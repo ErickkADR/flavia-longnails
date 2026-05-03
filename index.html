@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Flávia Long Nails – Especialista em unhas longas, nail art e alongamentos. Agende pelo WhatsApp.">
+<title>Flávia Long Nails – Especialista em Unhas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="shortcut icon" href="images/ICON%20FLAVIA.png" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" onclick="closeMenu()">✕</button>
+  <a href="#sobre">Sobre</a>
+  <a href="#servicos">Serviços</a>
+  <a href="#galeria">Galeria</a>
+  <a href="#depoimentos">Depoimentos</a>
+  <a href="#contato">Contato</a>
+  <a href="https://wa.me/5511946650392" style="color:var(--rose-d);border:1.5px solid var(--rose-d);padding:14px 28px;border-radius:100px;font-size:.78rem;font-family:'Cinzel',serif;letter-spacing:.08em">Agendar pelo WhatsApp</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Flávia <span>Long Nails</span></a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#galeria">Galeria</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#contato">Contato</a></li>
+      <li>
+        <a href="https://wa.me/5511946650392" class="nav-cta">
+          <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar Agora
+        </a>
+      </li>
+    </ul>
+    <button class="hamburger" onclick="openMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-sparks">
+    <span class="sp sp1"></span>
+    <span class="sp sp2"></span>
+    <span class="sp sp3"></span>
+    <span class="sp sp4"></span>
+    <span class="sp sp5"></span>
+  </div>
+  <div class="hero-inner">
+    <h1 class="hero-title">Flávia<br><span class="grad">Long Nails</span></h1>
+    <p class="hero-sub">Arte que transforma. Beleza que encanta.</p>
+    <p class="hero-desc">Especialista em alongamentos e nail art, crio obras de arte nas suas unhas. Técnicas avançadas, produtos premium e um olhar único para transformar sua beleza.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5511946650392" class="btn-rose">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar pelo WhatsApp
+      </a>
+      <a href="#servicos" class="btn-outline">Ver Serviços</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num">5+</span><span class="stat-lbl">Anos de Experiência</span></div>
+      <div><span class="stat-num">500+</span><span class="stat-lbl">Clientes Satisfeitas</span></div>
+      <div><span class="stat-num">100%</span><span class="stat-lbl">Qualidade Premium</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-dot"></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="container">
+  <div class="orn-div"><span class="orn-txt">✦ FLÁVIA LONG NAILS ✦</span></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="sobre">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal-left">
+        <div class="about-frame">
+          <img src="images/ICON%20FLAVIA.png" alt="Flávia Long Nails">
+          <div class="about-badge">
+            <span class="ab-num">5★</span>
+            <span class="ab-txt">Avaliação<br>média</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="sec-label">Sobre Mim</div>
+        <h2 class="sec-title">A arte de cuidar da<br><span>sua beleza</span></h2>
+        <p class="sec-sub">Com anos de experiência e paixão pela arte</p>
+        <p class="about-text" style="margin-top:22px">
+          Sou especialista em <strong>unhas longas e nail art</strong>, com anos de experiência
+          transformando as mãos das minhas clientes em verdadeiras obras de arte. Cada atendimento é
+          único e personalizado, pensado para realçar a beleza e o estilo de cada pessoa.
+        </p>
+        <p class="about-text">
+          Utilizo apenas <strong>produtos de alta qualidade</strong> e técnicas modernas,
+          garantindo resultados duradouros e acabamentos impecáveis. Seja para o dia a dia
+          ou para ocasiões especiais, você encontrará aqui o serviço perfeito.
+        </p>
+        <div class="highlights">
+          <div class="hl-item">
+            <span class="hl-icon">💅</span>
+            <div class="hl-title">Técnica Exclusiva</div>
+            <div class="hl-desc">Alongamentos com fibra de vidro, gel e acrílico</div>
+          </div>
+          <div class="hl-item">
+            <span class="hl-icon">✨</span>
+            <div class="hl-title">Produtos Premium</div>
+            <div class="hl-desc">Apenas marcas de alta qualidade e durabilidade</div>
+          </div>
+          <div class="hl-item">
+            <span class="hl-icon">🎨</span>
+            <div class="hl-title">Nail Art Única</div>
+            <div class="hl-desc">Designs exclusivos e personalizados para você</div>
+          </div>
+          <div class="hl-item">
+            <span class="hl-icon">🌸</span>
+            <div class="hl-title">Ambiente Acolhedor</div>
+            <div class="hl-desc">Atendimento humanizado e personalizado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gal-header reveal">
+      <div class="sec-label">Portfolio</div>
+      <h2 class="sec-title">Minha <span>Galeria</span></h2>
+      <p class="sec-sub">Cada detalhe, uma obra de arte</p>
+    </div>
+    <div class="gal-grid">
+      <div class="gal-item reveal">
+        <img src="images/gallery-1-BmiSL3Sa.jpg" alt="Nail Art Exclusiva">
+        <div class="gal-overlay">Nail Art Exclusiva</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.06s">
+        <img src="images/gallery-2-DcqYb2kp.jpg" alt="Gel Premium">
+        <div class="gal-overlay">Gel Premium</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.09s">
+        <img src="images/gallery-3-CfJ07KFu.jpg" alt="Floral Art">
+        <div class="gal-overlay">Floral Art</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.12s">
+        <img src="images/gallery-4-D86AdBP4.jpg" alt="Unhas Longas">
+        <div class="gal-overlay">Unhas Longas</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.15s">
+        <img src="images/gallery-5-DCuAuPD9.jpg" alt="Acrílico">
+        <div class="gal-overlay">Acrílico</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.18s">
+        <img src="images/gallery-6-Cm7G4Z85.jpg" alt="Decoração">
+        <div class="gal-overlay">Decoração</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.21s">
+        <img src="images/gallery-7-CosK5qJ0.jpg" alt="Nail Art">
+        <div class="gal-overlay">Nail Art</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.24s">
+        <img src="images/gallery-8-B1CqWwoN.jpg" alt="Design">
+        <div class="gal-overlay">Design</div>
+      </div>
+      <div class="gal-item reveal" style="transition-delay:.27s">
+        <img src="images/gallery-9-nc28CYqH.jpg" alt="Arte">
+        <div class="gal-overlay">Arte</div>
+      </div>
+    </div>
+
+
+    <!-- SERVICES -->
+<section class="services" id="servicos">
+  <div class="container">
+    <div class="svc-header reveal">
+      <div class="sec-label">Serviços</div>
+      <h2 class="sec-title">Meus <span>Tratamentos</span></h2>
+      <p class="sec-sub">Escolha o serviço ideal para você</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal" style="transition-delay:.05s">
+        <span class="svc-icon">💅</span>
+        <div class="svc-name">Manicure</div>
+        <div class="svc-desc">Cuidado completo para suas unhas naturais, incluindo cutícula, lixa e esmaltação. Acabamento perfeito para o dia a dia.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$40</span></div>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.1s">
+        <span class="svc-icon">👣</span>
+        <div class="svc-name">Pedicure</div>
+        <div class="svc-desc">Tratamento completo para os pés, com hidratação, esfoliação e esmaltação. Cuide dos seus pés com todo o carinho.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$50</span></div>
+      </div>
+      <div class="svc-card feat reveal" style="transition-delay:.15s">
+        <div class="feat-badge">Popular</div>
+        <span class="svc-icon">💎</span>
+        <div class="svc-name">Alongamento em Gel</div>
+        <div class="svc-desc">Unhas longas e naturais com gel de alta qualidade. Resultado durável e brilhante, perfeito para quem ama unhas compridas.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$120</span></div>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.2s">
+        <span class="svc-icon">🔮</span>
+        <div class="svc-name">Unhas Acrílicas</div>
+        <div class="svc-desc">Alongamento resistente e versátil. As unhas acrílicas oferecem durabilidade excepcional e possibilidade de designs arrojados.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$130</span></div>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.25s">
+        <span class="svc-icon">🌺</span>
+        <div class="svc-name">Nail Art</div>
+        <div class="svc-desc">Designs únicos e personalizados. Das flores delicadas aos padrões geométricos, crie o visual dos seus sonhos.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$20</span><span class="svc-note">/ design</span></div>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.3s">
+        <span class="svc-icon">🛡️</span>
+        <div class="svc-name">Blindagem</div>
+        <div class="svc-desc">Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.</div>
+        <div class="svc-price"><span class="svc-pre">A partir de</span><span class="svc-val">R$80</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- Instagram CTA -->
+    <div class="gal-instagram reveal">
+      <div class="gal-insta-left">
+        <div class="insta-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;color:#fff"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </div>
+        <div>
+          <div class="insta-title">Siga no Instagram</div>
+          <div class="insta-handle">@flavia_longnails</div>
+        </div>
+      </div>
+      <p class="insta-desc">Acompanhe meus trabalhos diários, novas criações e inspirações exclusivas no meu Instagram.</p>
+      <a href="https://www.instagram.com/flavia_longnails/" class="btn-instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Ver no Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MEGA WHATSAPP CTA -->
+<section class="mega-cta">
+  <div class="mega-bg">
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+  </div>
+  <div class="mega-inner reveal">
+    <div class="mega-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+    <div class="mega-eyebrow">Agende seu horário</div>
+    <h2 class="mega-title">Pronta para ter<br>unhas <span class="accent">perfeitas?</span></h2>
+    <p class="mega-desc">Não perca mais tempo! Fale com Flávia agora mesmo pelo WhatsApp e agende sua transformação. Atendimento rápido e personalizado.</p>
+    <a href="https://wa.me/5511946650392" class="mega-btn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Falar no WhatsApp Agora
+    </a>
+    <p class="mega-note">Resposta em até <span>5 minutos</span> · Agendamento simples e rápido</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="depoimentos">
+  <div class="container">
+    <div class="test-header reveal">
+      <div class="sec-label">Depoimentos</div>
+      <h2 class="sec-title">O que dizem minhas <span>clientes</span></h2>
+      <p class="sec-sub">Avaliações reais de clientes satisfeitas</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal" style="transition-delay:.08s">
+        <div class="test-quote">"</div>
+        <p class="test-text">Simplesmente apaixonada pelo resultado! Minhas unhas nunca ficaram tão lindas. A Flávia tem um talento incrível e muito cuidado com cada detalhe.</p>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-author">
+          <div class="author-av">AM</div>
+          <div><div class="author-name">Ana Maria S.</div><div class="author-svc">Alongamento em Gel</div></div>
+        </div>
+      </div>
+      <div class="test-card reveal" style="transition-delay:.14s">
+        <div class="test-quote">"</div>
+        <p class="test-text">A melhor nail designer que já fui! Ela transforma o que eu pedi em algo ainda mais lindo. As unhas duraram mais de 3 semanas perfeitas.</p>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-author">
+          <div class="author-av">CR</div>
+          <div><div class="author-name">Carolina R.</div><div class="author-svc">Nail Art + Acrílico</div></div>
+        </div>
+      </div>
+      <div class="test-card reveal" style="transition-delay:.20s">
+        <div class="test-quote">"</div>
+        <p class="test-text">Ambiente super agradável e atendimento de primeira! Me senti mimada do início ao fim. Já indiquei para todas as minhas amigas.</p>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-author">
+          <div class="author-av">JF</div>
+          <div><div class="author-name">Juliana F.</div><div class="author-svc">Manicure & Pedicure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contato">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal-left">
+        <div class="sec-label">Contato</div>
+        <h2 class="sec-title">Encontre-me e<br><span>agende sua visita</span></h2>
+        <p class="sec-sub" style="margin-bottom:44px">Estou aqui para te atender</p>
+        <div class="c-item">
+          <div class="c-icon">📍</div>
+          <div>
+            <div class="c-label">Rua doutor francisco elgenio do amaral, 11</div>
+            <div class="c-value">Jardim Peri - Alto, São Paulo - SP, 02281-206</div>
+          </div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">📱</div>
+          <div>
+            <div class="c-label">WhatsApp</div>
+            <div class="c-value">(55) 11 94665-0392</div>
+          </div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">🕐</div>
+          <div>
+            <div class="c-label">Horário de Atendimento</div>
+            <div class="c-value">Seg – Sex: 9h às 19h<br>Sábado: 9h às 17h<br>Domingo: Fechado</div>
+          </div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">📸</div>
+          <div>
+            <div class="c-label">Instagram</div>
+            <div class="c-value"><a href="https://www.instagram.com/flavia_longnails/" target="_blank" rel="noopener">@flavia_longnails</a></div>
+          </div>
+        </div>
+        <a href="https://wa.me/5511946650392" class="c-wa-link">
+          <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar pelo WhatsApp
+        </a>
+      </div>
+      <div class="contact-map reveal-right">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d915.0323548835642!2d-46.667898988954924!3d-23.45579574530064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef52306e1536f%3A0x19d2b4efe3ad44d2!2sFl%C3%A1via%20LongNails!5e0!3m2!1spt-BR!2sbr!4v1777825096078!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <a href="#" class="footer-logo">Flávia Long Nails</a>
+        <p class="footer-tagline">Arte e beleza nas pontas dos dedos</p>
+        <div style="display:flex;gap:10px;justify-content:flex-start;margin-top:16px">
+          <a href="https://www.instagram.com/flavia_longnails/" class="soc-btn" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://wa.me/5511946650392" class="soc-btn" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="f-col-title">Navegação</div>
+        <ul class="f-links">
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title">Serviços</div>
+        <ul class="f-links">
+          <li><a href="#servicos">Manicure</a></li>
+          <li><a href="#servicos">Pedicure</a></li>
+          <li><a href="#servicos">Alongamento em Gel</a></li>
+          <li><a href="#servicos">Unhas Acrílicas</a></li>
+          <li><a href="#servicos">Nail Art</a></li>
+          <li><a href="#servicos">Blindagem</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title">Horários</div>
+        <ul class="f-links" style="gap:12px">
+          <li style="color:rgba(255,255,255,.5);font-size:.82rem">Seg–Sex: 9h às 19h</li>
+          <li style="color:rgba(255,255,255,.5);font-size:.82rem">Sábado: 9h às 17h</li>
+          <li style="color:rgba(255,255,255,.5);font-size:.82rem">Domingo: Fechado</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Flávia Long Nails. Todos os direitos reservados.</span>
+      <span>Feito com 💅 para você</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<div class="float-wa">
+  <a href="https://wa.me/5511946650392" class="float-wa-btn">
+    <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Agendar pelo WhatsApp
+  </a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
