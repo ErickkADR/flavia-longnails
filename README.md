@@ -6,11 +6,13 @@ Site institucional para uma especialista em alongamento de unhas e nail art — 
 
 ## Prints
 
-<div align="center">
-  <img src="docs/01-hero.png" alt="Seção inicial (hero) do site" width="800" />
-  <br /><br />
-  <img src="docs/02-galeria.png" alt="Galeria de trabalhos e seção de serviços" width="800" />
-</div>
+| Hero | Galeria e serviços |
+|---|---|
+| ![Seção inicial (hero) do site](docs/01-hero.png) | ![Galeria de trabalhos e seção de serviços](docs/02-galeria.png) |
+
+| Depoimentos | Contato |
+|---|---|
+| ![Depoimentos de clientes](docs/03-depoimentos.png) | ![Seção de contato e agendamento](docs/04-contato.png) |
 
 ## Sobre o projeto
 
