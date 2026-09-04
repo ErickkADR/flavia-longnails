@@ -1,5 +1,6 @@
 import { testimonials } from '../data/testimonials';
 import { Marquee } from './Marquee';
+import { ReviewCard } from './ReviewCard';
 import './Testimonials.css';
 
 export function Testimonials() {
@@ -14,17 +15,7 @@ export function Testimonials() {
       </div>
       <Marquee duration={48}>
         {testimonials.map((t) => (
-          <article className="test-card" key={t.name}>
-            <div className="test-card-head">
-              <span className="author-av">{t.initials}</span>
-              <div>
-                <div className="author-name">{t.name}</div>
-                <div className="author-svc">{t.service} · {t.professional}</div>
-              </div>
-            </div>
-            <p className="test-text">{t.text}</p>
-            <div className="test-stars">★★★★★</div>
-          </article>
+          <ReviewCard t={t} className="test-card" key={t.name} />
         ))}
       </Marquee>
     </section>

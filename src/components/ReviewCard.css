@@ -1,0 +1,12 @@
+.review-card {
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 20px;
+  padding: 26px 28px; box-shadow: 0 4px 24px rgba(150, 86, 47, .05);
+}
+.review-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.review-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.review-name { font-family: 'Cinzel', serif; font-size: .82rem; font-weight: 600; color: var(--ink); letter-spacing: .02em; }
+.review-svc { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+
+.review-text { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-style: italic; color: var(--muted); line-height: 1.7; }
+.review-stars { color: var(--accent); font-size: .85rem; letter-spacing: .1em; margin-top: 18px; }

@@ -1,4 +1,4 @@
-.resultados { padding: clamp(90px, 14vw, 170px) 0; background: var(--bg-alt); min-height: 80vh; display: flex; align-items: center; }
+.resultados { padding: clamp(90px, 14vw, 170px) 0; background: var(--bg-alt); }
 .resultados-grid { display: grid; grid-template-columns: .85fr 1fr; gap: 90px; align-items: center; width: 100%; }
 
 .resultados-visual { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -28,7 +28,6 @@
 .rs-avatar:first-child { margin-left: 0; }
 
 @media (max-width: 900px) {
-  .resultados { min-height: auto; }
   .resultados-grid { grid-template-columns: 1fr; gap: 44px; text-align: center; }
   .resultados-text { margin-left: auto; margin-right: auto; }
   .resultados-stats { justify-content: center; }

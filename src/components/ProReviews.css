@@ -1,0 +1,7 @@
+.pro-reviews { padding: clamp(90px, 14vw, 170px) 0; background: var(--bg-alt); }
+.pro-reviews-header { text-align: center; max-width: 580px; margin: 0 auto 56px; }
+.pro-reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto; }
+
+@media (max-width: 640px) {
+  .pro-reviews-grid { grid-template-columns: 1fr; }
+}
