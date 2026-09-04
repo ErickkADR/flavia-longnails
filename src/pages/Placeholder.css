@@ -1,0 +1,2 @@
+.placeholder { padding: 200px 0 160px; background: var(--bg); min-height: 60vh; }
+.placeholder-inner { text-align: center; max-width: 560px; margin: 0 auto; }

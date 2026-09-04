@@ -1,0 +1,27 @@
+.pricing { padding: 110px 0 0; background: var(--bg-alt); overflow: hidden; }
+.pricing-header { text-align: center; max-width: 580px; margin: 0 auto 52px; }
+
+.pricing-list { max-width: 760px; margin: 0 auto; }
+.price-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 22px 28px; border-radius: 16px; background: var(--surface); border: 1px solid var(--muted-l);
+  margin-bottom: 14px; transition: all .3s;
+}
+.price-row:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: 0 12px 40px rgba(150, 86, 47, .1); }
+.price-info { display: flex; align-items: center; gap: 16px; }
+.price-rank {
+  font-family: 'Cinzel', serif; font-size: .7rem; font-weight: 700; color: #fff; background: var(--accent);
+  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.price-name { font-family: 'Cinzel', serif; font-size: .92rem; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.price-pro { font-size: .72rem; color: var(--muted); }
+.price-val { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; color: var(--accent); flex-shrink: 0; white-space: nowrap; }
+
+.tag-marquee { margin-top: 56px; border-top: 1.5px solid var(--muted-l); padding: 22px 0; background: var(--surface); }
+.tag-item { font-family: 'Cinzel', serif; font-size: .78rem; letter-spacing: .06em; color: var(--accent); white-space: nowrap; padding: 0 20px; }
+.tag-dot { color: var(--accent-soft); margin-left: 20px; }
+
+@media (max-width: 640px) {
+  .price-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .price-val { align-self: flex-end; }
+}

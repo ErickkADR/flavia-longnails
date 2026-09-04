@@ -28,26 +28,38 @@ torna o agendamento o mais direto possível, sem formulário — direto pro What
 - **Ranking dos serviços mais contratados** + faixa de tags em marquee
 - **Botão de WhatsApp flutuante**, sempre visível, além de vários CTAs ao longo da página
 - **Menu fixo (sticky)** que muda de estilo ao rolar a página
-- **Menu mobile** responsivo
+- **Menu mobile** responsivo, com Cursos / Área da Colaboradora / Agendar Agora
+- **Carrossel infinito** (avaliações, tags e galerias das profissionais) via `<Marquee>`, sem depender de clique
 - **Animações de entrada (scroll reveal)** conforme o usuário rola a página
 
 > As fotos e o carrossel de Jheny e Vitória usam imagens de banco (placeholder) — o Instagram da Jheny
 > é real (@jhenyluanyybeauty), mas o carrossel dela também é estático/ilustrativo, já que puxar posts
-> ao vivo exigiria token da API do Meta. Vitória ainda não tem Instagram cadastrado no site.
+> ao vivo exigiria token da API do Meta. Vitória ainda não tem Instagram cadastrado no site. A foto da
+> Flávia no hero e no card da equipe também é real (close-up de um trabalho dela), não um retrato de
+> rosto — não existe still nenhuma foto de rosto dela nos assets do projeto.
 
 ## Tecnologias
 
-- **HTML5**
-- **CSS3** (layout responsivo, animações, sticky header)
-- **JavaScript** (IntersectionObserver para scroll reveal, menu mobile, header dinâmico)
+- **React 18 + TypeScript**, via **Vite**
+- **React Router** (`BrowserRouter`, com o truque de `404.html` pra funcionar em página de projeto do GitHub Pages)
+- **CSS puro** por componente (sem framework de UI)
 
 ## Como rodar localmente
 
-Sem build, sem dependência — abra `index.html` no navegador ou sirva a pasta:
+```bash
+npm install
+npm run dev       # http://localhost:5173/flavia-longnails/
+```
+
+## Build e deploy
 
 ```bash
-npx serve .
+npm run build      # gera dist/
+npm run deploy      # build + publica dist/ na branch gh-pages (via pacote gh-pages)
 ```
+
+O GitHub Pages deste repositório está configurado pra servir da branch `gh-pages` (raiz) — **não** da
+`main`. Isso evita depender de GitHub Actions (o token usado aqui não tem escopo `workflow`).
 
 ---
 

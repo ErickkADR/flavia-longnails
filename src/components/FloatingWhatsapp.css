@@ -1,0 +1,18 @@
+.float-wa { position: fixed; bottom: 28px; right: 28px; z-index: 999; }
+.float-wa-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--accent); color: #fff; text-decoration: none;
+  padding: 15px 24px; border-radius: 100px;
+  font-family: 'Jost', sans-serif; font-weight: 600; font-size: .88rem;
+  box-shadow: 0 8px 32px rgba(150, 86, 47, .35);
+  transition: all .3s; animation: floatBtn 3s ease-in-out infinite;
+}
+@keyframes floatBtn {
+  0%, 100% { transform: translateY(0); box-shadow: 0 8px 32px rgba(150, 86, 47, .35); }
+  50% { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(150, 86, 47, .45); }
+}
+.float-wa-btn:hover { transform: translateY(-5px) scale(1.04); box-shadow: 0 20px 60px rgba(150, 86, 47, .5); animation: none; background: var(--accent-deep); }
+
+@media (max-width: 640px) {
+  .float-wa-btn { padding: 13px 18px; font-size: .82rem; }
+}
