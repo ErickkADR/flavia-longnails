@@ -52,14 +52,20 @@ create table if not exists public.salon_transactions (
 create table if not exists public.personal_expenses (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
-  professional text not null,
-  type text not null check (type in ('entrada', 'saida')),
+  professional text not null default '',
+  type text not null default 'saida',
   category text not null,
   description text,
   amount numeric(10, 2) not null,
   occurred_on date not null default current_date,
   created_at timestamptz not null default now()
 );
+
+-- Caso a tabela já existisse de uma versão anterior deste arquivo, sem essas colunas:
+alter table public.personal_expenses add column if not exists professional text not null default '';
+alter table public.personal_expenses add column if not exists type text not null default 'saida';
+alter table public.personal_expenses drop constraint if exists personal_expenses_type_check;
+alter table public.personal_expenses add constraint personal_expenses_type_check check (type in ('entrada', 'saida'));
 
 -- ============================================================
 -- RLS
@@ -69,14 +75,24 @@ alter table public.appointments enable row level security;
 alter table public.salon_transactions enable row level security;
 alter table public.personal_expenses enable row level security;
 
+drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
   for all to authenticated using (true) with check (true);
 
+drop policy if exists "staff logada acessa appointments" on public.appointments;
 create policy "staff logada acessa appointments" on public.appointments
   for all to authenticated using (true) with check (true);
 
+drop policy if exists "staff logada acessa salon_transactions" on public.salon_transactions;
 create policy "staff logada acessa salon_transactions" on public.salon_transactions
   for all to authenticated using (true) with check (true);
+
+-- versão antiga deste arquivo criava uma única policy "for all" aqui — remove antes de recriar
+drop policy if exists "cada uma so acessa os proprios gastos" on public.personal_expenses;
+drop policy if exists "leitura gastos pessoais" on public.personal_expenses;
+drop policy if exists "insere gastos pessoais" on public.personal_expenses;
+drop policy if exists "edita gastos pessoais" on public.personal_expenses;
+drop policy if exists "apaga gastos pessoais" on public.personal_expenses;
 
 -- leitura: cada uma vê o próprio; a dona do studio vê de todo mundo
 create policy "leitura gastos pessoais" on public.personal_expenses
