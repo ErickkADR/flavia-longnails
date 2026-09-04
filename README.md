@@ -1,37 +1,39 @@
-# Flávia Long Nails
+# Studio Flávia Alves
 
-Site institucional para uma especialista em alongamento de unhas e nail art — página única (one-page) com apresentação, galeria de trabalhos, serviços, depoimentos e agendamento direto pelo WhatsApp.
+Site institucional para um studio de beleza com três especialistas — Flávia (unhas), Jheny (maquiagem)
+e Vitória (cabelo). Home one-page com resultados, equipe, avaliações e ranking de serviços, mais uma
+página própria por profissional, com agendamento direto pelo WhatsApp.
 
 🔗 **Site no ar:** [erickkadr.github.io/Flavia-LongNails](https://erickkadr.github.io/Flavia-LongNails/)
 
-## Prints
-
-| Hero | Galeria e serviços |
-|---|---|
-| ![Seção inicial (hero) do site](docs/01-hero.png) | ![Galeria de trabalhos e seção de serviços](docs/02-galeria.png) |
-
-| Depoimentos | Contato |
-|---|---|
-| ![Depoimentos de clientes](docs/03-depoimentos.png) | ![Seção de contato e agendamento](docs/04-contato.png) |
-
 ## Sobre o projeto
 
-Landing page para negócio local, pensada para converter visita em agendamento: apresentação da profissional, prova social (número de clientes, anos de experiência), galeria de trabalhos, cards de serviço e depoimentos — com o botão de WhatsApp sempre visível (fixo na tela) para o cliente marcar o horário sem fricção.
+Landing page para negócio local, pensada para converter visita em agendamento: resultados do studio,
+equipe com cards por profissional (cada uma com página própria — bio, serviços e preços), avaliações
+de clientes, ranking dos serviços mais contratados e localização — com o botão de WhatsApp sempre
+visível (fixo na tela) para o cliente marcar o horário sem fricção.
 
 ## Motivação
 
-Projeto real de portfólio para uma cliente do ramo de estética — o objetivo era um site que **vendesse o serviço visualmente** (a galeria é o argumento de venda principal desse tipo de negócio) e que tornasse o agendamento o mais direto possível, sem formulário — direto pro WhatsApp.
+Evolução de um projeto real de portfólio (antes só sobre unhas) para representar o studio completo,
+com as três profissionais. O objetivo continua sendo um site que **vende o serviço visualmente** e
+torna o agendamento o mais direto possível, sem formulário — direto pro WhatsApp da Flávia.
 
 ## Funcionalidades
 
-- **Hero** com estatísticas de credibilidade (anos de experiência, clientes atendidas, qualidade)
-- **Galeria de trabalhos** em grade responsiva
-- **Seção de serviços** com cards (alongamento, nail art, spa dos pés etc.)
-- **Depoimentos** de clientes
+- **Hero** com estatísticas de credibilidade (anos de experiência, especialistas, avaliação média)
+- **Resultados do studio** em galeria responsiva, misturando os três serviços
+- **Equipe** com card por profissional, cada uma linkando pra sua própria página (bio + serviços + preços)
+- **Avaliações** em carrossel horizontal com setas
+- **Ranking dos serviços mais contratados** + faixa de tags em marquee
 - **Botão de WhatsApp flutuante**, sempre visível, além de vários CTAs ao longo da página
 - **Menu fixo (sticky)** que muda de estilo ao rolar a página
 - **Menu mobile** responsivo
 - **Animações de entrada (scroll reveal)** conforme o usuário rola a página
+
+> As fotos e o carrossel de Jheny e Vitória usam imagens de banco (placeholder) — o Instagram da Jheny
+> é real (@jhenyluanyybeauty), mas o carrossel dela também é estático/ilustrativo, já que puxar posts
+> ao vivo exigiria token da API do Meta. Vitória ainda não tem Instagram cadastrado no site.
 
 ## Tecnologias
 

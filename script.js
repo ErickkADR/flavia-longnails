@@ -73,9 +73,23 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =====================
+   CARROSSEL (setas prev/next)
+   ===================== */
+document.querySelectorAll('[data-car-target]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const track = document.getElementById(btn.dataset.carTarget);
+    if (!track) return;
+    const card = track.querySelector(':scope > *');
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 20;
+    const step = card ? card.getBoundingClientRect().width + gap : 300;
+    track.scrollBy({ left: btn.dataset.carDir === 'prev' ? -step : step, behavior: 'smooth' });
+  });
+});
+
+/* =====================
    SMOOTH ANCHOR SCROLL
    ===================== */
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach((anchor) => {
   anchor.addEventListener('click', (e) => {
     const target = document.querySelector(anchor.getAttribute('href'));
     if (target) {
