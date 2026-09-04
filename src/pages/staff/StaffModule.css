@@ -38,3 +38,37 @@
 .mod-tag.saida { background: #f3d9d3; color: #a13f2c; }
 .mod-tag.concluido { background: #d9e9d3; color: #3f6b2c; }
 .mod-tag.cancelado { background: var(--muted-l); color: var(--muted); }
+
+.month-nav { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.month-nav button {
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--muted-l); background: var(--surface);
+  color: var(--accent); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.month-nav button:hover { border-color: var(--accent); background: var(--accent-soft); }
+.month-nav span { font-family: 'Cinzel', serif; font-size: .85rem; color: var(--ink); text-transform: capitalize; min-width: 140px; text-align: center; }
+
+.vip-section { margin-bottom: 32px; }
+.vip-header {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--accent-deep); margin-bottom: 16px;
+}
+.vip-star { color: var(--accent); }
+.vip-note { font-family: 'Jost', sans-serif; font-size: .72rem; font-weight: 400; color: var(--muted); }
+.vip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.vip-card {
+  background: linear-gradient(135deg, var(--accent-soft), var(--bg-alt));
+  border: 1.5px solid rgba(190, 114, 72, .35); border-radius: 16px; padding: 18px 20px;
+}
+.vip-card-name { font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.vip-card-visits { font-size: .78rem; color: var(--accent-deep); font-weight: 600; }
+.vip-card-phone { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+.admin-section { margin-top: 56px; padding-top: 40px; border-top: 1.5px solid var(--muted-l); }
+.admin-title { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.admin-sub { font-size: .82rem; color: var(--muted); margin-bottom: 24px; }
+.admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.admin-card { background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 16px; padding: 20px; }
+.admin-card-name { font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.admin-card-row { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-bottom: 4px; }
+.admin-card-row strong { color: var(--ink); }

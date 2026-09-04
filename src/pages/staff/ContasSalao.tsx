@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTable } from '../../hooks/useTable';
+import { useMonthFilter } from '../../hooks/useMonthFilter';
+import { MonthNav } from './MonthNav';
 import './StaffModule.css';
 
 interface Transaction {
@@ -18,6 +20,8 @@ const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória'];
 
 export function ContasSalao() {
   const { rows, loading, error, insert, remove } = useTable<Transaction>('salon_transactions', 'occurred_on');
+  const { filtered, label, prevMonth, nextMonth } = useMonthFilter(rows, 'occurred_on');
+
   const [type, setType] = useState<Transaction['type']>('entrada');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
@@ -27,9 +31,10 @@ export function ContasSalao() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const balance = useMemo(() => {
-    return rows.reduce((sum, t) => sum + (t.type === 'entrada' ? t.amount : -t.amount), 0);
-  }, [rows]);
+  const balance = useMemo(
+    () => filtered.reduce((sum, t) => sum + (t.type === 'entrada' ? t.amount : -t.amount), 0),
+    [filtered]
+  );
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -52,9 +57,11 @@ export function ContasSalao() {
       <div className="mod-header">
         <div className="mod-title">Controle de Contas do Salão</div>
         <div className="mod-sub">
-          Saldo: <strong style={{ color: balance >= 0 ? 'var(--accent-deep)' : '#a13f2c' }}>R${balance.toFixed(2)}</strong>
+          Saldo do mês: <strong style={{ color: balance >= 0 ? 'var(--accent-deep)' : '#a13f2c' }}>R${balance.toFixed(2)}</strong>
         </div>
       </div>
+
+      <MonthNav label={label} onPrev={prevMonth} onNext={nextMonth} />
 
       <form className="mod-form" onSubmit={handleSubmit}>
         <label className="mod-field">
@@ -96,8 +103,8 @@ export function ContasSalao() {
       <div className="mod-table-wrap">
         {loading ? (
           <p className="mod-empty">Carregando...</p>
-        ) : rows.length === 0 ? (
-          <p className="mod-empty">Nenhum lançamento ainda.</p>
+        ) : filtered.length === 0 ? (
+          <p className="mod-empty">Nenhum lançamento neste mês.</p>
         ) : (
           <table className="mod-table">
             <thead>
@@ -112,7 +119,7 @@ export function ContasSalao() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((t) => (
+              {filtered.map((t) => (
                 <tr key={t.id}>
                   <td>{new Date(t.occurred_on).toLocaleDateString('pt-BR')}</td>
                   <td><span className={`mod-tag ${t.type}`}>{t.type}</span></td>

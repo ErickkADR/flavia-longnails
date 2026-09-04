@@ -2,12 +2,13 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase, supabaseConfigured } from '../lib/supabase';
-import { emailForUsername, nameForEmail } from './staffUsers';
+import { emailForUsername, staffForEmail } from './staffUsers';
 
 interface AuthState {
   loading: boolean;
   session: Session | null;
   name: string;
+  isOwner: boolean;
   signIn: (username: string, password: string) => Promise<string | null>;
   signOut: () => Promise<void>;
 }
@@ -45,10 +46,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   }
 
-  const name = nameForEmail(session?.user.email);
+  const staff = staffForEmail(session?.user.email);
 
   return (
-    <AuthContext.Provider value={{ loading, session, name, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ loading, session, name: staff?.name ?? 'Colaboradora', isOwner: staff?.isOwner ?? false, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

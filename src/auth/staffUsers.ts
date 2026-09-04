@@ -2,6 +2,8 @@ export interface StaffUser {
   username: string;
   email: string;
   name: string;
+  /** Flávia é a proprietária do studio — só ela enxerga os gastos pessoais das outras. */
+  isOwner: boolean;
 }
 
 /**
@@ -11,9 +13,9 @@ export interface StaffUser {
  * identificador único no Supabase Auth.
  */
 export const STAFF_USERS: StaffUser[] = [
-  { username: 'flavia', email: 'flavia@studioflaviaalves.app', name: 'Flávia' },
-  { username: 'jheny', email: 'jheny@studioflaviaalves.app', name: 'Jheny' },
-  { username: 'vitoria', email: 'vitoria@studioflaviaalves.app', name: 'Vitória' },
+  { username: 'flavia', email: 'flavia@studioflaviaalves.app', name: 'Flávia', isOwner: true },
+  { username: 'jheny', email: 'jheny@studioflaviaalves.app', name: 'Jheny', isOwner: false },
+  { username: 'vitoria', email: 'vitoria@studioflaviaalves.app', name: 'Vitória', isOwner: false },
 ];
 
 export function emailForUsername(username: string): string | null {
@@ -21,7 +23,6 @@ export function emailForUsername(username: string): string | null {
   return match?.email ?? null;
 }
 
-export function nameForEmail(email: string | null | undefined): string {
-  const match = STAFF_USERS.find((u) => u.email.toLowerCase() === (email ?? '').toLowerCase());
-  return match?.name ?? 'Colaboradora';
+export function staffForEmail(email: string | null | undefined): StaffUser | null {
+  return STAFF_USERS.find((u) => u.email.toLowerCase() === (email ?? '').toLowerCase()) ?? null;
 }

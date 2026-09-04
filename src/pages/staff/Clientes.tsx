@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTable } from '../../hooks/useTable';
 import './StaffModule.css';
@@ -12,14 +12,49 @@ interface Client {
   created_at: string;
 }
 
+interface AppointmentRef {
+  id: string;
+  client_name: string;
+  status: string;
+}
+
+/** A partir de quantas visitas concluídas a cliente vira VIP automaticamente. */
+const VIP_MIN_VISITS = 3;
+
+function normalize(name: string) {
+  return name.trim().toLowerCase();
+}
+
 export function Clientes() {
   const { rows, loading, error, insert, remove } = useTable<Client>('clients');
+  const { rows: appointments } = useTable<AppointmentRef>('appointments');
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const visitCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const a of appointments) {
+      if (a.status === 'cancelado') continue;
+      const key = normalize(a.client_name);
+      counts[key] = (counts[key] ?? 0) + 1;
+    }
+    return counts;
+  }, [appointments]);
+
+  const withVisits = useMemo(
+    () => rows.map((c) => ({ ...c, visits: visitCounts[normalize(c.name)] ?? 0 })),
+    [rows, visitCounts]
+  );
+  const vipClients = useMemo(
+    () => withVisits.filter((c) => c.visits >= VIP_MIN_VISITS).sort((a, b) => b.visits - a.visits),
+    [withVisits]
+  );
+  const otherClients = withVisits.filter((c) => c.visits < VIP_MIN_VISITS);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -69,10 +104,28 @@ export function Clientes() {
 
       {(error || formError) && <p className="mod-error">{error ?? formError}</p>}
 
+      {vipClients.length > 0 && (
+        <div className="vip-section">
+          <div className="vip-header">
+            <span className="vip-star">✦</span> Clientes VIP
+            <span className="vip-note">{VIP_MIN_VISITS}+ visitas concluídas — calculado automaticamente</span>
+          </div>
+          <div className="vip-grid">
+            {vipClients.map((c) => (
+              <div className="vip-card" key={c.id}>
+                <div className="vip-card-name">{c.name}</div>
+                <div className="vip-card-visits">{c.visits} visitas</div>
+                {c.phone && <div className="vip-card-phone">{c.phone}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mod-table-wrap">
         {loading ? (
           <p className="mod-empty">Carregando...</p>
-        ) : rows.length === 0 ? (
+        ) : otherClients.length === 0 && vipClients.length === 0 ? (
           <p className="mod-empty">Nenhuma cliente cadastrada ainda.</p>
         ) : (
           <table className="mod-table">
@@ -82,16 +135,18 @@ export function Clientes() {
                 <th>WhatsApp</th>
                 <th>E-mail</th>
                 <th>Observações</th>
+                <th>Visitas</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((c) => (
+              {otherClients.map((c) => (
                 <tr key={c.id}>
                   <td>{c.name}</td>
                   <td>{c.phone ?? '—'}</td>
                   <td>{c.email ?? '—'}</td>
                   <td>{c.notes ?? '—'}</td>
+                  <td>{c.visits}</td>
                   <td><button className="mod-table-del" onClick={() => remove(c.id)}>remover</button></td>
                 </tr>
               ))}
