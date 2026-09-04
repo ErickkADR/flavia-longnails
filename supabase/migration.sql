@@ -29,6 +29,20 @@ create table if not exists public.appointments (
   created_at timestamptz not null default now()
 );
 
+-- Cada profissional só vê os próprios agendamentos (antes era compartilhado e a Jheny via
+-- o histórico da Flávia inteiro). owner_id fica nullable de propósito: linhas antigas sem
+-- correspondência ficam só órfãs (invisíveis pra todo mundo) em vez de travar a migração.
+alter table public.appointments add column if not exists owner_id uuid references auth.users(id) on delete cascade;
+alter table public.appointments alter column owner_id set default auth.uid();
+
+update public.appointments set owner_id = (
+  select id from auth.users where email = case professional
+    when 'Flávia' then 'flavia@studioflaviaalves.app'
+    when 'Jheny' then 'jheny@studioflaviaalves.app'
+    when 'Vitória' then 'vitoria@studioflaviaalves.app'
+  end
+) where owner_id is null;
+
 -- ============================================================
 -- 3. Controle de Contas do Salão (compartilhado entre as 3)
 -- ============================================================
@@ -79,9 +93,24 @@ drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
   for all to authenticated using (true) with check (true);
 
+-- versão antiga deste arquivo compartilhava a agenda inteira entre as 3 — remove antes de recriar
 drop policy if exists "staff logada acessa appointments" on public.appointments;
-create policy "staff logada acessa appointments" on public.appointments
-  for all to authenticated using (true) with check (true);
+drop policy if exists "le proprio agendamento" on public.appointments;
+drop policy if exists "insere proprio agendamento" on public.appointments;
+drop policy if exists "edita proprio agendamento" on public.appointments;
+drop policy if exists "apaga proprio agendamento" on public.appointments;
+
+create policy "le proprio agendamento" on public.appointments
+  for select to authenticated using (owner_id = auth.uid());
+
+create policy "insere proprio agendamento" on public.appointments
+  for insert to authenticated with check (owner_id = auth.uid());
+
+create policy "edita proprio agendamento" on public.appointments
+  for update to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+
+create policy "apaga proprio agendamento" on public.appointments
+  for delete to authenticated using (owner_id = auth.uid());
 
 drop policy if exists "staff logada acessa salon_transactions" on public.salon_transactions;
 create policy "staff logada acessa salon_transactions" on public.salon_transactions

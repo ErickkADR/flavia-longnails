@@ -84,8 +84,13 @@ Supabase de produção da Jet IA/Bannerjet — são projetos totalmente separado
 4 tabelas, RLS habilitada em todas:
 - `clients` — registro de clientes. Sem `phone`/`email` reais ainda pra maioria (a planilha
   antiga da Flávia não tinha esses campos).
-- `appointments` — agendamentos/histórico de atendimentos. `professional` é texto livre
-  (`'Flávia' | 'Jheny' | 'Vitória'`), não FK — mais simples que ligar a `auth.users`.
+- `appointments` — agendamentos/histórico de atendimentos. **Privado por profissional**
+  (RLS: só `owner_id = auth.uid()`), desde 04/09/2026 — era compartilhado no começo e a Jheny
+  reportou estar vendo os 260 atendimentos históricos da Flávia junto. `professional` continua
+  como texto livre (`'Flávia' | 'Jheny' | 'Vitória'`) só pra exibição/import; quem manda no
+  RLS é `owner_id`. Formulário não deixa mais escolher profissional — sempre insere no nome
+  de quem está logada (`useAuth().name`). `owner_id` é `nullable` de propósito: linha órfã
+  (sem match de e-mail no backfill) fica invisível pra todo mundo em vez de travar a migração.
 - `salon_transactions` — contas do salão, compartilhado entre as 3 (RLS: qualquer
   `authenticated` lê/escreve tudo).
 - `personal_expenses` — gastos pessoais, **privado por padrão** (RLS: só o próprio
@@ -135,6 +140,10 @@ está descrita acima; não é complicado reconstruir.
 
 ## Pendências / observações
 
+- **URGENTE pra próxima sessão: rodar de novo o `supabase/migration.sql` no SQL Editor.**
+  Ele foi atualizado em 04/09/2026 (depois do commit anterior) pra tornar `appointments`
+  privado por profissional — sem rodar essa parte, a Jheny e a Vitória continuam vendo o
+  histórico inteiro da Flávia. É seguro rodar o arquivo inteiro de novo (idempotente).
 - Identidade do git neste Mac não está configurada (commits saem como
   `erickk@iMac-de-Erick.local`) — mencionado ao Erick, ele não pediu pra mexer.
 - `salon_transactions` (Contas do Salão) está sem nenhum dado real ainda — só a Flávia tinha

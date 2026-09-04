@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
 import './StaffModule.css';
 
@@ -14,16 +15,14 @@ interface Appointment {
   created_at: string;
 }
 
-const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória'];
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
 export function Agendamento() {
+  const { name } = useAuth();
   const { rows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
   const [clientName, setClientName] = useState('');
-  const [professional, setProfessional] = useState(PROFESSIONALS[0]);
   const [service, setService] = useState('');
   const [scheduledAt, setScheduledAt] = useState('');
   const [price, setPrice] = useState('');
@@ -37,7 +36,7 @@ export function Agendamento() {
     try {
       await insert({
         client_name: clientName,
-        professional,
+        professional: name,
         service,
         scheduled_at: new Date(scheduledAt).toISOString(),
         price: price ? Number(price) : null,
@@ -58,19 +57,13 @@ export function Agendamento() {
     <div>
       <div className="mod-header">
         <div className="mod-title">Agendamento de Clientes</div>
-        <div className="mod-sub">Próximos atendimentos do studio</div>
+        <div className="mod-sub">Seus próximos atendimentos</div>
       </div>
 
       <form className="mod-form" onSubmit={handleSubmit}>
         <label className="mod-field">
           <span>Cliente</span>
           <input value={clientName} onChange={(e) => setClientName(e.target.value)} required />
-        </label>
-        <label className="mod-field">
-          <span>Profissional</span>
-          <select value={professional} onChange={(e) => setProfessional(e.target.value)}>
-            {PROFESSIONALS.map((p) => <option key={p} value={p}>{p}</option>)}
-          </select>
         </label>
         <label className="mod-field">
           <span>Serviço</span>
@@ -95,14 +88,13 @@ export function Agendamento() {
         {loading ? (
           <p className="mod-empty">Carregando...</p>
         ) : rows.length === 0 ? (
-          <p className="mod-empty">Nenhum agendamento ainda.</p>
+          <p className="mod-empty">Nenhum agendamento seu ainda.</p>
         ) : (
           <table className="mod-table">
             <thead>
               <tr>
                 <th>Data</th>
                 <th>Cliente</th>
-                <th>Profissional</th>
                 <th>Serviço</th>
                 <th>Valor</th>
                 <th>Status</th>
@@ -114,7 +106,6 @@ export function Agendamento() {
                 <tr key={a.id}>
                   <td>{formatDate(a.scheduled_at)}</td>
                   <td>{a.client_name}</td>
-                  <td>{a.professional}</td>
                   <td>{a.service}</td>
                   <td>{a.price != null ? `R$${a.price}` : '—'}</td>
                   <td><span className={`mod-tag ${a.status}`}>{a.status}</span></td>
