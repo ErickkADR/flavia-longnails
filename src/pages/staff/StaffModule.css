@@ -1,0 +1,40 @@
+.mod-header { margin-bottom: 32px; }
+.mod-title { font-family: 'Cinzel', serif; font-size: 1.7rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.mod-sub { font-size: .88rem; color: var(--muted); }
+
+.mod-form {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px;
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 18px;
+  padding: 24px; margin-bottom: 32px; align-items: end;
+}
+.mod-field { display: flex; flex-direction: column; gap: 6px; }
+.mod-field span { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mod-field input, .mod-field select, .mod-field textarea {
+  font-family: 'Jost', sans-serif; font-size: .88rem; color: var(--ink);
+  border: 1.5px solid var(--muted-l); border-radius: 10px; padding: 10px 12px; background: var(--bg);
+}
+.mod-field input:focus, .mod-field select:focus, .mod-field textarea:focus { outline: none; border-color: var(--accent); }
+.mod-form .btn-primary { padding: 12px 26px; font-size: .85rem; white-space: nowrap; }
+
+.mod-error { color: #b3402f; font-size: .82rem; margin-bottom: 16px; }
+.mod-empty { color: var(--muted); font-size: .88rem; padding: 24px 0; }
+
+.mod-table-wrap { overflow-x: auto; border: 1.5px solid var(--muted-l); border-radius: 18px; background: var(--surface); }
+.mod-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.mod-table th {
+  text-align: left; font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); padding: 14px 18px; border-bottom: 1.5px solid var(--muted-l); white-space: nowrap;
+}
+.mod-table td { padding: 14px 18px; border-bottom: 1px solid var(--muted-l); color: var(--ink); vertical-align: top; }
+.mod-table tr:last-child td { border-bottom: none; }
+.mod-table-del {
+  border: none; background: transparent; color: var(--muted); cursor: pointer;
+  font-size: .78rem; text-decoration: underline; transition: color .2s;
+}
+.mod-table-del:hover { color: #b3402f; }
+
+.mod-tag { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: .72rem; font-weight: 600; }
+.mod-tag.entrada, .mod-tag.agendado { background: var(--accent-soft); color: var(--accent-deep); }
+.mod-tag.saida { background: #f3d9d3; color: #a13f2c; }
+.mod-tag.concluido { background: #d9e9d3; color: #3f6b2c; }
+.mod-tag.cancelado { background: var(--muted-l); color: var(--muted); }
