@@ -17,8 +17,8 @@ export function Resultados() {
           <div className="sec-label">Portfolio</div>
           <h2 className="sec-title">Resultados que <span>Falam por Si</span></h2>
           <p className="resultados-text">
-            Cada atendimento no studio é pensado pra durar — na unha, na make ou no cabelo.
-            Produtos de qualidade, técnica apurada e um olhar atento a cada detalhe, sempre.
+            Cada atendimento no studio é pensado pra durar, na unha, na make ou no cabelo,
+            com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
           </p>
           <div className="resultados-stats">
             <div className="rs-rating">

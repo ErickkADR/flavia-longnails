@@ -20,7 +20,7 @@ export function ProHero({ pro }: { pro: Professional }) {
               <img src={asset(pro.avatar)} alt={pro.photoIsPlaceholder ? `${pro.name} (foto ilustrativa)` : pro.name} />
             </div>
             {pro.photoIsPlaceholder && (
-              <p className="pro-note">Foto ilustrativa — em breve, foto real de {pro.name}.</p>
+              <p className="pro-note">Foto ilustrativa. Em breve, foto real de {pro.name}.</p>
             )}
           </div>
 

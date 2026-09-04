@@ -10,7 +10,7 @@ export function Footer() {
         <div className="footer-top">
           <div>
             <Link to="/" className="footer-logo">Studio Flávia Alves</Link>
-            <p className="footer-tagline">Unhas, maquiagem e cabelo — beleza em um só lugar</p>
+            <p className="footer-tagline">Unhas, maquiagem e cabelo em um só lugar</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/flavia_longnails/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <InstagramIcon />

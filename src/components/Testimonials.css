@@ -2,22 +2,22 @@
 .test-header { text-align: center; max-width: 580px; margin: 0 auto 52px; }
 
 .test-card {
-  width: 360px; flex-shrink: 0;
+  width: 360px; flex-shrink: 0; display: flex; flex-direction: column;
   background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 20px;
-  padding: 32px; box-shadow: 0 4px 24px rgba(150, 86, 47, .05);
+  padding: 26px 28px; box-shadow: 0 4px 24px rgba(150, 86, 47, .05);
 }
-.test-quote { font-family: 'Cinzel', serif; font-size: 2.8rem; color: var(--accent-soft); line-height: 1; margin-bottom: 14px; }
-.test-text { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-style: italic; color: var(--muted); line-height: 1.7; margin-bottom: 20px; min-height: 5.9em; }
-.test-stars { color: var(--accent); font-size: .85rem; letter-spacing: .1em; margin-bottom: 14px; }
-.test-author { display: flex; align-items: center; gap: 12px; }
+.test-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .author-av {
-  width: 42px; height: 42px; border-radius: 50%; background: var(--accent);
+  width: 46px; height: 46px; border-radius: 50%; background: var(--accent);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 700; color: #fff; flex-shrink: 0;
+  font-family: 'Cinzel', serif; font-size: .8rem; font-weight: 700; color: #fff; flex-shrink: 0;
 }
-.author-name { font-family: 'Cinzel', serif; font-size: .72rem; font-weight: 600; color: var(--ink); letter-spacing: .05em; }
-.author-svc { font-size: .68rem; color: var(--muted); margin-top: 2px; }
+.author-name { font-family: 'Cinzel', serif; font-size: .82rem; font-weight: 600; color: var(--ink); letter-spacing: .02em; }
+.author-svc { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+
+.test-text { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-style: italic; color: var(--muted); line-height: 1.7; min-height: 5.9em; }
+.test-stars { color: var(--accent); font-size: .85rem; letter-spacing: .1em; margin-top: 18px; }
 
 @media (max-width: 640px) {
-  .test-card { width: 280px; padding: 26px; }
+  .test-card { width: 280px; padding: 22px; }
 }

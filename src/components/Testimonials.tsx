@@ -14,18 +14,17 @@ export function Testimonials() {
       </div>
       <Marquee duration={48}>
         {testimonials.map((t) => (
-          <div className="test-card" key={t.name}>
-            <div className="test-quote">&ldquo;</div>
-            <p className="test-text">{t.text}</p>
-            <div className="test-stars">★★★★★</div>
-            <div className="test-author">
-              <div className="author-av">{t.initials}</div>
+          <article className="test-card" key={t.name}>
+            <div className="test-card-head">
+              <span className="author-av">{t.initials}</span>
               <div>
                 <div className="author-name">{t.name}</div>
                 <div className="author-svc">{t.service} · {t.professional}</div>
               </div>
             </div>
-          </div>
+            <p className="test-text">{t.text}</p>
+            <div className="test-stars">★★★★★</div>
+          </article>
         ))}
       </Marquee>
     </section>

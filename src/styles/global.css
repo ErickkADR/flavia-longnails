@@ -33,7 +33,7 @@ a { color: inherit; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 1536px; margin: 0 auto; padding: 0 24px; }
 
 .reveal, .reveal-left, .reveal-right {
   opacity: 0;

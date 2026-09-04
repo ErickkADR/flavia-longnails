@@ -1,7 +1,6 @@
 .marquee {
+  position: relative;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 .marquee-track {
   display: flex; width: max-content;
@@ -10,9 +9,21 @@
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-group { display: flex; gap: 24px; padding-right: 24px; flex-shrink: 0; }
 
+/* Fade nas bordas com divs sólidas por cima, não mask-image: mask junto com o transform
+   animado do track pisca/some por instantes em alguns navegadores WebKit. */
+.marquee-fade {
+  position: absolute; top: 0; bottom: 0; width: 64px; z-index: 2; pointer-events: none;
+}
+.marquee-fade-l { left: 0; background: linear-gradient(90deg, var(--marquee-bg, var(--bg)), transparent); }
+.marquee-fade-r { right: 0; background: linear-gradient(270deg, var(--marquee-bg, var(--bg)), transparent); }
+
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+  .marquee-fade { width: 32px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

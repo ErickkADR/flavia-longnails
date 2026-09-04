@@ -7,8 +7,8 @@ import './InstaGallery.css';
 export function InstaGallery({ pro }: { pro: Professional }) {
   const heading = pro.instagramIsReal ? 'Trabalhos' : 'Inspirações';
   const sub = pro.instagramIsReal
-    ? `Imagens ilustrativas — os posts reais estão no Instagram @${pro.instagram}`
-    : `Imagens ilustrativas — Instagram de ${pro.name} em breve`;
+    ? `Imagens ilustrativas. Os posts reais estão no Instagram @${pro.instagram}`
+    : `Imagens ilustrativas. Instagram de ${pro.name} em breve`;
 
   return (
     <section className="insta-gallery">

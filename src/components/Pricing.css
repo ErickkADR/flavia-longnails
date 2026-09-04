@@ -1,27 +1,51 @@
 .pricing { padding: 110px 0 0; background: var(--bg-alt); overflow: hidden; }
 .pricing-header { text-align: center; max-width: 580px; margin: 0 auto 52px; }
 
-.pricing-list { max-width: 760px; margin: 0 auto; }
-.price-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  padding: 22px 28px; border-radius: 16px; background: var(--surface); border: 1px solid var(--muted-l);
-  margin-bottom: 14px; transition: all .3s;
-}
-.price-row:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: 0 12px 40px rgba(150, 86, 47, .1); }
-.price-info { display: flex; align-items: center; gap: 16px; }
-.price-rank {
-  font-family: 'Cinzel', serif; font-size: .7rem; font-weight: 700; color: #fff; background: var(--accent);
-  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.price-name { font-family: 'Cinzel', serif; font-size: .92rem; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
-.price-pro { font-size: .72rem; color: var(--muted); }
-.price-val { font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; color: var(--accent); flex-shrink: 0; white-space: nowrap; }
+.rank-grid { max-width: 980px; margin: 0 auto; display: grid; gap: 22px; }
 
-.tag-marquee { margin-top: 56px; border-top: 1.5px solid var(--muted-l); padding: 22px 0; background: var(--surface); }
+.rank-spotlight {
+  display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--accent-soft), var(--bg-alt) 120%);
+  border: 1.5px solid rgba(190, 114, 72, .35);
+  border-radius: 28px; padding: 40px 46px;
+}
+.rank-spotlight-left { display: flex; align-items: center; gap: 24px; }
+.rank-medal {
+  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700;
+  box-shadow: 0 12px 30px rgba(150, 86, 47, .32);
+}
+.rank-spotlight-tag { font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-deep); margin-bottom: 8px; }
+.rank-spotlight-name { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 700; color: var(--ink); }
+.rank-spotlight-pro { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.rank-spotlight-price { font-family: 'Cinzel', serif; font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 700; color: var(--accent-deep); }
+
+.rank-others { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.rank-card { background: var(--surface); border: 1px solid var(--muted-l); border-radius: 18px; padding: 24px; transition: all .3s; }
+.rank-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 18px 40px rgba(150, 86, 47, .12); }
+.rank-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.rank-card-num {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent-soft); color: var(--accent-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: .8rem;
+}
+.rank-card-name { font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink); font-size: .95rem; }
+.rank-card-pro { font-size: .74rem; color: var(--muted); margin-bottom: 14px; }
+.rank-card-price { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+
+.tag-marquee { margin-top: 56px; border-top: 1.5px solid var(--muted-l); padding: 22px 0; background: var(--surface); --marquee-bg: var(--surface); }
 .tag-item { font-family: 'Cinzel', serif; font-size: .78rem; letter-spacing: .06em; color: var(--accent); white-space: nowrap; padding: 0 20px; }
 .tag-dot { color: var(--accent-soft); margin-left: 20px; }
 
+@media (max-width: 860px) {
+  .rank-others { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 640px) {
-  .price-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .price-val { align-self: flex-end; }
+  .rank-spotlight { padding: 32px 26px; }
+  .rank-spotlight-left { gap: 16px; }
+  .rank-medal { width: 52px; height: 52px; font-size: 1.1rem; }
+  .rank-others { grid-template-columns: 1fr; }
 }

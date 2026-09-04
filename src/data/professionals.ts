@@ -30,7 +30,7 @@ export const professionals: Professional[] = [
     role: 'Unhas & Nail Art',
     avatar: 'images/avatar-about-BtqxEbBP.png',
     photoIsPlaceholder: false,
-    bio: 'Especialista em unhas longas e nail art, com anos de experiência transformando as mãos das clientes em verdadeiras obras de arte. Cada atendimento é único e personalizado, com produtos de alta qualidade e técnicas modernas — resultados duradouros e acabamento impecável.',
+    bio: 'Especialista em unhas longas e nail art, com anos de experiência transformando as mãos das clientes em verdadeiras obras de arte. Cada atendimento é único e personalizado, com produtos de alta qualidade e técnicas modernas, resultados duradouros e acabamento impecável.',
     instagram: 'flavia_longnails',
     instagramIsReal: true,
     services: [
@@ -63,9 +63,9 @@ export const professionals: Professional[] = [
     instagram: 'jhenyluanyybeauty',
     instagramIsReal: true,
     services: [
-      { icon: '💄', name: 'Maquiagem Social', desc: 'Make para o dia a dia, ensaios ou compromissos — natural e elegante, feita sob medida para você.', price: 'R$150' },
+      { icon: '💄', name: 'Maquiagem Social', desc: 'Make para o dia a dia, ensaios ou compromissos, natural e elegante, feita sob medida para você.', price: 'R$150' },
       { icon: '👰', name: 'Maquiagem para Noiva', desc: 'Produção completa para o grande dia, com prova incluída e produtos de alta fixação para durar até o último brinde.', price: 'R$350', popular: true },
-      { icon: '✨', name: 'Maquiagem para Festa', desc: 'Para debutantes, formaturas e festas — acabamento com mais intensidade e efeito prolongado para fotos.', price: 'R$180' },
+      { icon: '✨', name: 'Maquiagem para Festa', desc: 'Para debutantes, formaturas e festas, com acabamento mais intenso e efeito prolongado para fotos.', price: 'R$180' },
       { icon: '👁️', name: 'Design de Sobrancelha', desc: 'Modelagem que valoriza o formato do seu rosto, com técnica de fio a fio ou henna.', price: 'R$40' },
       { icon: '🎀', name: 'Aplicação de Cílios', desc: 'Cílios postiços fio a fio ou boneca, para um olhar mais marcante no seu evento.', price: 'R$90' },
       { icon: '🎨', name: 'Aula de Automaquiagem', desc: 'Aula individual e personalizada para você aprender a se maquiar sozinha no dia a dia.', price: 'R$120' },
@@ -87,7 +87,7 @@ export const professionals: Professional[] = [
     instagramIsReal: false,
     services: [
       { icon: '✂️', name: 'Corte Feminino', desc: 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', price: 'R$70' },
-      { icon: '💨', name: 'Escova Modelada', desc: 'Escova com acabamento liso ou volumoso, pronta para o seu dia — ou a sua noite.', price: 'R$60' },
+      { icon: '💨', name: 'Escova Modelada', desc: 'Escova com acabamento liso ou volumoso, pronta para o seu dia ou a sua noite.', price: 'R$60' },
       { icon: '💧', name: 'Hidratação Profunda', desc: 'Tratamento que repõe nutrientes e devolve brilho e maciez para o fio.', price: 'R$90' },
       { icon: '🎨', name: 'Coloração', desc: 'Cobertura de fios brancos ou mudança de cor, com produtos que preservam a saúde do cabelo.', price: 'R$180', popular: true },
       { icon: '✨', name: 'Luzes / Mechas', desc: 'Iluminação personalizada para dar profundidade e movimento ao cabelo.', price: 'R$250' },
