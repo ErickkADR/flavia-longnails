@@ -6,3 +6,6 @@ dist-ssr
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
+
+# Dados reais de clientes (PII) — nunca versionar num repo público.
+supabase/import-flavia-data.sql
