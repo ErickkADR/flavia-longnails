@@ -30,5 +30,7 @@ export function useMonthFilter<T>(rows: T[], dateField: keyof T) {
     setMonth(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
   }
 
-  return { filtered, label, prevMonth: () => shift(-1), nextMonth: () => shift(1) };
+  // `month` sai junto porque o controle de aluguel precisa da chave YYYY-MM pra
+  // montar o reference_month da linha, e nao so da lista ja filtrada.
+  return { filtered, label, month, prevMonth: () => shift(-1), nextMonth: () => shift(1) };
 }

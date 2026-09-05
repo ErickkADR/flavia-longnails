@@ -1,4 +1,4 @@
-.contact { padding: 110px 0; background: var(--bg); }
+.contact { padding: var(--section-y) 0; background: var(--bg); }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
 
 .c-item { display: flex; gap: 18px; margin-bottom: 26px; padding-bottom: 26px; border-bottom: 1px solid var(--muted-l); }

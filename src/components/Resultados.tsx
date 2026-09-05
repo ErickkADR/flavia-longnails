@@ -6,10 +6,22 @@ export function Resultados() {
   return (
     <section className="resultados" id="resultados">
       <div className="container resultados-grid">
+        {/* Composição em camadas: arco principal, contorno deslocado atrás pra dar
+            profundidade, e um círculo menor mordendo o canto. Era um círculo só com
+            borda branca grossa, que ficava chapado. */}
         <div className="resultados-visual reveal-left">
-          <div className="resultados-blob" aria-hidden="true"></div>
-          <div className="resultados-frame">
-            <img src={asset('images/gallery-1-BmiSL3Sa.jpg')} alt="Nail art feita no Studio Flávia Alves" />
+          <div className="rv-ring" aria-hidden="true" />
+          <div className="rv-main">
+            <img
+              src={asset('images/ig-flavia-4.jpg')}
+              alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Afrodite Studio"
+            />
+          </div>
+          <div className="rv-inset">
+            <img
+              src={asset('images/ig-flavia-2.jpg')}
+              alt="Francesinha vermelha com aplique de cereja"
+            />
           </div>
         </div>
 

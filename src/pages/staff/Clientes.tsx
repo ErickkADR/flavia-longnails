@@ -14,11 +14,15 @@ interface Client {
 
 interface AppointmentRef {
   id: string;
+  client_id: string | null;
   client_name: string;
   status: string;
 }
 
-/** A partir de quantas visitas concluídas a cliente vira VIP automaticamente. */
+/**
+ * A partir de quantas visitas a cliente vira VIP automaticamente.
+ * Agendamento novo ja conta: cancelado e o unico status que fica de fora.
+ */
 const VIP_MIN_VISITS = 3;
 
 function normalize(name: string) {
@@ -36,18 +40,31 @@ export function Clientes() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
+  /**
+   * Duas contagens em paralelo, e cada agendamento cai em exatamente uma delas:
+   * - por `client_id`, que o autocomplete do agendamento passou a gravar;
+   * - por nome normalizado, que e o unico vinculo que as 260 linhas importadas da
+   *   planilha antiga tem.
+   * Somar as duas fecha o historico sem contar ninguem duas vezes. Quando as linhas
+   * antigas ganharem client_id, o segundo mapa simplesmente esvazia sozinho.
+   */
   const visitCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
+    const byId: Record<string, number> = {};
+    const byName: Record<string, number> = {};
     for (const a of appointments) {
       if (a.status === 'cancelado') continue;
-      const key = normalize(a.client_name);
-      counts[key] = (counts[key] ?? 0) + 1;
+      if (a.client_id) byId[a.client_id] = (byId[a.client_id] ?? 0) + 1;
+      else byName[normalize(a.client_name)] = (byName[normalize(a.client_name)] ?? 0) + 1;
     }
-    return counts;
+    return { byId, byName };
   }, [appointments]);
 
   const withVisits = useMemo(
-    () => rows.map((c) => ({ ...c, visits: visitCounts[normalize(c.name)] ?? 0 })),
+    () =>
+      rows.map((c) => ({
+        ...c,
+        visits: (visitCounts.byId[c.id] ?? 0) + (visitCounts.byName[normalize(c.name)] ?? 0),
+      })),
     [rows, visitCounts]
   );
   const vipClients = useMemo(
@@ -108,7 +125,7 @@ export function Clientes() {
         <div className="vip-section">
           <div className="vip-header">
             <span className="vip-star">✦</span> Clientes VIP
-            <span className="vip-note">{VIP_MIN_VISITS}+ visitas concluídas — calculado automaticamente</span>
+            <span className="vip-note">{VIP_MIN_VISITS}+ visitas, canceladas não contam, calculado automaticamente</span>
           </div>
           <div className="vip-grid">
             {vipClients.map((c) => (

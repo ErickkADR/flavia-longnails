@@ -20,7 +20,7 @@ export function StaffLayout() {
     <div className="staff-shell">
       <aside className="staff-sidebar">
         <div className="staff-sidebar-top">
-          <div className="staff-sidebar-logo">Studio <span>Flávia Alves</span></div>
+          <div className="staff-sidebar-logo">Afrodite <span>Studio</span></div>
           <div className="staff-sidebar-user">Olá, {name}</div>
         </div>
         <nav className="staff-nav">

@@ -35,6 +35,25 @@ export function useTable<T extends { id: string }>(table: string, orderBy = 'cre
     await reload();
   }
 
+  async function update(id: string, patch: Partial<T>) {
+    if (!supabase) throw new Error('Supabase nao configurado');
+    const { error } = await supabase.from(table).update(patch as never).eq('id', id);
+    if (error) throw error;
+    await reload();
+  }
+
+  /**
+   * Grava criando ou sobrescrevendo, conforme a chave unica informada em `onConflict`.
+   * Usado no controle de aluguel: a tela marca "pagou" num mes que pode nunca ter tido
+   * linha, e clicar de novo no mesmo mes precisa atualizar em vez de duplicar.
+   */
+  async function upsert(row: Partial<T>, onConflict: string) {
+    if (!supabase) throw new Error('Supabase nao configurado');
+    const { error } = await supabase.from(table).upsert(row as never, { onConflict });
+    if (error) throw error;
+    await reload();
+  }
+
   async function remove(id: string) {
     if (!supabase) throw new Error('Supabase não configurado');
     const { error } = await supabase.from(table).delete().eq('id', id);
@@ -42,5 +61,5 @@ export function useTable<T extends { id: string }>(table: string, orderBy = 'cre
     await reload();
   }
 
-  return { rows, loading, error, insert, remove, reload };
+  return { rows, loading, error, insert, update, upsert, remove, reload };
 }

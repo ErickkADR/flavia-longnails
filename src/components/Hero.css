@@ -1,44 +1,119 @@
+/* Hero de tela cheia: texto na coluna da ESQUERDA, vídeo ocupando a viewport inteira
+   por baixo. O scrim é um degradê que sai do bege sólido na esquerda (onde o texto vive)
+   e abre pro vídeo limpo na direita. O vídeo continua cobrindo 100% da tela; o que muda
+   é de que lado ele fica legível. Texto segue em tinta escura sobre bege, igual ao resto
+   do site, sem overlay escuro nem texto branco. */
+
 .hero {
-  padding: clamp(150px, 14vw, 210px) 0 clamp(80px, 8vw, 120px);
-  background: var(--bg); position: relative; overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--bg);
+  padding: 104px 0 56px; /* topo reserva o nav fixo, que é position:fixed */
 }
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; width: 100%; }
+
+.hero-stage { position: absolute; inset: 0; z-index: 0; }
+
+/* Os três clipes ficam empilhados no mesmo lugar; só o ativo aparece. O fade é longo
+   de propósito: corte seco atrás de um texto compete com a leitura. */
+.hero-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.1s ease;
+  pointer-events: none;
+}
+.hero-video.is-active { opacity: 1; }
+
+.hero-scrim {
+  position: absolute; inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    /* pé da tela: costura com a seção seguinte, sem corte duro no vídeo */
+    linear-gradient(to top,
+      rgba(var(--bg-rgb), .5) 0%,
+      rgba(var(--bg-rgb), 0) 22%),
+    /* eixo principal: bege opaco à esquerda, vídeo limpo à direita */
+    linear-gradient(96deg,
+      var(--bg) 0%,
+      rgba(var(--bg-rgb), .94) 26%,
+      rgba(var(--bg-rgb), .62) 42%,
+      rgba(var(--bg-rgb), .12) 64%,
+      rgba(var(--bg-rgb), 0) 88%);
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 620px) 1fr;
+  align-items: center;
+  width: 100%;
+}
+.hero-copy { grid-column: 1; }
 
 .hero-title {
-  font-family: 'Cinzel', serif; font-size: clamp(2.6rem, 5.2vw, 4.4rem);
-  font-weight: 600; line-height: 1.12; color: var(--ink); margin-bottom: 26px;
+  font-family: 'Cinzel', serif; font-size: clamp(2.4rem, 3.6vw, 3.6rem);
+  font-weight: 600; line-height: 1.14; color: var(--ink); margin-bottom: 24px;
 }
 .hero-title span { color: var(--accent); }
 
-.hero-desc { font-size: 1.12rem; color: var(--muted); max-width: 540px; margin-bottom: 46px; line-height: 1.85; }
+.hero-desc { font-size: 1.08rem; color: var(--muted); max-width: 540px; margin-bottom: 40px; line-height: 1.8; }
 
-.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 58px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 46px; }
 
-.hero-stats { display: flex; gap: 52px; padding-top: 34px; border-top: 1px solid var(--muted-l); flex-wrap: wrap; }
-.stat-num { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }
+.hero-stats { display: flex; gap: 40px; padding-top: 30px; border-top: 1px solid var(--muted-l); flex-wrap: wrap; }
+.stat-num { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }
 .stat-lbl { font-size: .7rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 
-.hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
-.hero-blob {
-  position: absolute; top: 50%; right: -8%; transform: translateY(-50%);
-  width: 92%; aspect-ratio: 1/1; border-radius: 50%;
-  background: var(--accent-soft); z-index: 0;
+/* Indicador da especialidade em cena, no canto do lado do vídeo. Serve de legenda
+   (diz que o studio faz três coisas) e de controle manual pra quem não quer esperar. */
+.hero-dots {
+  position: absolute; z-index: 3;
+  right: clamp(24px, 4vw, 56px); bottom: clamp(24px, 4vw, 48px);
+  display: flex; align-items: center; gap: 10px;
 }
-.hero-frame {
-  position: relative; z-index: 1; width: 92%; aspect-ratio: 4/5; max-height: 74vh;
-  border-radius: 32px; overflow: hidden;
-  border: 6px solid var(--surface);
-  box-shadow: 0 30px 70px rgba(150, 86, 47, .18);
+.hero-dots-lbl {
+  font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-deep); margin-right: 4px;
+  background: rgba(var(--bg-rgb), .7); padding: 5px 11px; border-radius: 100px;
+  backdrop-filter: blur(8px);
 }
-.hero-frame img { width: 100%; height: 100%; object-fit: cover; }
+.hero-dot {
+  width: 8px; height: 8px; padding: 0; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--accent-deep); background: transparent;
+  transition: all .3s;
+}
+.hero-dot.is-on { background: var(--accent-deep); transform: scale(1.3); }
 
+/* Abaixo de 900px nenhum <source> é renderizado (ver Hero.tsx), então o que aparece é o
+   poster. Conteúdo desce pro terço de baixo, com o degradê vertical: a foto respira em
+   cima e o texto fica sobre a parte opaca. */
 @media (max-width: 900px) {
-  .hero { padding: 128px 0 72px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+  .hero {
+    align-items: flex-end;
+    padding: 116px 0 72px;
+  }
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-copy { grid-column: 1; }
+  .hero-video { opacity: 1; } /* só o poster aparece aqui; sem fade pra não piscar */
+  .hero-scrim {
+    background: linear-gradient(to bottom,
+      rgba(var(--bg-rgb), .10) 0%,
+      rgba(var(--bg-rgb), .30) 32%,
+      rgba(var(--bg-rgb), .88) 58%,
+      var(--bg) 82%);
+  }
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
-  .hero-stats { justify-content: center; }
-  .hero-visual { order: -1; }
-  .hero-frame { width: 70%; max-height: none; margin: 0 auto; }
-  .hero-blob { width: 80%; right: 10%; }
+  .hero-stats { justify-content: center; gap: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { transition: none; }
 }

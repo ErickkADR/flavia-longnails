@@ -31,7 +31,7 @@ export function Login() {
       <form className="staff-login-card" onSubmit={handleSubmit}>
         <div className="sec-label">Área da Colaboradora</div>
         <h1 className="staff-login-title">Entrar</h1>
-        <p className="staff-login-sub">Acesso restrito à equipe do Studio Flávia Alves.</p>
+        <p className="staff-login-sub">Acesso restrito à equipe do Afrodite Studio.</p>
 
         {!supabaseConfigured && (
           <p className="staff-login-warning">

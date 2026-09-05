@@ -1,16 +1,61 @@
-.resultados { padding: clamp(90px, 14vw, 170px) 0; background: var(--bg-alt); }
-.resultados-grid { display: grid; grid-template-columns: .85fr 1fr; gap: 90px; align-items: center; width: 100%; }
+.resultados { padding: var(--section-y) 0; background: var(--bg-alt); }
+.resultados-grid { display: grid; grid-template-columns: .9fr 1fr; gap: 90px; align-items: center; width: 100%; }
 
-.resultados-visual { position: relative; display: flex; align-items: center; justify-content: center; }
-.resultados-blob {
-  position: absolute; top: 50%; left: 8%; transform: translateY(-50%);
-  width: 90%; aspect-ratio: 1/1; border-radius: 50%; background: var(--bg); z-index: 0;
+/* ============================================================
+   Visual em camadas
+   Antes era um círculo único com borda branca de 6px sobre o bege: sem profundidade,
+   e o recorte redondo cortava justamente as pontas das unhas, que é o assunto da foto.
+   Agora são três planos: contorno deslocado ao fundo, arco principal no meio, círculo
+   menor à frente mordendo o canto. O arco (topo abaulado, base reta) é forma de
+   catálogo de beleza e preserva a foto em retrato, que é como o Instagram entrega.
+   ============================================================ */
+.resultados-visual {
+  position: relative;
+  padding: 4% 0 7% 0;
 }
-.resultados-frame {
-  position: relative; z-index: 1; width: 85%; aspect-ratio: 1/1; max-height: 62vh; border-radius: 50%;
-  overflow: hidden; border: 6px solid var(--surface); box-shadow: 0 30px 70px rgba(150, 86, 47, .16);
+
+/* Proporção 3/4 igual à das fotos do Instagram: sem corte lateral. */
+.rv-main {
+  position: relative;
+  z-index: 2;
+  width: 76%;
+  margin-left: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 50% 50% 16px 16px / 38% 38% 16px 16px;
+  overflow: hidden;
+  box-shadow: 0 34px 72px rgba(150, 86, 47, .22);
 }
-.resultados-frame img { width: 100%; height: 100%; object-fit: cover; }
+.rv-main img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Contorno fino repetindo o arco, deslocado pra cima e pra esquerda. É o que dá a
+   sensação de camada sem precisar de mais uma foto. */
+.rv-ring {
+  position: absolute;
+  z-index: 0;
+  right: 8%;
+  top: 0;
+  width: 76%;
+  aspect-ratio: 3 / 4;
+  border: 1.5px solid var(--accent);
+  border-radius: 50% 50% 16px 16px / 38% 38% 16px 16px;
+  opacity: .5;
+}
+
+/* A borda usa a cor de fundo da seção, não branco: assim o círculo parece recortado
+   de dentro do arco em vez de colado por cima com moldura. */
+.rv-inset {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+  width: 42%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 8px solid var(--bg-alt);
+  box-shadow: 0 20px 44px rgba(150, 86, 47, .24);
+}
+.rv-inset img { width: 100%; height: 100%; object-fit: cover; }
 
 .resultados-text { font-size: 1.06rem; color: var(--muted); line-height: 1.9; max-width: 520px; margin-bottom: 40px; }
 
@@ -31,7 +76,12 @@
   .resultados-grid { grid-template-columns: 1fr; gap: 44px; text-align: center; }
   .resultados-text { margin-left: auto; margin-right: auto; }
   .resultados-stats { justify-content: center; }
-  .resultados-frame { width: 58%; margin: 0 auto; }
-  .resultados-blob { width: 70%; }
   .rs-avatars { justify-content: center; }
+
+  /* Empilhado a composição encolhe e centraliza, mas mantém as três camadas: o
+     conjunto é a identidade da seção, não um enfeite de desktop. */
+  .resultados-visual { max-width: 380px; margin: 0 auto; padding: 4% 0 10% 0; }
+  .rv-main { width: 72%; }
+  .rv-ring { width: 72%; right: 10%; }
+  .rv-inset { width: 44%; border-width: 6px; }
 }

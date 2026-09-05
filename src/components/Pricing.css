@@ -1,4 +1,4 @@
-.pricing { padding: 110px 0 0; background: var(--bg-alt); overflow: hidden; }
+.pricing { padding: var(--section-y) 0 0; background: var(--bg-alt); overflow: hidden; }
 .pricing-header { text-align: center; max-width: 580px; margin: 0 auto 52px; }
 
 .rank-grid { max-width: 980px; margin: 0 auto; display: grid; gap: 22px; }

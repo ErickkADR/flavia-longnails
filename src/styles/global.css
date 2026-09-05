@@ -5,6 +5,8 @@
 :root {
   /* Bege claro — fundo dominante do site (nunca terracota sólido em áreas grandes) */
   --bg: #FBF6EF;
+  /* Mesmo bege, em componentes: o scrim do hero precisa dele com alpha variavel. */
+  --bg-rgb: 251, 246, 239;
   --bg-alt: #F3E7D8;
   --surface: #ffffff;
 
@@ -16,6 +18,13 @@
   --ink: #2E2620;
   --muted: #8A7A6C;
   --muted-l: #E3D6C4;
+
+  /* Ritmo vertical das secoes.
+     Era clamp(90px, 14vw, 170px) espalhado por cada componente. O 14vw escala com a
+     LARGURA da tela, entao em monitor largo todas as secoes batiam no teto de 170px e
+     dois blocos vizinhos somavam 340px de vao. Um token so, mais curto, e o valor de
+     referencia pra qualquer secao nova. */
+  --section-y: clamp(64px, 6.5vw, 112px);
 }
 
 html { scroll-behavior: smooth; }

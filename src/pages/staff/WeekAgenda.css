@@ -1,0 +1,97 @@
+/* Agenda semanal no formato de grade horária: colunas são dias (terça a domingo),
+   a régua da esquerda são as horas, e cada atendimento é um bloco posicionado por
+   `top`/`height` calculados a partir do horário e da duração. O mesmo desenho do
+   Google Agenda, sem biblioteca. */
+
+.wk { margin: 20px 0 8px; }
+
+.wk-grid {
+  display: grid;
+  grid-template-columns: 52px repeat(6, minmax(0, 1fr));
+  border: 1px solid var(--muted-l);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.wk-corner { border-bottom: 1px solid var(--muted-l); background: var(--bg); }
+
+.wk-dayhead {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 4px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--muted-l);
+  border-left: 1px solid var(--muted-l);
+  font-family: inherit; cursor: pointer;
+  transition: background .2s;
+}
+.wk-dayhead:hover { background: var(--accent-soft); }
+.wk-dayhead.is-today { background: var(--accent-soft); }
+.wk-dow { font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.wk-date { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--ink); }
+.wk-free { font-size: .62rem; color: var(--accent-deep); letter-spacing: .04em; }
+
+/* Régua de horas. A altura de cada faixa é a mesma unidade usada pelo cálculo de
+   `top` dos blocos, então a linha da hora e o bloco das 14h coincidem. */
+.wk-hours { background: var(--bg); }
+.wk-hour {
+  height: var(--px-hour);
+  border-bottom: 1px dashed var(--muted-l);
+  position: relative;
+}
+.wk-hour span {
+  position: absolute; top: -8px; right: 6px;
+  font-size: .62rem; color: var(--muted); background: var(--bg); padding: 0 2px;
+}
+.wk-hour:first-child span { top: 2px; }
+
+.wk-col {
+  position: relative;
+  border-left: 1px solid var(--muted-l);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0, transparent calc(var(--px-hour) - 1px),
+      var(--muted-l) calc(var(--px-hour) - 1px), var(--muted-l) var(--px-hour)
+    );
+}
+
+/* Encaixe clicável. Fica invisível até o mouse chegar: a grade tem 20 deles por dia
+   e desenhar todos o tempo todo viraria zebrado. */
+.wk-slot {
+  position: absolute; left: 2px; right: 2px;
+  height: calc(var(--px-hour) / 2);
+  border: none; background: transparent; padding: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.wk-slot.is-free:hover { background: rgba(190, 114, 72, .16); box-shadow: inset 0 0 0 1px var(--accent); }
+.wk-slot:disabled { cursor: default; }
+.wk-slot.is-past { opacity: .5; }
+
+.wk-item {
+  position: absolute; left: 3px; right: 3px;
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  border-left: 3px solid var(--accent-deep);
+  background: var(--accent-soft);
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none; /* não rouba o clique do encaixe vizinho */
+}
+.wk-item.concluido { background: #E4EEDF; border-left-color: #5C7F4E; }
+.wk-item.cancelado { background: #F0E2DE; border-left-color: #A8624F; opacity: .65; text-decoration: line-through; }
+
+.wk-item-time { font-size: .58rem; color: var(--accent-deep); letter-spacing: .05em; }
+.wk-item-name { font-size: .74rem; font-weight: 500; color: var(--ink); line-height: 1.2; }
+.wk-item-svc { font-size: .62rem; color: var(--muted); line-height: 1.2; }
+
+.wk-legend { font-size: .74rem; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+/* Em tela estreita a grade de 6 dias não cabe: vira rolagem horizontal com largura
+   mínima por coluna, em vez de espremer tudo até ficar ilegível. */
+@media (max-width: 900px) {
+  .wk { overflow-x: auto; }
+  .wk-grid { min-width: 680px; }
+}

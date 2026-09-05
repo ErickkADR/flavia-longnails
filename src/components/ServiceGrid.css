@@ -1,4 +1,4 @@
-.svc-section { padding: clamp(90px, 14vw, 170px) 0; background: var(--surface); }
+.svc-section { padding: var(--section-y) 0; background: var(--surface); }
 .svc-header { text-align: center; max-width: 620px; margin: 0 auto 64px; }
 .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
 .svc-card {

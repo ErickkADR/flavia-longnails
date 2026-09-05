@@ -1,4 +1,10 @@
-.testimonials { padding: 110px 0 120px; background: var(--bg); }
+.testimonials { padding: var(--section-y) 0; background: var(--bg); }
+
+/* Emenda com a Equipe: as duas usam var(--bg), entao o padding de baixo de uma somava
+   com o de cima da outra e virava uma faixa continua de bege vazio. Quando .team vem
+   logo antes (home), colapsa a maior parte do topo. Em pagina onde .testimonials nao
+   segue a equipe, o ritmo cheio continua valendo. */
+.team + .testimonials { padding-top: calc(var(--section-y) * .3); }
 .test-header { text-align: center; max-width: 580px; margin: 0 auto 52px; }
 
 .test-card { width: 360px; flex-shrink: 0; }

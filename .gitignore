@@ -2,6 +2,13 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Chaves do Supabase. O `*.local` acima NAO pega um `.env` puro, e o repo e publico.
+# A anon key e publica por design (vai no bundle), mas arquivo de env nao se versiona:
+# o dia que alguem colar a service_role aqui por engano, ja era.
+.env
+.env.*
+!.env.example
 .DS_Store
 *.tsbuildinfo
 vite.config.js
@@ -9,3 +16,10 @@ vite.config.d.ts
 
 # Dados reais de clientes (PII) — nunca versionar num repo público.
 supabase/import-flavia-data.sql
+
+# Material do projeto de expansão (contrato, decks, estratégia) — só local.
+# O repo é público; isso não pode vazar.
+projeto-expansao/
+
+# Permissões locais do Claude Code (por máquina).
+.claude/settings.local.json

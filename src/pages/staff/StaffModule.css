@@ -72,3 +72,104 @@
 .admin-card-name { font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
 .admin-card-row { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-bottom: 4px; }
 .admin-card-row strong { color: var(--ink); }
+
+/* ============================================================
+   Autocomplete de cliente
+   Combobox próprio em vez de <datalist>: o datalist não deixa capturar QUAL cliente
+   foi escolhida, só o texto. Como o agendamento precisa gravar o client_id pra somar
+   no histórico certo, a lista é renderizada à mão.
+   ============================================================ */
+.combo { position: relative; }
+.combo-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  margin-top: 4px; padding: 4px; list-style: none;
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(150, 86, 47, .14);
+  max-height: 232px; overflow-y: auto;
+}
+.combo-list li button {
+  display: block; width: 100%; text-align: left;
+  padding: 9px 11px; border: none; background: none; border-radius: 8px;
+  font-family: 'Jost', sans-serif; font-size: .86rem; color: var(--ink); cursor: pointer;
+}
+.combo-list li button:hover { background: var(--accent-soft); }
+.combo-new { padding: 9px 11px; font-size: .76rem; color: var(--muted); font-style: italic; }
+
+/* ============================================================
+   Seletor de serviços (múltipla escolha)
+   Ocupa a linha inteira do grid do formulário: são até 6 chips e espremer isso numa
+   coluna de 160px deixaria ilegível.
+   ============================================================ */
+.svc-picker { grid-column: 1 / -1; }
+.svc-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.svc-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px; border-radius: 100px; cursor: pointer;
+  border: 1.5px solid var(--muted-l); background: var(--bg);
+  font-family: 'Jost', sans-serif; color: var(--ink);
+  transition: all .2s;
+}
+.svc-chip:hover { border-color: var(--accent); }
+.svc-chip.is-on { background: var(--accent-soft); border-color: var(--accent); }
+.svc-chip-ico { font-size: .95rem; }
+.svc-chip-name { font-size: .84rem; }
+.svc-chip-meta { font-size: .68rem; color: var(--muted); }
+.svc-chip.is-on .svc-chip-meta { color: var(--accent-deep); }
+
+.svc-total {
+  font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--accent-deep);
+  padding: 10px 0;
+}
+
+/* ============================================================
+   Dashboard (Contas do Salão e Gastos Pessoais)
+   ============================================================ */
+.dash { margin-bottom: 32px; }
+.dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.dash-card {
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 16px; padding: 18px 20px;
+}
+.dash-card-lbl { font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.dash-card-val { font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); line-height: 1; }
+.dash-card-val.pos { color: #4F7141; }
+.dash-card-val.neg { color: #A8432F; }
+.dash-card-val.accent { color: var(--accent-deep); }
+.dash-card-note { font-size: .72rem; color: var(--muted); margin-top: 7px; }
+
+/* Barras por categoria. Largura proporcional ao maior valor da lista, calculada no
+   componente e injetada como --w, porque CSS puro não sabe o máximo de um conjunto. */
+.dash-bars { background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 16px; padding: 20px; }
+.dash-bars-title { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: 16px; }
+.dash-bar { margin-bottom: 12px; }
+.dash-bar:last-child { margin-bottom: 0; }
+.dash-bar-top { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: 5px; }
+.dash-bar-cat { color: var(--ink); }
+.dash-bar-val { color: var(--muted); }
+.dash-bar-track { height: 7px; border-radius: 100px; background: var(--bg-alt); overflow: hidden; }
+.dash-bar-fill { height: 100%; width: var(--w); border-radius: 100px; background: var(--accent); }
+.dash-bar-fill.entrada { background: #6E9160; }
+.dash-bar-fill.saida { background: var(--accent); }
+
+/* ============================================================
+   Controle de aluguel das colaboradoras (só a Flávia)
+   ============================================================ */
+.rent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.rent-card {
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 16px; padding: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.rent-card.is-paid { border-color: #8FB07F; background: #F4F8F1; }
+.rent-name { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+.rent-amount { font-size: .82rem; color: var(--muted); }
+.rent-amount strong { color: var(--ink); }
+.rent-status { font-size: .78rem; }
+.rent-status.paid { color: #4F7141; }
+.rent-status.due { color: #A8432F; }
+.rent-toggle {
+  padding: 10px 16px; border-radius: 100px; cursor: pointer;
+  border: 1.5px solid var(--accent); background: var(--bg);
+  font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent-deep); transition: all .2s;
+}
+.rent-toggle:hover { background: var(--accent-soft); }
+.rent-card.is-paid .rent-toggle { border-color: #8FB07F; color: #4F7141; }

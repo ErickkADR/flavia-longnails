@@ -9,7 +9,7 @@ export function Footer() {
       <div className="container">
         <div className="footer-top">
           <div>
-            <Link to="/" className="footer-logo">Studio Flávia Alves</Link>
+            <Link to="/" className="footer-logo">Afrodite Studio</Link>
             <p className="footer-tagline">Unhas, maquiagem e cabelo em um só lugar</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/flavia_longnails/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -52,7 +52,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Studio Flávia Alves. Todos os direitos reservados.</span>
+          <span>© 2026 Afrodite Studio. Todos os direitos reservados.</span>
           <span>Feito com 💅 para você</span>
         </div>
       </div>

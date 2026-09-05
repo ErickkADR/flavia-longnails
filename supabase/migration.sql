@@ -1,4 +1,4 @@
--- Studio Flávia Alves — Área da Colaboradora
+-- Afrodite Studio - Área da Colaboradora
 -- Cole isto inteiro no SQL Editor do painel do Supabase e rode uma vez.
 -- (Se você já rodou uma versão anterior deste arquivo sem ter criado nenhum
 -- dado ainda, pode apagar as 4 tabelas antes e rodar este de novo.)
@@ -43,6 +43,23 @@ update public.appointments set owner_id = (
   end
 ) where owner_id is null;
 
+-- Vinculo com a cliente cadastrada. Antes o cruzamento era por texto (clients.name x
+-- appointments.client_name), o que so funciona enquanto ninguem digita diferente. O
+-- autocomplete do formulario passa a gravar o id aqui, e o historico/VIP deixa de
+-- depender de casar string. Fica nullable: as 260 linhas importadas da planilha antiga
+-- nao tem id de cliente, e client_name continua sendo a fonte pra elas.
+alter table public.appointments add column if not exists client_id uuid references public.clients(id) on delete set null;
+
+-- Mais de um servico por atendimento, como [{"name":"Manicure","price":40}].
+-- A coluna `service` (texto, singular) continua existindo e nao foi tocada: e o unico
+-- dado que as linhas importadas tem. A tela le `services` e cai em `service` quando
+-- o array esta vazio.
+alter table public.appointments add column if not exists services jsonb not null default '[]'::jsonb;
+
+-- Quanto tempo o atendimento ocupa. A agenda semanal desenha o bloco com isso e usa
+-- pra saber se um horario esta livre de verdade (um alongamento de 2h fecha 4 encaixes).
+alter table public.appointments add column if not exists duration_min integer not null default 60;
+
 -- ============================================================
 -- 3. Controle de Contas do Salão (compartilhado entre as 3)
 -- ============================================================
@@ -81,6 +98,34 @@ alter table public.personal_expenses add column if not exists type text not null
 alter table public.personal_expenses drop constraint if exists personal_expenses_type_check;
 alter table public.personal_expenses add constraint personal_expenses_type_check check (type in ('entrada', 'saida'));
 
+-- Ambito do lancamento. Cada profissional tem dois bolsos distintos: o gasto da vida
+-- dela e o que ela poe no salao (aluguel do posto, produtos, limpeza, comida). A Flavia
+-- precisa somar o segundo por pessoa, e sem essa coluna os dois viravam a mesma pilha.
+-- Default 'pessoal' de proposito: os 80 lancamentos importados da planilha antiga sao
+-- de quando a Flavia era autonoma sozinha, entao entram como gasto de vida.
+alter table public.personal_expenses add column if not exists scope text not null default 'pessoal';
+alter table public.personal_expenses drop constraint if exists personal_expenses_scope_check;
+alter table public.personal_expenses add constraint personal_expenses_scope_check check (scope in ('pessoal', 'salao'));
+
+-- ============================================================
+-- 5. Aluguel das colaboradoras (so a Flavia enxerga e mexe)
+-- Controle de quem pagou os R$ 500 do mes. Hoje sao Jheny e Vitoria; a Flavia e dona
+-- do studio e nao paga aluguel pra si mesma, por isso ela nao entra no check.
+-- A unique(professional, reference_month) e o que deixa a tela usar upsert e nao
+-- duplicar linha quando a Flavia clica duas vezes no mesmo mes.
+-- ============================================================
+create table if not exists public.rent_payments (
+  id uuid primary key default gen_random_uuid(),
+  professional text not null check (professional in ('Jheny', 'Vitória')),
+  reference_month date not null,
+  amount numeric(10, 2) not null default 500,
+  paid boolean not null default false,
+  paid_on date,
+  notes text,
+  created_at timestamptz not null default now(),
+  unique (professional, reference_month)
+);
+
 -- ============================================================
 -- RLS
 -- ============================================================
@@ -88,6 +133,7 @@ alter table public.clients enable row level security;
 alter table public.appointments enable row level security;
 alter table public.salon_transactions enable row level security;
 alter table public.personal_expenses enable row level security;
+alter table public.rent_payments enable row level security;
 
 drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
@@ -137,6 +183,15 @@ create policy "edita gastos pessoais" on public.personal_expenses
 
 create policy "apaga gastos pessoais" on public.personal_expenses
   for delete to authenticated using (owner_id = auth.uid());
+
+-- Aluguel: leitura e escrita so pra dona do studio. A Jheny e a Vitoria nao veem esta
+-- tabela nem o proprio status; se um dia isso mudar, o caminho e uma policy de select
+-- extra comparando o e-mail com a coluna `professional`.
+drop policy if exists "so a dona mexe no aluguel" on public.rent_payments;
+create policy "so a dona mexe no aluguel" on public.rent_payments
+  for all to authenticated
+  using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
+  with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
 
 -- ============================================================
 -- Depois de rodar isso: vá em Authentication -> Users -> Add User

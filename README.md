@@ -1,10 +1,10 @@
-# Studio Flávia Alves
+# Afrodite Studio
 
 Site institucional para um studio de beleza com três especialistas: Flávia (unhas), Jheny (maquiagem)
 e Vitória (cabelo). Home one-page com resultados, equipe, avaliações e ranking de serviços, mais uma
 página própria por profissional, com agendamento direto pelo WhatsApp.
 
-🔗 **Site no ar:** [erickkadr.github.io/Flavia-LongNails](https://erickkadr.github.io/Flavia-LongNails/)
+🔗 **Site no ar:** [afroditestudio.vercel.app](https://afroditestudio.vercel.app) · espelho no [GitHub Pages](https://erickkadr.github.io/flavia-longnails/)
 
 ## Sobre o projeto
 

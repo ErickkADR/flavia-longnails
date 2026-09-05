@@ -50,7 +50,7 @@ export function Contact() {
 
         <div className="contact-map reveal-right">
           <iframe
-            title="Localização do Studio Flávia Alves"
+            title="Localização do Afrodite Studio"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d915.0323548835642!2d-46.667898988954924!3d-23.45579574530064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef52306e1536f%3A0x19d2b4efe3ad44d2!2sFl%C3%A1via%20LongNails!5e0!3m2!1spt-BR!2sbr!4v1777825096078!5m2!1spt-BR!2sbr"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

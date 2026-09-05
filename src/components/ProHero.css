@@ -1,4 +1,4 @@
-.pro-hero { padding: clamp(150px, 15vw, 200px) 0 clamp(90px, 10vw, 140px); background: var(--bg); position: relative; }
+.pro-hero { padding: calc(var(--section-y) + 76px) 0 var(--section-y); background: var(--bg); position: relative; }
 
 .back-link {
   display: inline-flex; align-items: center; gap: 8px;
