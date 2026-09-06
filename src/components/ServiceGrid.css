@@ -24,3 +24,23 @@
 
 @media (max-width: 1024px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .svc-grid { grid-template-columns: 1fr; } }
+
+/* O card inteiro virou link pro WhatsApp, com a mensagem do serviço já escrita.
+   Preferi isso a colocar um botão em cada card: o CLAUDE.md registra pedido explícito
+   de não encher o site de "Agendar pelo WhatsApp". A dica só aparece no hover, então
+   o card em repouso continua sendo um card. */
+.svc-card { text-decoration: none; color: inherit; display: block; }
+.svc-cta {
+  display: block; margin-top: 14px;
+  font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); opacity: 0; transform: translateY(4px);
+  transition: opacity .3s, transform .3s;
+}
+.svc-card:hover .svc-cta, .svc-card:focus-visible .svc-cta { opacity: 1; transform: none; }
+.svc-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Sem hover (toque), a dica fica sempre visível: não existe estado intermediário
+   no celular pra revelar que o card leva a algum lugar. */
+@media (hover: none) {
+  .svc-cta { opacity: 1; transform: none; }
+}

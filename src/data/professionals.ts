@@ -139,3 +139,17 @@ export function priceOf(service: Service): number {
 export function servicesForName(name: string): Service[] {
   return professionals.find((p) => p.name === name)?.services ?? [];
 }
+
+/**
+ * Link de WhatsApp com a mensagem ja escrita. Os cards de servico do site publico usam
+ * isso: a cliente chega no chat com "quero agendar X" digitado, em vez de cair num
+ * "Ola" vazio que ela precisa completar sozinha.
+ *
+ * Nao adiciona botao nenhum na tela: o proprio card vira link. O CLAUDE.md registra
+ * pedido explicito de nao encher o site de botao "Agendar pelo WhatsApp".
+ */
+export function whatsappForService(serviceName: string, professionalName?: string): string {
+  const comQuem = professionalName ? ` com a ${professionalName}` : '';
+  const texto = `Oi! Vim pelo site do Afrodite Studio e queria agendar ${serviceName}${comQuem}.`;
+  return `${WHATSAPP_LINK}?text=${encodeURIComponent(texto)}`;
+}

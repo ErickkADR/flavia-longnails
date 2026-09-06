@@ -1,4 +1,5 @@
 import { mostBooked } from '../data/testimonials';
+import { whatsappForService } from '../data/professionals';
 import { Marquee } from './Marquee';
 import './Pricing.css';
 
@@ -15,7 +16,12 @@ export function Pricing() {
         </div>
 
         <div className="rank-grid">
-          <div className="rank-spotlight reveal">
+          <a
+            className="rank-spotlight reveal"
+            href={whatsappForService(top.name, top.professional)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <div className="rank-spotlight-left">
               <div className="rank-medal">1º</div>
               <div>
@@ -25,18 +31,25 @@ export function Pricing() {
               </div>
             </div>
             <div className="rank-spotlight-price">{top.price}</div>
-          </div>
+          </a>
 
           <div className="rank-others">
             {rest.map((s, i) => (
-              <div className="rank-card reveal" style={{ transitionDelay: `${i * 0.05}s` }} key={s.name}>
+              <a
+                className="rank-card reveal"
+                style={{ transitionDelay: `${i * 0.05}s` }}
+                key={s.name}
+                href={whatsappForService(s.name, s.professional)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <div className="rank-card-top">
                   <div className="rank-card-num">{i + 2}</div>
                   <div className="rank-card-name">{s.name}</div>
                 </div>
                 <div className="rank-card-pro">{s.professional} · {s.category}</div>
                 <div className="rank-card-price">{s.price}</div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

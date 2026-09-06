@@ -44,6 +44,14 @@ function toLocalInput(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+function formatDuration(min: number): string {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  if (h === 0) return `${m}min`;
+  if (m === 0) return `${h}h`;
+  return `${h}h${String(m).padStart(2, '0')}`;
+}
+
 export function Agendamento() {
   const { name } = useAuth();
   const { rows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
@@ -96,7 +104,7 @@ export function Agendamento() {
   );
 
   // Fecha a lista do autocomplete ao clicar fora. Sem isso ela fica aberta por cima
-  // da agenda e come o clique nos encaixes.
+  // do resto do formulário e come o clique dos chips.
   useEffect(() => {
     function onDown(e: MouseEvent) {
       if (comboRef.current && !comboRef.current.contains(e.target as Node)) setListOpen(false);
@@ -158,18 +166,138 @@ export function Agendamento() {
   }
 
   const weekLabel = `${days[0].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} a ${days[5].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}`;
+  const valorFinal = priceOverride ? Number(priceOverride) : totalPrice;
 
   return (
     <div>
       <div className="mod-header">
         <div className="mod-title">Agendamento de Clientes</div>
-        <div className="mod-sub">Seus próximos atendimentos</div>
+        <div className="mod-sub">Marque um atendimento e veja sua semana</div>
       </div>
 
-      <div className="month-nav">
-        <button type="button" onClick={() => setWeekRef((d) => addDays(d, -7))} aria-label="Semana anterior">‹</button>
-        <span>{weekLabel}</span>
-        <button type="button" onClick={() => setWeekRef((d) => addDays(d, 7))} aria-label="Próxima semana">›</button>
+      {/* O formulário vem antes da agenda: marcar é a ação principal da tela, e a grade
+          é consulta. Estava invertido, e a grade vazia empurrava o formulário pra fora
+          da primeira dobra. */}
+      <form className="ag-form" onSubmit={handleSubmit}>
+        <div className="ag-form-head">
+          <span className="ag-form-title">Novo atendimento</span>
+          <span className="ag-form-pro">no nome de {name}</span>
+        </div>
+
+        <div className="ag-row">
+          <div className="ag-field combo" ref={comboRef}>
+            <span>Cliente</span>
+            <input
+              value={clientQuery}
+              onChange={(e) => { setClientQuery(e.target.value); setClientId(null); setListOpen(true); }}
+              onFocus={() => setListOpen(true)}
+              placeholder="Comece a digitar o nome"
+              autoComplete="off"
+              required
+            />
+            {clientId && <span className="ag-badge-ok">cadastrada</span>}
+            {listOpen && (matches.length > 0 || isNewClient) && (
+              <ul className="combo-list">
+                {matches.map((c) => (
+                  <li key={c.id}>
+                    <button
+                      type="button"
+                      onClick={() => { setClientQuery(c.name); setClientId(c.id); setListOpen(false); }}
+                    >
+                      {c.name}
+                    </button>
+                  </li>
+                ))}
+                {isNewClient && <li className="combo-new">Cliente nova, vai entrar só neste agendamento</li>}
+              </ul>
+            )}
+          </div>
+
+          <label className="ag-field">
+            <span>Data e hora</span>
+            <input type="datetime-local" value={scheduledAt} onChange={(e) => setScheduledAt(e.target.value)} required />
+          </label>
+
+          <label className="ag-field ag-field-sm">
+            <span>Valor (R$)</span>
+            <input
+              type="number" step="0.01" min="0"
+              value={priceOverride}
+              placeholder={totalPrice.toFixed(2)}
+              onChange={(e) => setPriceOverride(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="ag-services">
+          <div className="ag-services-head">
+            <span>Serviços</span>
+            {picked.length > 0 && (
+              <button type="button" className="ag-clear" onClick={() => { setPicked([]); setPriceOverride(''); }}>
+                limpar seleção
+              </button>
+            )}
+          </div>
+          <div className="svc-chips">
+            {catalog.map((s) => {
+              const on = picked.some((x) => x.name === s.name);
+              return (
+                <button
+                  type="button"
+                  key={s.name}
+                  className={`svc-chip${on ? ' is-on' : ''}`}
+                  onClick={() => toggleService(s)}
+                  aria-pressed={on}
+                >
+                  <span className="svc-chip-ico">{s.icon}</span>
+                  <span className="svc-chip-name">{s.name}</span>
+                  <span className="svc-chip-meta">{s.price} · {formatDuration(s.durationMin)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Faixa de resumo: fecha o que foi montado antes de gravar. Fica apagada até
+            existir seleção, pra não anunciar R$0,00 numa tela recém-aberta. */}
+        <div className={`ag-summary${picked.length > 0 ? ' is-on' : ''}`}>
+          <div className="ag-summary-list">
+            {picked.length === 0
+              ? <span className="ag-summary-empty">Nenhum serviço selecionado ainda</span>
+              : picked.map((s) => <span className="ag-tag" key={s.name}>{s.name}</span>)}
+          </div>
+          <div className="ag-summary-right">
+            <div className="ag-summary-total">
+              <span className="ag-summary-lbl">Total</span>
+              <span className="ag-summary-val">R${valorFinal.toFixed(2)}</span>
+            </div>
+            <div className="ag-summary-total">
+              <span className="ag-summary-lbl">Duração</span>
+              <span className="ag-summary-val">{formatDuration(totalDuration)}</span>
+            </div>
+            <button type="submit" className="btn-primary" disabled={saving}>
+              {saving ? 'Salvando...' : 'Agendar'}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {(error || formError) && <p className="mod-error">{error ?? formError}</p>}
+
+      <div className="ag-agenda-head">
+        <div>
+          <div className="ag-sec-title">Sua semana</div>
+          <div className="ag-sec-sub">
+            Clique num espaço vazio para jogar o horário no formulário, ou no cabeçalho do dia
+            para copiar a mensagem de vagas. As vagas já consideram a duração do que você selecionou
+            acima ({formatDuration(totalDuration)}).
+          </div>
+        </div>
+        <div className="month-nav ag-week-nav">
+          <button type="button" onClick={() => setWeekRef((d) => addDays(d, -7))} aria-label="Semana anterior">‹</button>
+          <span>{weekLabel}</span>
+          <button type="button" onClick={() => setWeekRef((d) => addDays(d, 7))} aria-label="Próxima semana">›</button>
+        </div>
       </div>
 
       <WeekAgenda
@@ -181,83 +309,12 @@ export function Agendamento() {
         copiedDay={copiedDay}
       />
 
-      <form className="mod-form" onSubmit={handleSubmit}>
-        <div className="mod-field combo" ref={comboRef}>
-          <span>Cliente</span>
-          <input
-            value={clientQuery}
-            onChange={(e) => { setClientQuery(e.target.value); setClientId(null); setListOpen(true); }}
-            onFocus={() => setListOpen(true)}
-            placeholder="Comece a digitar o nome"
-            autoComplete="off"
-            required
-          />
-          {listOpen && (matches.length > 0 || isNewClient) && (
-            <ul className="combo-list">
-              {matches.map((c) => (
-                <li key={c.id}>
-                  <button
-                    type="button"
-                    onClick={() => { setClientQuery(c.name); setClientId(c.id); setListOpen(false); }}
-                  >
-                    {c.name}
-                  </button>
-                </li>
-              ))}
-              {isNewClient && <li className="combo-new">Cliente nova, vai entrar só neste agendamento</li>}
-            </ul>
-          )}
+      <div className="ag-agenda-head ag-list-head">
+        <div>
+          <div className="ag-sec-title">Todos os atendimentos</div>
+          <div className="ag-sec-sub">Seu histórico completo, do mais recente pro mais antigo.</div>
         </div>
-
-        <div className="mod-field svc-picker">
-          <span>Serviços ({picked.length} selecionado{picked.length === 1 ? '' : 's'})</span>
-          <div className="svc-chips">
-            {catalog.map((s) => {
-              const on = picked.some((x) => x.name === s.name);
-              return (
-                <button
-                  type="button"
-                  key={s.name}
-                  className={`svc-chip${on ? ' is-on' : ''}`}
-                  onClick={() => toggleService(s)}
-                >
-                  <span className="svc-chip-ico">{s.icon}</span>
-                  <span className="svc-chip-name">{s.name}</span>
-                  <span className="svc-chip-meta">{s.price} · {s.durationMin}min</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <label className="mod-field">
-          <span>Data e hora</span>
-          <input type="datetime-local" value={scheduledAt} onChange={(e) => setScheduledAt(e.target.value)} required />
-        </label>
-
-        <label className="mod-field">
-          <span>Valor (R$)</span>
-          <input
-            type="number" step="0.01" min="0"
-            value={priceOverride}
-            placeholder={totalPrice.toFixed(2)}
-            onChange={(e) => setPriceOverride(e.target.value)}
-          />
-        </label>
-
-        <div className="mod-field">
-          <span>Total</span>
-          <div className="svc-total">
-            R${(priceOverride ? Number(priceOverride) : totalPrice).toFixed(2)} · {totalDuration}min
-          </div>
-        </div>
-
-        <button type="submit" className="btn-primary" disabled={saving}>
-          {saving ? 'Salvando...' : 'Agendar'}
-        </button>
-      </form>
-
-      {(error || formError) && <p className="mod-error">{error ?? formError}</p>}
+      </div>
 
       <div className="mod-table-wrap">
         {loading ? (
@@ -283,7 +340,7 @@ export function Agendamento() {
                   <td>{new Date(a.scheduled_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
                   <td>{a.client_name}</td>
                   <td>{labelOf(a)}</td>
-                  <td>{a.duration_min || 60}min</td>
+                  <td>{formatDuration(a.duration_min || 60)}</td>
                   <td>{a.price != null ? `R$${a.price}` : '—'}</td>
                   <td><span className={`mod-tag ${a.status}`}>{a.status}</span></td>
                   <td><button className="mod-table-del" onClick={() => remove(a.id)}>remover</button></td>

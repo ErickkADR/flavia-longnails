@@ -3,77 +3,130 @@
    `top`/`height` calculados a partir do horário e da duração. O mesmo desenho do
    Google Agenda, sem biblioteca. */
 
-.wk { margin: 20px 0 8px; }
+.wk { margin: 0; }
 
 .wk-grid {
   display: grid;
-  grid-template-columns: 52px repeat(6, minmax(0, 1fr));
-  border: 1px solid var(--muted-l);
-  border-radius: 14px;
+  grid-template-columns: 62px repeat(6, minmax(0, 1fr));
+  border: 1.5px solid var(--muted-l);
+  border-radius: 18px;
   overflow: hidden;
   background: var(--surface);
 }
 
-.wk-corner { border-bottom: 1px solid var(--muted-l); background: var(--bg); }
+.wk-corner {
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1.5px solid var(--muted-l);
+  background: var(--bg);
+  padding: 10px 4px;
+}
+.wk-corner span {
+  font-family: 'Cinzel', serif; font-size: .5rem; letter-spacing: .06em;
+  color: var(--muted); text-align: center; line-height: 1.3;
+}
 
 .wk-dayhead {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 10px 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 11px 4px 10px;
   background: var(--bg);
-  border-bottom: 1px solid var(--muted-l);
+  border-bottom: 1.5px solid var(--muted-l);
   border-left: 1px solid var(--muted-l);
   font-family: inherit; cursor: pointer;
   transition: background .2s;
+  position: relative;
 }
 .wk-dayhead:hover { background: var(--accent-soft); }
-.wk-dayhead.is-today { background: var(--accent-soft); }
-.wk-dow { font-size: .68rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
-.wk-date { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--ink); }
-.wk-free { font-size: .62rem; color: var(--accent-deep); letter-spacing: .04em; }
+.wk-dayhead:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* Hoje ganha uma barra no topo em vez de fundo cheio: marca a coluna sem competir
+   com o hover nem escurecer os blocos que estão dentro dela. */
+.wk-dayhead.is-today::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent);
+}
+.wk-dayhead.is-today .wk-date { color: var(--accent-deep); }
+
+.wk-dow { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.wk-date { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1; }
+
+.wk-pill {
+  font-size: .58rem; letter-spacing: .04em;
+  color: var(--accent-deep); background: var(--accent-soft);
+  padding: 2px 8px; border-radius: 100px;
+  transition: all .2s;
+}
+.wk-pill.is-full { color: var(--muted); background: var(--bg-alt); }
+.wk-dayhead.is-copied .wk-pill { background: #DCEAD4; color: #4F7141; }
 
 /* Régua de horas. A altura de cada faixa é a mesma unidade usada pelo cálculo de
    `top` dos blocos, então a linha da hora e o bloco das 14h coincidem. */
 .wk-hours { background: var(--bg); }
 .wk-hour {
   height: var(--px-hour);
-  border-bottom: 1px dashed var(--muted-l);
+  border-bottom: 1px solid var(--muted-l);
   position: relative;
 }
 .wk-hour span {
-  position: absolute; top: -8px; right: 6px;
-  font-size: .62rem; color: var(--muted); background: var(--bg); padding: 0 2px;
+  position: absolute; top: -7px; right: 7px;
+  font-size: .6rem; color: var(--muted); background: var(--bg); padding: 0 3px;
 }
-.wk-hour:first-child span { top: 2px; }
+.wk-hour:first-child span { top: 3px; }
 
+/* Linha cheia na hora, tracejada na meia hora: dá pra ler 14:30 sem contar pixel. */
 .wk-col {
   position: relative;
   border-left: 1px solid var(--muted-l);
   background:
     repeating-linear-gradient(
       to bottom,
+      transparent 0, transparent calc(var(--px-hour) / 2 - 1px),
+      var(--bg-alt) calc(var(--px-hour) / 2 - 1px), var(--bg-alt) calc(var(--px-hour) / 2)
+    ),
+    repeating-linear-gradient(
+      to bottom,
       transparent 0, transparent calc(var(--px-hour) - 1px),
       var(--muted-l) calc(var(--px-hour) - 1px), var(--muted-l) var(--px-hour)
     );
 }
+.wk-col.is-today { background-color: rgba(236, 217, 196, .22); }
 
-/* Encaixe clicável. Fica invisível até o mouse chegar: a grade tem 20 deles por dia
-   e desenhar todos o tempo todo viraria zebrado. */
+/* Encaixe clicável. Fica invisível até o mouse chegar: são 20 por dia e desenhar
+   todos o tempo todo viraria zebrado. No hover mostra a hora, pra não precisar
+   conferir na régua antes de clicar. */
 .wk-slot {
   position: absolute; left: 2px; right: 2px;
   height: calc(var(--px-hour) / 2);
+  display: flex; align-items: center; justify-content: center;
   border: none; background: transparent; padding: 0;
   border-radius: 5px;
   cursor: pointer;
 }
-.wk-slot.is-free:hover { background: rgba(190, 114, 72, .16); box-shadow: inset 0 0 0 1px var(--accent); }
+.wk-slot-hint {
+  font-size: .58rem; color: var(--accent-deep); opacity: 0; transition: opacity .15s;
+  pointer-events: none;
+}
+.wk-slot.is-free:hover { background: rgba(190, 114, 72, .14); box-shadow: inset 0 0 0 1px var(--accent); }
+.wk-slot.is-free:hover .wk-slot-hint { opacity: 1; }
+.wk-slot:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .wk-slot:disabled { cursor: default; }
-.wk-slot.is-past { opacity: .5; }
+.wk-slot.is-past { opacity: .45; }
+
+/* Linha de "agora", só na coluna de hoje. Anda de minuto em minuto (ver o setInterval
+   no componente), senão congela no horário em que a tela abriu. */
+.wk-now {
+  position: absolute; left: 0; right: 0; height: 1.5px;
+  background: var(--accent-deep); z-index: 4; pointer-events: none;
+}
+.wk-now-dot {
+  position: absolute; left: -3px; top: -3px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent-deep);
+}
 
 .wk-item {
   position: absolute; left: 3px; right: 3px;
-  display: flex; flex-direction: column; gap: 1px;
-  padding: 4px 7px;
-  border-radius: 7px;
+  display: flex; flex-direction: column; gap: 1px; justify-content: center;
+  padding: 4px 8px;
+  border-radius: 8px;
   border-left: 3px solid var(--accent-deep);
   background: var(--accent-soft);
   overflow: hidden;
@@ -81,17 +134,21 @@
   pointer-events: none; /* não rouba o clique do encaixe vizinho */
 }
 .wk-item.concluido { background: #E4EEDF; border-left-color: #5C7F4E; }
-.wk-item.cancelado { background: #F0E2DE; border-left-color: #A8624F; opacity: .65; text-decoration: line-through; }
+.wk-item.cancelado { background: #F0E2DE; border-left-color: #A8624F; opacity: .6; text-decoration: line-through; }
+/* Atendimento de 30min não tem altura pra duas linhas: some o serviço e fica o nome. */
+.wk-item.is-short { padding: 2px 7px; }
 
-.wk-item-time { font-size: .58rem; color: var(--accent-deep); letter-spacing: .05em; }
-.wk-item-name { font-size: .74rem; font-weight: 500; color: var(--ink); line-height: 1.2; }
-.wk-item-svc { font-size: .62rem; color: var(--muted); line-height: 1.2; }
+.wk-item-name { font-size: .72rem; font-weight: 500; color: var(--ink); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wk-item-svc { font-size: .6rem; color: var(--muted); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.wk-legend { font-size: .74rem; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+.wk-empty {
+  font-size: .82rem; color: var(--muted); line-height: 1.7;
+  text-align: center; padding: 20px 24px 4px; max-width: 560px; margin: 0 auto;
+}
 
 /* Em tela estreita a grade de 6 dias não cabe: vira rolagem horizontal com largura
    mínima por coluna, em vez de espremer tudo até ficar ilegível. */
 @media (max-width: 900px) {
   .wk { overflow-x: auto; }
-  .wk-grid { min-width: 680px; }
+  .wk-grid { min-width: 700px; }
 }

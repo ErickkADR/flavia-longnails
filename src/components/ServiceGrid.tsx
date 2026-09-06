@@ -1,4 +1,5 @@
 import type { Service } from '../data/professionals';
+import { whatsappForService } from '../data/professionals';
 import './ServiceGrid.css';
 
 export function ServiceGrid({ name, services }: { name: string; services: Service[] }) {
@@ -12,7 +13,14 @@ export function ServiceGrid({ name, services }: { name: string; services: Servic
         </div>
         <div className="svc-grid">
           {services.map((s, i) => (
-            <div className={`svc-card${s.popular ? ' feat' : ''} reveal`} style={{ transitionDelay: `${i * .05}s` }} key={s.name}>
+            <a
+              className={`svc-card${s.popular ? ' feat' : ''} reveal`}
+              style={{ transitionDelay: `${i * .05}s` }}
+              key={s.name}
+              href={whatsappForService(s.name, name)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {s.popular && <div className="feat-badge">Popular</div>}
               <span className="svc-icon">{s.icon}</span>
               <div className="svc-name">{s.name}</div>
@@ -22,7 +30,8 @@ export function ServiceGrid({ name, services }: { name: string; services: Servic
                 <span className="svc-val">{s.price}</span>
                 {s.priceNote && <span className="svc-note">{s.priceNote}</span>}
               </div>
-            </div>
+              <span className="svc-cta">Agendar no WhatsApp</span>
+            </a>
           ))}
         </div>
       </div>

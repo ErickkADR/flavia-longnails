@@ -49,3 +49,9 @@
   .rank-medal { width: 52px; height: 52px; font-size: 1.1rem; }
   .rank-others { grid-template-columns: 1fr; }
 }
+
+/* Ranking: destaque e cards também levam pro WhatsApp com o serviço já na mensagem. */
+.rank-spotlight, .rank-card { text-decoration: none; color: inherit; }
+.rank-spotlight { transition: all .3s; }
+.rank-spotlight:hover { border-color: var(--accent); box-shadow: 0 20px 48px rgba(150, 86, 47, .16); }
+.rank-spotlight:focus-visible, .rank-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

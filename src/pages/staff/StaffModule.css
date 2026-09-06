@@ -173,3 +173,86 @@
 }
 .rent-toggle:hover { background: var(--accent-soft); }
 .rent-card.is-paid .rent-toggle { border-color: #8FB07F; color: #4F7141; }
+
+/* ============================================================
+   Agendamento: formulário
+   Grid próprio em vez do `.mod-form` genérico. A tela tem três blocos com pesos
+   diferentes (identificação, catálogo de serviços, fechamento) e o auto-fit do
+   .mod-form espremia tudo em colunas iguais de 160px.
+   ============================================================ */
+.ag-form {
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 20px;
+  padding: 24px 26px; margin-bottom: 34px;
+}
+.ag-form-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.ag-form-title { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+.ag-form-pro { font-size: .78rem; color: var(--muted); }
+
+.ag-row { display: grid; grid-template-columns: 1.6fr 1fr .7fr; gap: 16px; margin-bottom: 20px; }
+.ag-field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+.ag-field > span:first-child {
+  font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ag-field input {
+  font-family: 'Jost', sans-serif; font-size: .9rem; color: var(--ink);
+  border: 1.5px solid var(--muted-l); border-radius: 10px; padding: 11px 13px; background: var(--bg);
+  width: 100%;
+}
+.ag-field input:focus { outline: none; border-color: var(--accent); }
+
+/* Confirma que o nome digitado casou com uma cliente cadastrada, e não é texto solto.
+   Importa porque só o caso "cadastrada" grava client_id e soma no histórico dela. */
+.ag-badge-ok {
+  position: absolute; right: 10px; bottom: 12px;
+  font-size: .56rem; letter-spacing: .06em; text-transform: uppercase;
+  color: #4F7141; background: #DCEAD4; padding: 3px 8px; border-radius: 100px;
+}
+
+.ag-services { margin-bottom: 20px; }
+.ag-services-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.ag-services-head > span {
+  font-family: 'Cinzel', serif; font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.ag-clear {
+  border: none; background: none; cursor: pointer;
+  font-family: 'Jost', sans-serif; font-size: .74rem; color: var(--accent); text-decoration: underline;
+}
+
+/* Faixa de fechamento. Fica cinza e discreta enquanto não há serviço escolhido, e
+   acende quando existe algo pra confirmar. */
+.ag-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  border-top: 1.5px solid var(--muted-l); padding-top: 18px;
+}
+.ag-summary-list { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 180px; }
+.ag-summary-empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+.ag-tag {
+  font-size: .74rem; color: var(--accent-deep); background: var(--accent-soft);
+  padding: 4px 11px; border-radius: 100px;
+}
+.ag-summary-right { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.ag-summary-total { display: flex; flex-direction: column; gap: 2px; }
+.ag-summary-lbl { font-family: 'Cinzel', serif; font-size: .52rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ag-summary-val { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700; color: var(--muted); line-height: 1; transition: color .3s; }
+.ag-summary.is-on .ag-summary-val { color: var(--accent-deep); }
+.ag-summary .btn-primary { padding: 13px 30px; font-size: .85rem; white-space: nowrap; }
+
+/* ============================================================
+   Agendamento: cabeçalhos de seção
+   ============================================================ */
+.ag-agenda-head {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
+  flex-wrap: wrap; margin-bottom: 16px;
+}
+.ag-list-head { margin-top: 40px; }
+.ag-sec-title { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.ag-sec-sub { font-size: .78rem; color: var(--muted); line-height: 1.6; max-width: 620px; }
+.ag-week-nav { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .ag-row { grid-template-columns: 1fr; }
+  .ag-summary { flex-direction: column; align-items: stretch; }
+  .ag-summary-right { justify-content: space-between; }
+}

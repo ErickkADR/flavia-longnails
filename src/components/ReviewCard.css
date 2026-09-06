@@ -10,3 +10,9 @@
 
 .review-text { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-style: italic; color: var(--muted); line-height: 1.7; }
 .review-stars { color: var(--accent); font-size: .85rem; letter-spacing: .1em; margin-top: 18px; }
+/* Selo de verificado. Ligado por depoimento via `verified` em testimonials.ts.
+   Ver o comentário lá: hoje está em todos, e nenhum depoimento é real. */
+.review-name { display: flex; align-items: center; gap: 6px; }
+.review-verified { display: inline-flex; flex-shrink: 0; }
+.review-verified svg { width: 15px; height: 15px; fill: var(--accent); }
+.review-verified-check { fill: none; stroke: var(--surface); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }

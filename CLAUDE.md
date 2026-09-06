@@ -149,10 +149,34 @@ sem URL que expira, sem scraping.
 - **Jheny e Vitória**: fotos de rosto são de banco de imagens (Unsplash), marcadas como
   "foto ilustrativa" na própria página. Instagram da Jheny é real (@jhenyluanyybeauty);
   Vitória ainda não tem.
-- **Avaliações (depoimentos)**: são fictícias — mas o Erick pediu explicitamente foto real
-  (banco de imagens) em vez de iniciais, depois de eu ter optado por iniciais por padrão. Ele
-  reafirmou o pedido, então está como ele pediu: `src/data/testimonials.ts` tem um campo
-  `avatar` por depoimento.
+- **Avaliações (depoimentos)**: os 6 são **fictícios**. Nome, texto e foto inventados; as
+  fotos são de banco de imagens. `src/data/testimonials.ts` tem `avatar` por depoimento
+  porque o Erick pediu foto em vez de iniciais, e reafirmou depois da ressalva.
+
+  > **O selo de verificado está ligado em todos os 6** (campo `verified`, desde 05/09/2026),
+  > e **não corresponde a verificação nenhuma**. Levantei que um selo de verificado afirma
+  > pra cliente que alguém conferiu que a pessoa é real e esteve no salão, o que não é o
+  > caso em nenhum dos 6, e o Erick mandou colocar assim mesmo. Fica registrado porque é
+  > afirmação sobre experiência de terceiros num site de negócio real, não escolha de
+  > design.
+  >
+  > O campo é por depoimento de propósito: quando entrarem avaliações reais, é marcar
+  > `true` só nas verdadeiras e `false` nas que ainda forem placeholder, sem tocar no
+  > componente. A Flávia já tem 110 clientes na base e VIPs identificadas (Maria, Dona
+  > Maria, Gabi, Thais) — é de lá que sai depoimento de verdade.
+
+## Cards de serviço levam pro WhatsApp
+
+Desde 05/09/2026 os cards de serviço são links, não divs: `ServiceGrid` (páginas das
+profissionais) e os dois formatos do ranking em `Pricing` (home). O link vem de
+`whatsappForService()` no `professionals.ts` e **já leva a mensagem escrita**, então a
+cliente cai no chat com "queria agendar Alongamento em Gel com a Flávia" digitado, em vez
+de um "Oi" vazio que ela precisa completar.
+
+**O card inteiro vira o link, e não um botão dentro dele.** É deliberado: existe pedido
+antigo do Erick de não encher o site de botão "Agendar pelo WhatsApp". A dica textual
+(`.svc-cta`) só aparece no hover, e em telas de toque (`@media (hover: none)`) fica sempre
+visível, já que no celular não há estado intermediário pra revelar que o card é clicável.
 
 ## Área da Colaboradora (`/area-colaboradora`)
 
@@ -232,6 +256,15 @@ começa no dia seguinte, que é o que a profissional quer ver numa segunda.
 `freeSlots()` testa **sobreposição de intervalo**, não de encaixe: um alongamento de 2h
 fecha 4 slots de 30min, e nenhum deles sobra. Atendimento cancelado não bloqueia horário,
 a vaga voltou a existir.
+
+**A ordem da tela é formulário primeiro, agenda depois** (invertido em 05/09/2026 a
+pedido do Erick). Marcar é a ação principal; a grade é consulta. Com a agenda em cima, uma
+semana vazia empurrava o formulário pra fora da primeira dobra.
+
+A grade tem linha cheia na hora e tracejada na meia hora, marca a coluna de hoje com uma
+barra no topo (não com fundo cheio, que competia com os blocos dentro dela) e desenha uma
+linha de "agora" que **anda de minuto em minuto** via `setInterval`: sem isso ela congela
+no horário em que a aba abriu e passa a mentir.
 
 Clicar num espaço vazio joga o horário no formulário. Clicar no cabeçalho do dia copia a
 mensagem pronta pra WhatsApp (`availabilityMessage()`), com contagem e lista dos horários,
