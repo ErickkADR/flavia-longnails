@@ -87,9 +87,10 @@ em `src/data/professionals.ts`, nada foi apagado.
 |---|---|---|
 | Galeria da Flávia | 9 fotos, 1280x1920 | 6 do `@flavia_longnails`, 480x640 |
 | Galeria da Jheny | 3 de banco de imagem | 3 makes reais do `@jhenyluanyybeauty` |
-| Avatar da Jheny | stock, 700x700 | foto real dela, **150x150** |
+| Avatar da Jheny | stock, 700x700 | recorte do portfólio dela, **900x900** (07/09) |
 | Avatar da Flávia | foto de trabalho, 682x788 | **ainda não mudou**, ver pendência |
-| Vitória | tudo stock | **não mudou** (ela não tem Instagram) |
+| Avatar da Vitória | stock, 700x700 | foto real dela, 485x565 (07/09) |
+| Galeria da Vitória | stock | **continua stock**: só o rosto virou real |
 
 > **Isso rebaixou a resolução da galeria da Flávia**, e foi decisão consciente dele depois
 > de eu levantar a ressalva. O Instagram comprime tudo pra 640px e **não deixa pedir maior**:
@@ -98,6 +99,40 @@ em `src/data/professionals.ts`, nada foi apagado.
 >
 > **O avatar do Instagram da Flávia é um desenho, não foto.** Por isso ela ficou com a foto
 > de trabalho que já estava lá.
+
+### O portfólio da Jheny (07/09/2026) e o que ele corrigiu
+
+Ela entregou um portfólio em PDF (9 páginas, 42 MB, export de Canva). Ele está no
+`.gitignore` (`portfolio-*.pdf`): é pesado, o repo é público, e o que interessava já foi
+transcrito pro `professionals.ts`.
+
+**O que ele revelou: os serviços e preços dela no site estavam todos errados.** Eram 6
+serviços que eu tinha inventado numa sessão anterior, com preços entre R$40 e R$350.
+Ela oferece **três**, e mais baratos:
+
+| Serviço | Preço | Tempo |
+|---|---|---|
+| Maquiagem Express | R$70 | 45min a 1h |
+| Maquiagem Social | R$90 | 1h40 a 2h |
+| Maquiagem Blindada | R$110 | 1h30 a 2h30 |
+
+Sumiram do site: Maquiagem para Noiva (R$350), Maquiagem para Festa, Design de
+Sobrancelha, Aplicação de Cílios e Aula de Automaquiagem. **Nenhum desses existe.** O
+ranking em `testimonials.ts` e um depoimento citavam dois deles e foram corrigidos junto.
+
+> Lição pro resto do projeto: **os serviços da Flávia e da Vitória também foram
+> inventados por mim** e nunca passaram por elas. Se o desvio da Jheny foi esse, é
+> provável que os outros também estejam errados. Vale pedir o material das duas antes
+> que alguma cliente cobre um preço que o site anuncia.
+
+A bio dela também virou texto próprio, do portfólio, e a página ganhou a seção
+`ProPolicies` (sinal de 30%, cancelamento, tolerância de 15min, atendimento a domicílio,
+formas de pagamento, orientações do dia). O campo `policies` é opcional: some sozinho
+para quem não tem. **Não inventar conteúdo ali**, são condições comerciais e cada uma
+define as suas.
+
+O avatar dela virou um recorte da capa do portfólio renderizada a 300dpi: 900x900, contra
+os 150x150 que o Instagram entregava.
 
 ### Curadoria feita em cima disso (05/09/2026, revisão do Erick)
 
@@ -178,12 +213,35 @@ antigo do Erick de não encher o site de botão "Agendar pelo WhatsApp". A dica 
 (`.svc-cta`) só aparece no hover, e em telas de toque (`@media (hover: none)`) fica sempre
 visível, já que no celular não há estado intermediário pra revelar que o card é clicável.
 
+## `/trabalhe-conosco`
+
+Página pública de recrutamento, criada em 07/09/2026. O conteúdo vem do deck
+`projeto-expansao/apresentacao-colaboradoras.html`, que é material **interno e fora do
+git**. Se o deck mudar, esta página não muda sozinha: são cópias independentes.
+
+> **Duas coisas do deck ficaram deliberadamente fora da página pública:** o valor da
+> locação (R$ 500/mês) e a divisão da plataforma de cursos (90/10). Motivo: o Erick já
+> tinha tirado condição comercial dos documentos uma vez, em 24/08/2026 ("vamos contar
+> isso só depois"), e aqui é site público, onde o número fica exposto a concorrente e
+> trava a negociação antes da conversa acontecer. A página vende a oportunidade e leva
+> pro WhatsApp com mensagem pronta; o valor sai na entrevista. **Se for pra publicar o
+> valor, é decisão dele, não esquecimento meu.**
+
+A rota está declarada **antes** de `/:slug` no `App.tsx`. Aquele é catch-all de página de
+profissional e engoliria qualquer rota estática nova declarada depois dele.
+
 ## Área da Colaboradora (`/area-colaboradora`)
 
 Login por **usuário + senha**, não e-mail — o Supabase Auth exige e-mail por baixo dos panos,
 então `src/auth/staffUsers.ts` mapeia um apelido simples (`flavia`/`jheny`/`vitoria`) pra um
 e-mail fixo e não-real (`<apelido>@studioflaviaalves.app`). As 3 colaboradoras nunca veem essa
 parte — só digitam o apelido.
+
+**Sair volta pra home, não pra tela de login** (desde 07/09/2026). A ordem no
+`handleLogout` importa: navega primeiro, derruba a sessão depois. Invertido, o guard de
+`!session` dispararia o `<Navigate>` pra `/area-colaboradora` antes e a tela de login
+piscaria no caminho. A logo da sidebar também virou link pra home; era um `<div>` e
+clicar nela não fazia nada.
 
 **Consequência: "esqueci a senha" não funciona** (os e-mails não recebem nada de verdade).
 Reset é manual, pelo painel do Supabase: Authentication → Users → clica na pessoa → Reset

@@ -25,6 +25,13 @@ export interface Professional {
   instagramIsReal: boolean;
   services: Service[];
   gallery: string[];
+  /**
+   * Regras de atendimento da profissional (sinal, atraso, domicilio, pagamento).
+   * Opcional porque so a Jheny entregou material com isso ate agora: veio do
+   * portfolio em PDF dela. Quando Flavia e Vitoria passarem as delas, e so
+   * preencher aqui que a secao aparece sozinha na pagina.
+   */
+  policies?: { title: string; text: string }[];
 }
 
 const WHATSAPP_NUMBER = '5511946650392';
@@ -69,21 +76,23 @@ export const professionals: Professional[] = [
     slug: 'jheny',
     name: 'Jheny',
     role: 'Maquiagem',
-    // Foto real dela, do @jhenyluanyybeauty. Sai em 150x150 (teto do Instagram pra foto
-    // de perfil) e o card da equipe mostra em 240px, entao amplia e fica macia. A
-    // `jheny-avatar-stock.jpg`, 700x700, continua no repo se precisar voltar.
-    avatar: 'images/ig-jheny-avatar.jpg',
+    // Retrato recortado da capa do portfolio dela em PDF, a 300dpi: 900x900, contra os
+    // 150x150 que o Instagram entregava. A `ig-jheny-avatar.jpg` e a
+    // `jheny-avatar-stock.jpg` continuam no repo.
+    avatar: 'images/jheny-perfil.jpg',
     photoIsPlaceholder: false,
-    bio: 'Jheny é maquiadora especializada em realçar a beleza natural de cada cliente, com técnicas voltadas para peles brasileiras e olhar atento a cada detalhe. Atende noivas, formandas e produções para eventos, sempre com produtos de alta fixação e acabamento impecável em fotos.',
+    // Texto dela, do portfolio. A bio anterior era escrita por mim e falava de servicos
+    // que ela nao oferece (noiva, sobrancelha, cilios).
+    bio: 'Tenho 21 anos e minha paixão pela maquiagem começou aos 15, quando comecei a me maquiar, praticar e descobrir o quanto eu amava transformar e realçar a beleza. Acredito que a maquiagem vai muito além da beleza: é sobre autoestima, confiança e se sentir bem consigo mesma. Por isso busco oferecer uma experiência personalizada, valorizando os traços e a personalidade de cada cliente.',
     instagram: 'jhenyluanyybeauty',
     instagramIsReal: true,
+    // Os 3 servicos REAIS, com preco e tempo do portfolio em PDF que ela entregou em
+    // 07/09/2026. Antes havia 6 servicos inventados por mim, com precos entre R$40 e
+    // R$350: nao existiam. Nao repor sem material dela.
     services: [
-      { icon: '💄', name: 'Maquiagem Social', desc: 'Make para o dia a dia, ensaios ou compromissos, natural e elegante, feita sob medida para você.', price: 'R$150', durationMin: 60 },
-      { icon: '👰', name: 'Maquiagem para Noiva', desc: 'Produção completa para o grande dia, com prova incluída e produtos de alta fixação para durar até o último brinde.', price: 'R$350', popular: true, durationMin: 120 },
-      { icon: '✨', name: 'Maquiagem para Festa', desc: 'Para debutantes, formaturas e festas, com acabamento mais intenso e efeito prolongado para fotos.', price: 'R$180', durationMin: 75 },
-      { icon: '👁️', name: 'Design de Sobrancelha', desc: 'Modelagem que valoriza o formato do seu rosto, com técnica de fio a fio ou henna.', price: 'R$40', durationMin: 30 },
-      { icon: '🎀', name: 'Aplicação de Cílios', desc: 'Cílios postiços fio a fio ou boneca, para um olhar mais marcante no seu evento.', price: 'R$90', durationMin: 60 },
-      { icon: '🎨', name: 'Aula de Automaquiagem', desc: 'Aula individual e personalizada para você aprender a se maquiar sozinha no dia a dia.', price: 'R$120', durationMin: 90 },
+      { icon: '✨', name: 'Maquiagem Express', desc: 'Produção leve e prática, para quem gosta de uma beleza mais natural e delicada. Pele leve, olhos suaves e acabamento sofisticado, com técnicas mais rápidas.', price: 'R$70', durationMin: 60 },
+      { icon: '💄', name: 'Maquiagem Social', desc: 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', price: 'R$90', popular: true, durationMin: 120 },
+      { icon: '🛡️', name: 'Maquiagem Blindada', desc: 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', price: 'R$110', durationMin: 150 },
     ],
     // Makes que ela fez de verdade, do Instagram dela. Antes eram banco de imagem.
     gallery: [
@@ -91,13 +100,23 @@ export const professionals: Professional[] = [
       'images/ig-jheny-2.jpg',
       'images/ig-jheny-3.jpg',
     ],
+    policies: [
+      { title: 'Sinal de agendamento', text: 'Para reservar o horário é necessário o pagamento de 30% do valor do serviço. O agendamento só é confirmado após o sinal, e o restante é pago no dia do atendimento.' },
+      { title: 'Cancelamento', text: 'Em caso de cancelamento por parte da cliente, o sinal de agendamento não é reembolsado.' },
+      { title: 'Atrasos', text: 'A tolerância é de 15 minutos. Depois desse período o atendimento pode ser cancelado ou sofrer alteração de horário.' },
+      { title: 'Atendimento a domicílio', text: 'Disponível mediante agenda. O valor do serviço é o mesmo, acrescido do custo de deslocamento de ida e volta, calculado conforme a localização da cliente.' },
+      { title: 'Formas de pagamento', text: 'Pix ou dinheiro.' },
+      { title: 'No dia do atendimento', text: 'Venha com a pele limpa e sem maquiagem, evitando óleos ou produtos pesados no rosto. Se possível use uma blusa que não precise passar pela cabeça. Traga referências, se tiver. A preparação da pele é feita por ela antes da maquiagem.' },
+    ],
   },
   {
     slug: 'vitoria',
     name: 'Vitória',
     role: 'Cabelo',
-    avatar: 'images/vitoria-avatar-stock.jpg',
-    photoIsPlaceholder: true,
+    // Foto real dela, entregue pelo Erick em 07/09/2026 (485x565). A galeria de
+    // trabalhos dela CONTINUA sendo banco de imagem: so o rosto virou real.
+    avatar: 'images/vitoria-perfil.png',
+    photoIsPlaceholder: false,
     bio: 'Vitória é cabeleireira especializada em cortes, coloração e tratamentos capilares, sempre buscando o equilíbrio entre saúde e estilo. Atenta às tendências, ela personaliza cada atendimento para valorizar a textura e o formato natural do seu cabelo.',
     instagram: null,
     instagramIsReal: false,

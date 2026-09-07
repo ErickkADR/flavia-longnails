@@ -1,0 +1,22 @@
+/* Regras de atendimento da profissional. Só renderiza se `policies` existir no
+   professionals.ts, então a seção some sozinha para quem ainda não passou as suas. */
+.pro-policies { padding: var(--section-y) 0; background: var(--bg); }
+.pro-policies-header { text-align: center; max-width: 620px; margin: 0 auto 44px; }
+
+.pol-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.pol-card {
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 18px;
+  padding: 24px 26px; transition: border-color .3s;
+}
+.pol-card:hover { border-color: var(--accent); }
+/* Numerador discreto: dá ordem de leitura sem transformar condição comercial em lista
+   numerada, que soa contrato. */
+.pol-title {
+  font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--ink);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 9px;
+}
+.pol-title::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.pol-text { font-size: .88rem; color: var(--muted); line-height: 1.75; }

@@ -1,4 +1,4 @@
-import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import './StaffLayout.css';
 
@@ -12,6 +12,20 @@ const NAV_ITEMS = [
 export function StaffLayout() {
   const { session, loading, name, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  /**
+   * Sair volta pra HOME, nao pra tela de login.
+   *
+   * A ordem importa: navega primeiro e so depois derruba a sessao. Se fosse ao
+   * contrario, o `!session` logo abaixo dispararia o <Navigate> pra
+   * /area-colaboradora antes, e a colaboradora veria a tela de login piscar no
+   * caminho.
+   */
+  async function handleLogout() {
+    navigate('/', { replace: true });
+    await signOut();
+  }
 
   if (loading) return null;
   if (!session) return <Navigate to="/area-colaboradora" state={{ from: location.pathname }} replace />;
@@ -20,7 +34,7 @@ export function StaffLayout() {
     <div className="staff-shell">
       <aside className="staff-sidebar">
         <div className="staff-sidebar-top">
-          <div className="staff-sidebar-logo">Afrodite <span>Studio</span></div>
+          <Link to="/" className="staff-sidebar-logo">Afrodite <span>Studio</span></Link>
           <div className="staff-sidebar-user">Olá, {name}</div>
         </div>
         <nav className="staff-nav">
@@ -34,7 +48,7 @@ export function StaffLayout() {
             </NavLink>
           ))}
         </nav>
-        <button className="staff-logout" onClick={signOut}>Sair</button>
+        <button className="staff-logout" onClick={handleLogout}>Sair</button>
       </aside>
       <main className="staff-main">
         <Outlet />

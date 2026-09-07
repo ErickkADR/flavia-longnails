@@ -4,6 +4,7 @@ import { ProHero } from '../components/ProHero';
 import { ServiceGrid } from '../components/ServiceGrid';
 import { ProReviews } from '../components/ProReviews';
 import { InstaGallery } from '../components/InstaGallery';
+import { ProPolicies } from '../components/ProPolicies';
 
 export function ProfessionalPage() {
   const { slug = '' } = useParams();
@@ -15,6 +16,7 @@ export function ProfessionalPage() {
     <>
       <ProHero pro={pro} />
       <ServiceGrid name={pro.name} services={pro.services} />
+      <ProPolicies pro={pro} />
       <ProReviews name={pro.name} />
       <InstaGallery pro={pro} />
     </>

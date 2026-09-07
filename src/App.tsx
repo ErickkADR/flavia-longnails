@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { ProfessionalPage } from './pages/ProfessionalPage';
 import { Placeholder } from './pages/Placeholder';
+import { TrabalheConosco } from './pages/TrabalheConosco';
 import { Login } from './pages/staff/Login';
 import { StaffLayout } from './pages/staff/StaffLayout';
 import { Agendamento } from './pages/staff/Agendamento';
@@ -16,6 +17,8 @@ export function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/cursos" element={<Placeholder title="Cursos" />} />
+        {/* Antes do /:slug: aquele e catch-all e engoliria esta rota. */}
+        <Route path="/trabalhe-conosco" element={<TrabalheConosco />} />
         <Route path="/:slug" element={<ProfessionalPage />} />
       </Route>
 

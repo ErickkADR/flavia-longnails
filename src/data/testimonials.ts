@@ -42,9 +42,9 @@ export const testimonials: Testimonial[] = [
   {
     initials: 'BF',
     name: 'Bruna Ferreira',
-    service: 'Maquiagem para Noiva',
+    service: 'Maquiagem Blindada',
     professional: 'Jheny',
-    text: 'A Jheny fez minha make de noiva e foi além das minhas expectativas. Durou o dia inteiro perfeita, e ela é super atenciosa do início ao fim.',
+    text: 'Pedi a blindada pra um casamento que foi o dia inteiro e ela não saiu do lugar, nem no calor. A Jheny é super atenciosa do início ao fim.',
     avatar: 'images/review-bruna-stock.jpg',
     verified: true,
   },
@@ -87,9 +87,9 @@ export interface RankedService {
 export const mostBooked: RankedService[] = [
   { name: 'Alongamento em Gel', professional: 'Flávia', category: 'Unhas', price: 'R$120' },
   { name: 'Coloração', professional: 'Vitória', category: 'Cabelo', price: 'R$180' },
-  { name: 'Maquiagem para Noiva', professional: 'Jheny', category: 'Maquiagem', price: 'R$350' },
+  { name: 'Maquiagem Social', professional: 'Jheny', category: 'Maquiagem', price: 'R$90' },
   { name: 'Escova Modelada', professional: 'Vitória', category: 'Cabelo', price: 'R$60' },
   { name: 'Manicure', professional: 'Flávia', category: 'Unhas', price: 'R$40' },
-  { name: 'Design de Sobrancelha', professional: 'Jheny', category: 'Maquiagem', price: 'R$40' },
+  { name: 'Maquiagem Blindada', professional: 'Jheny', category: 'Maquiagem', price: 'R$110' },
   { name: 'Blindagem', professional: 'Flávia', category: 'Unhas', price: 'R$80' },
 ];

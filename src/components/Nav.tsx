@@ -30,6 +30,7 @@ export function Nav() {
           </Link>
           <ul className="nav-links">
             <li><Link to="/cursos">Cursos</Link></li>
+            <li><Link to="/trabalhe-conosco">Trabalhe Conosco</Link></li>
             <li><Link to="/area-colaboradora">Área da Colaboradora</Link></li>
             <li>
               <a href={WHATSAPP_LINK} className="nav-cta" target="_blank" rel="noopener noreferrer">
@@ -47,6 +48,7 @@ export function Nav() {
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
         <button className="mob-close" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">✕</button>
         <Link to="/cursos" onClick={() => setMenuOpen(false)}>Cursos</Link>
+        <Link to="/trabalhe-conosco" onClick={() => setMenuOpen(false)}>Trabalhe Conosco</Link>
         <Link to="/area-colaboradora" onClick={() => setMenuOpen(false)}>Área da Colaboradora</Link>
         <a href={WHATSAPP_LINK} className="mob-cta" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
       </div>

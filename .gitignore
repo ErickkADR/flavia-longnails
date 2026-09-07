@@ -23,3 +23,8 @@ projeto-expansao/
 
 # Permissões locais do Claude Code (por máquina).
 .claude/settings.local.json
+
+# Material de origem das profissionais (portfolio em PDF etc). Fica local: e pesado
+# (o da Jheny tem 42 MB), o repo e publico, e o que interessa dele ja foi transcrito
+# pro professionals.ts.
+portfolio-*.pdf
