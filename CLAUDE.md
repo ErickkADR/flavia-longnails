@@ -7,6 +7,25 @@ No ar em dois lugares:
 - **GitHub Pages**: https://erickkadr.github.io/flavia-longnails/ (branch `gh-pages`, deploy via `npm run deploy`)
 - **Vercel**: https://afroditestudio.vercel.app (deploy automático a cada push na `main`, projeto Vercel se chama "afrodite_studio")
 
+## Onde paramos (07/09/2026)
+
+Última sessão fechou em `3233d8d`, tudo commitado e no ar na Vercel. Se você está
+voltando depois de semanas, leia estes três pontos antes de qualquer coisa:
+
+1. **Os preços da Flávia e da Vitória no site são invenção minha.** Nunca passaram por
+   elas. Descobrimos isso pelo portfólio da Jheny, cujos 6 serviços inventados viraram os
+   3 reais dela, com preços bem menores. É o risco aberto mais sério do projeto: o site
+   anuncia valores que o salão pode não praticar. Detalhe na seção do portfólio.
+2. **O banco está em dia com o código.** O `migration.sql` foi rodado e confirmado por
+   sondagem. Não precisa rodar de novo, a menos que o schema mude.
+3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
+   deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
+
+O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
+com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
+de aluguel, cards de serviço abrindo o WhatsApp, fotos reais das três profissionais e a
+página `/trabalhe-conosco`.
+
 ## Stack
 
 Vite + React 18 + TypeScript + CSS puro por componente (sem Tailwind/UI kit), React Router,
@@ -427,48 +446,76 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
 
 ## Pendências / observações
 
-- ~~Rodar o `migration.sql`~~ → **rodado e confirmado em 05/09/2026.** Sondagem pelo REST
-  devolveu 200 para `appointments.client_id/services/duration_min`, `personal_expenses.scope`
-  e `rent_payments`. O banco está em dia com o código.
+### Aberto, em ordem de risco
 
-  Pra sondar de novo depois de qualquer mudança de schema, com a chave publishable no `.env`:
-  ```bash
-  KEY=$(grep VITE_SUPABASE_ANON_KEY .env | cut -d= -f2)
-  curl -s -o /dev/null -w "%{http_code}
-"     "https://gpfdqnfaxyomzlqtqwsh.supabase.co/rest/v1/rent_payments?select=id&limit=1"     -H "apikey: $KEY" -H "Authorization: Bearer $KEY"
-  ```
-  200 = aplicado, 404 = falta rodar. O root `/rest/v1/` (spec OpenAPI) **não** serve pra
-  isso: exige chave secreta e devolve 401 com a publishable.
+- **Os serviços e preços da Flávia e da Vitória foram inventados por mim** e nunca foram
+  validados com elas. O portfólio da Jheny provou que esse tipo de chute erra feio: os 6
+  serviços dela que estavam no ar não existiam, e os preços reais são bem menores. **Pedir
+  o material das duas** antes que alguma cliente cobre um preço que o site anuncia.
+- **As durações dos serviços também são chute meu**, com uma exceção: Manicure é 2h,
+  corrigido pelo Erick, e eu tinha posto 45min. Errar 75 minutos num serviço sugere que os
+  outros 17 estão igualmente errados. A agenda semanal desenha os blocos com esses
+  números, então isso vira erro operacional assim que ela for usada pra valer.
+- **Rotacionar a `sb_secret_`**, se ainda não foi feito. Ela foi colada num chat em
+  05/09/2026. Ignora RLS inteira, incluindo os 110 nomes de clientes. Settings → API Keys.
+- **O GitHub Pages está com a marca antiga.** `npm run deploy` resolve. A Vercel está em
+  dia, ela builda sozinha a cada push na `main`.
+- **O header tem 4 itens agora** (Cursos, Trabalhe Conosco, Área da Colaboradora, Agendar
+  Agora) e **não foi conferido visualmente em tela média**. Pode ter ficado apertado.
+- **Publicar ou não o valor da locação** em `/trabalhe-conosco`. Hoje está fora de
+  propósito, ver a seção daquela página. É decisão do Erick, não esquecimento.
+
+### Decisões que ficaram registradas, não são pendência
+
 - **VIP é por profissional, não do studio.** Consequência da RLS de `appointments`: o
   `Clientes.tsx` só enxerga os agendamentos de quem está logada, então uma cliente VIP com
-  a Flávia não aparece como VIP no login da Jheny. O cadastro de clientes é compartilhado,
-  a contagem não. Não mexi porque desfazer isso reabriria a privacidade que foi o motivo
-  da mudança de 04/09. Se incomodar, o caminho é uma view ou RPC que devolve só a
-  contagem agregada, sem expor as linhas.
-- **O projeto usa o formato NOVO de chave do Supabase** (`sb_publishable_...` /
-  `sb_secret_...`), não o par antigo `anon`/`service_role` em JWT. A publishable vai em
-  `VITE_SUPABASE_ANON_KEY` e o supabase-js aceita normalmente. **A secret nunca entra em
-  nada aqui**: o site é todo client-side e ela ignora RLS inteira, incluindo os 110 nomes
-  de clientes.
-  > A `sb_secret_` foi colada num chat em 05/09/2026 e **precisa ter sido rotacionada**.
-  > Se ninguém rotacionou, rotacionar agora em Settings → API Keys.
-- **`.env` não estava no `.gitignore`** até 05/09/2026: o `*.local` cobre `.env.local` mas
-  não um `.env` puro. Como o repo é público, isso teria vazado no primeiro commit depois de
-  criar o arquivo. Corrigido com `.env`, `.env.*` e `!.env.example`.
-- ~~Falta a foto de rosto da Flávia~~ → **resolvido em 05/09/2026.**
-  `public/images/flavia-perfil.jpg`, 640x640. É a primeira foto de rosto dela no projeto;
-  até então o card da equipe usava `avatar-about-BtqxEbBP.png`, uma foto de trabalho (mão
-  com luva aplicando esmalte), que continua no repo.
-  > Registro pra próxima vez: **anexo de conversa não vira arquivo em disco.** Eu enxergo a
-  > imagem que o Erick cola no chat mas não consigo gravá-la; ele precisa salvar à mão e me
-  > dizer o caminho. Ele salvou como `flavia-perfil.jpg.png` (extensão dupla), era JPEG, foi
-  > renomeado.
-- **O rebrand ainda não subiu pros hosts.** Push na `main` cobre a Vercel sozinho; o GitHub
-  Pages precisa de `npm run deploy` à parte.
-- `salon_transactions` (Contas do Salão) está sem nenhum dado real ainda: só a Flávia tinha
+  a Flávia não aparece como VIP no login da Jheny. Não mexi porque desfazer isso reabriria
+  a privacidade que motivou a mudança de 04/09. Se incomodar, o caminho é uma view ou RPC
+  que devolve só a contagem agregada, sem expor as linhas.
+- **O selo de verificado está em depoimentos fictícios.** Ver a seção de fotos placeholder.
+- **A galeria da Flávia perdeu resolução** ao migrar pro Instagram (1280x1920 → 640px).
+  Decisão consciente dele depois da ressalva.
+
+### Esperando dado de terceiro
+
+- Depoimentos reais. A Flávia tem 110 clientes na base e VIPs identificadas (Maria, Dona
+  Maria, Gabi, Thais). Com eles, o campo `verified` passa a ser verdade.
+- Fotos em resolução cheia da Flávia e da Jheny. O que está no ar veio do Instagram em
+  640px, exceto o avatar da Jheny (900x900, recortado do portfólio dela).
+- Galeria de trabalhos da Vitória: continua banco de imagem, só o rosto dela é real. Ela
+  também não tem Instagram; o da Jheny (`@jhenyluanyybeauty`) é real.
+- Confirmar o encaixe de 30min da agenda com a Flávia. Dias (terça a domingo) e horário
+  (fecha às 19h) já foram confirmados pelo Erick.
+- `salon_transactions` (Contas do Salão) está sem nenhum dado real: só a Flávia tinha
   planilha, e ela não separava gasto do salão de gasto pessoal.
-- Sem fluxo de troca de senha pelas próprias colaboradoras (só reset manual pelo Erick, em
-  Authentication → Users → Reset Password).
 - `phone`/`email`/`notes` dos 110 clientes importados estão vazios: a planilha antiga não
   tinha essas colunas, só nome.
-- O Instagram da Vitória ainda não existe; o da Jheny (`@jhenyluanyybeauty`) é real.
+
+### Coisas técnicas que valem lembrar
+
+- **Sem fluxo de troca de senha** pelas colaboradoras. Reset é manual, em
+  Authentication → Users → Reset Password.
+- **Chave do Supabase no formato novo** (`sb_publishable_` / `sb_secret_`), não o par
+  antigo em JWT. A publishable vai em `VITE_SUPABASE_ANON_KEY` e o supabase-js aceita.
+  A Vercel já está configurada com ela.
+- **Sondar o schema sem abrir o painel**, com a publishable no `.env`:
+
+  ```bash
+  KEY=$(grep VITE_SUPABASE_ANON_KEY .env | cut -d= -f2)
+  curl -s -o /dev/null -w "%{http_code}\n" \
+    "https://gpfdqnfaxyomzlqtqwsh.supabase.co/rest/v1/rent_payments?select=id&limit=1" \
+    -H "apikey: $KEY" -H "Authorization: Bearer $KEY"
+  ```
+
+  200 = tabela existe, 404 = falta rodar o migration. O root `/rest/v1/` **não** serve pra
+  isso: exige chave secreta e devolve 401 com a publishable.
+- **`.env` só entrou no `.gitignore` em 05/09/2026.** O `*.local` cobre `.env.local` mas
+  não um `.env` puro, e o repo é público. Se alguém criar um `.env` numa máquina com o
+  `.gitignore` antigo, vaza.
+- **Anexo de conversa não vira arquivo em disco.** Eu enxergo a imagem que o Erick cola no
+  chat mas não consigo gravá-la: ele precisa salvar à mão e me dizer o caminho.
+- **Ferramentas instaladas nesta máquina** pra viabilizar o trabalho: `ffmpeg` (Gyan.FFmpeg,
+  compressão e recorte dos vídeos do hero, e extração de frames pra eu conferir
+  enquadramento) e `poppler` (oschwartz10612.Poppler, renderização do portfólio em PDF).
+  Ambas via winget, e ambas precisam de `--source winget`: a fonte `msstore` falha com erro
+  de certificado nesta máquina.
