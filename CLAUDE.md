@@ -11,10 +11,8 @@ No ar em dois lugares:
 
 Se você está voltando depois de semanas, leia estes quatro pontos antes de qualquer coisa:
 
-0. **BLOQUEIO: rodar o `supabase/migration.sql` de novo.** A sessão criou a tabela
-   `client_returns` (painel RETORNO) e ela **ainda não existe no banco**, confirmado por
-   sondagem: `/rest/v1/client_returns` devolve 404. O painel abre mas quebra ao gravar.
-   O arquivo é idempotente, seguro rodar inteiro.
+0. ~~Rodar o `migration.sql`~~ → **rodado em 07/09/2026**, `client_returns` confirmada por
+   sondagem (200). O banco está em dia com o código e a Vercel também.
 1. **Os preços da Flávia e da Vitória no site são invenção minha.** Nunca passaram por
    elas. Descobrimos isso pelo portfólio da Jheny, cujos 6 serviços inventados viraram os
    3 reais dela, com preços bem menores. É o risco aberto mais sério do projeto: o site
@@ -540,9 +538,6 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
 
 ### Aberto, em ordem de risco
 
-- **Rodar o `supabase/migration.sql`.** A tabela `client_returns` não existe no banco
-  (sondado: 404). O painel RETORNO abre, monta a lista da agenda, mas quebra ao gravar
-  "recusado" ou ao dispensar. Idempotente, seguro rodar inteiro.
 - **Nada desta sessão foi conferido em tela.** Tipografia nova, ícones no lugar dos
   emojis, políticas em 3 colunas, Resultados com três fotos e o painel RETORNO inteiro
   passaram só por compilação e build. Vale abrir e olhar antes de considerar pronto.

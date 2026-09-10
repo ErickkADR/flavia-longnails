@@ -208,9 +208,6 @@ create policy "edita gastos pessoais" on public.personal_expenses
 create policy "apaga gastos pessoais" on public.personal_expenses
   for delete to authenticated using (owner_id = auth.uid());
 
--- Aluguel: leitura e escrita so pra dona do studio. A Jheny e a Vitoria nao veem esta
--- tabela nem o proprio status; se um dia isso mudar, o caminho e uma policy de select
--- extra comparando o e-mail com a coluna `professional`.
 -- Retorno e por profissional, igual a agenda: cada uma cuida das proprias clientes.
 drop policy if exists "cada uma cuida do proprio retorno" on public.client_returns;
 create policy "cada uma cuida do proprio retorno" on public.client_returns
@@ -218,6 +215,9 @@ create policy "cada uma cuida do proprio retorno" on public.client_returns
   using (owner_id = auth.uid())
   with check (owner_id = auth.uid());
 
+-- Aluguel: leitura e escrita so pra dona do studio. A Jheny e a Vitoria nao veem esta
+-- tabela nem o proprio status; se um dia isso mudar, o caminho e uma policy de select
+-- extra comparando o e-mail com a coluna `professional`.
 drop policy if exists "so a dona mexe no aluguel" on public.rent_payments;
 create policy "so a dona mexe no aluguel" on public.rent_payments
   for all to authenticated
