@@ -1,6 +1,7 @@
 import type { Testimonial } from '../data/testimonials';
 import { asset } from '../lib/asset';
 import './ReviewCard.css';
+import { Stars } from './Icon';
 
 export function ReviewCard({ t, className }: { t: Testimonial; className?: string }) {
   return (
@@ -23,7 +24,7 @@ export function ReviewCard({ t, className }: { t: Testimonial; className?: strin
         </div>
       </div>
       <p className="review-text">{t.text}</p>
-      <div className="review-stars">★★★★★</div>
+      <Stars className="review-stars" />
     </article>
   );
 }

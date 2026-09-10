@@ -21,7 +21,7 @@
   padding: 10px 4px;
 }
 .wk-corner span {
-  font-family: 'Cinzel', serif; font-size: .5rem; letter-spacing: .06em;
+  font-family: var(--font-display); font-size: .5rem; letter-spacing: .06em;
   color: var(--muted); text-align: center; line-height: 1.3;
 }
 
@@ -47,7 +47,7 @@
 .wk-dayhead.is-today .wk-date { color: var(--accent-deep); }
 
 .wk-dow { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.wk-date { font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1; }
+.wk-date { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1; }
 
 .wk-pill {
   font-size: .58rem; letter-spacing: .04em;

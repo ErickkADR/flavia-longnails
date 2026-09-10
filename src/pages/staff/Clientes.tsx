@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTable } from '../../hooks/useTable';
 import './StaffModule.css';
+import { Icon } from '../../components/Icon';
 
 interface Client {
   id: string;
@@ -124,7 +125,7 @@ export function Clientes() {
       {vipClients.length > 0 && (
         <div className="vip-section">
           <div className="vip-header">
-            <span className="vip-star">✦</span> Clientes VIP
+            <Icon name="brilho" className="vip-star" fill="currentColor" strokeWidth={0} /> Clientes VIP
             <span className="vip-note">{VIP_MIN_VISITS}+ visitas, canceladas não contam, calculado automaticamente</span>
           </div>
           <div className="vip-grid">

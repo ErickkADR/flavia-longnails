@@ -1,6 +1,7 @@
 import { professionals } from '../data/professionals';
 import { asset } from '../lib/asset';
 import './Resultados.css';
+import { Stars } from './Icon';
 
 export function Resultados() {
   return (
@@ -17,10 +18,19 @@ export function Resultados() {
               alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Afrodite Studio"
             />
           </div>
-          <div className="rv-inset">
+          {/* Os dois círculos menores existem pra dizer, sem texto, que o studio faz
+              três coisas: a foto grande é unha, e as pequenas são cabelo e maquiagem.
+              A de cabelo ainda é banco de imagem, a Vitória não passou material. */}
+          <div className="rv-inset rv-inset-cabelo">
             <img
-              src={asset('images/ig-flavia-2.jpg')}
-              alt="Francesinha vermelha com aplique de cereja"
+              src={asset('images/vitoria-look-1-stock.jpg')}
+              alt="Cabelo longo com ondas e iluminação, trabalho de cabelo do studio"
+            />
+          </div>
+          <div className="rv-inset rv-inset-make">
+            <img
+              src={asset('images/ig-jheny-2.jpg')}
+              alt="Maquiagem com olhos trabalhados em tons frios, feita no Afrodite Studio"
             />
           </div>
         </div>
@@ -35,7 +45,7 @@ export function Resultados() {
           <div className="resultados-stats">
             <div className="rs-rating">
               <span className="rs-num">4.9</span>
-              <span className="rs-stars">★★★★★</span>
+              <Stars className="rs-stars" />
               <span className="rs-lbl">Avaliação média</span>
             </div>
             <div className="rs-divider"></div>

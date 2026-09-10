@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { WHATSAPP_LINK } from '../data/professionals';
 import { WhatsappIcon } from './icons';
 import './Nav.css';
+import { Icon } from './Icon';
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -46,7 +47,7 @@ export function Nav() {
       </nav>
 
       <div className={`mob-menu${menuOpen ? ' open' : ''}`}>
-        <button className="mob-close" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">✕</button>
+        <button className="mob-close" onClick={() => setMenuOpen(false)} aria-label="Fechar menu"><Icon name="fechar" /></button>
         <Link to="/cursos" onClick={() => setMenuOpen(false)}>Cursos</Link>
         <Link to="/trabalhe-conosco" onClick={() => setMenuOpen(false)}>Trabalhe Conosco</Link>
         <Link to="/area-colaboradora" onClick={() => setMenuOpen(false)}>Área da Colaboradora</Link>

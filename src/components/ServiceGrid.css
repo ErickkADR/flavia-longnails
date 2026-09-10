@@ -11,15 +11,15 @@
 .svc-card.feat { background: var(--accent-soft); border-color: rgba(190, 114, 72, .4); }
 .feat-badge {
   position: absolute; top: 14px; right: 14px; background: var(--accent); color: #fff;
-  font-family: 'Cinzel', serif; font-size: .5rem; letter-spacing: .15em; text-transform: uppercase;
+  font-family: var(--font-body); font-size: .5rem; letter-spacing: .15em; text-transform: uppercase;
   padding: 4px 10px; border-radius: 100px; font-weight: 700;
 }
-.svc-icon { font-size: 2rem; margin-bottom: 18px; display: block; }
-.svc-name { font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: 10px; letter-spacing: .03em; }
+.svc-icon { margin-bottom: 18px; }
+.svc-name { font-family: var(--font-display); font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: 10px; letter-spacing: .03em; }
 .svc-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
 .svc-price { display: flex; align-items: baseline; gap: 4px; }
-.svc-pre { font-size: .72rem; color: var(--accent); font-family: 'Cinzel', serif; }
-.svc-val { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent-deep); }
+.svc-pre { font-size: .72rem; color: var(--accent); font-family: var(--font-display); }
+.svc-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--accent-deep); }
 .svc-note { font-size: .68rem; color: var(--muted); margin-left: 4px; }
 
 @media (max-width: 1024px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -32,7 +32,7 @@
 .svc-card { text-decoration: none; color: inherit; display: block; }
 .svc-cta {
   display: block; margin-top: 14px;
-  font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  font-family: var(--font-body); font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
   color: var(--accent); opacity: 0; transform: translateY(4px);
   transition: opacity .3s, transform .3s;
 }

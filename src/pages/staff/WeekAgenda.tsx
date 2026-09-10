@@ -100,7 +100,7 @@ export function WeekAgenda({ days, items, durationMin, onPickSlot, onCopyDay, co
               <span className="wk-dow">{d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</span>
               <span className="wk-date">{d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</span>
               <span className={`wk-pill${livres.length === 0 ? ' is-full' : ''}`}>
-                {copiado ? '✓ copiado' : fechado ? 'fechado' : `${livres.length} ${livres.length === 1 ? 'vaga' : 'vagas'}`}
+                {copiado ? 'copiado' : fechado ? 'fechado' : `${livres.length} ${livres.length === 1 ? 'vaga' : 'vagas'}`}
               </span>
             </button>
           );

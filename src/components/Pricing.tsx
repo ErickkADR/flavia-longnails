@@ -2,6 +2,7 @@ import { mostBooked } from '../data/testimonials';
 import { whatsappForService } from '../data/professionals';
 import { Marquee } from './Marquee';
 import './Pricing.css';
+import { Icon } from './Icon';
 
 export function Pricing() {
   const [top, ...rest] = mostBooked;
@@ -58,7 +59,7 @@ export function Pricing() {
       <div className="tag-marquee">
         <Marquee duration={30}>
           {mostBooked.map((s) => (
-            <span className="tag-item" key={s.name}>{s.name} <span className="tag-dot">✦</span></span>
+            <span className="tag-item" key={s.name}>{s.name} <Icon name="brilho" className="tag-dot" /></span>
           ))}
         </Marquee>
       </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@300;400;500;600;700&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -19,6 +19,15 @@
   --muted: #8A7A6C;
   --muted-l: #E3D6C4;
 
+  /* Tipografia. Trocada em 07/09/2026: era Cinzel + Cinzel Decorative + Cormorant
+     Garamond + Jost, que puxava pro lado convite-de-casamento e datava a marca.
+     Fraunces e uma serifa variavel com eixo optico (opsz), entao ela se ajusta
+     sozinha entre titulo grande e texto pequeno. Manrope segura o corpo e os
+     rotulos em caixa alta, onde serifa espacada fica pesada.
+     Trocar de fonte de novo? So estas duas linhas. */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
   /* Ritmo vertical das secoes.
      Era clamp(90px, 14vw, 170px) espalhado por cada componente. O 14vw escala com a
      LARGURA da tela, entao em monitor largo todas as secoes batiam no teto de 170px e
@@ -31,8 +40,11 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Jost', sans-serif;
-  font-weight: 300;
+  font-family: var(--font-body);
+  font-weight: 400;
+  /* Deixa o Fraunces escolher o corte certo por tamanho, que e o motivo de ter
+     escolhido uma variavel com eixo optico. */
+  font-optical-sizing: auto;
   overflow-x: hidden;
   line-height: 1.7;
 }
@@ -54,13 +66,13 @@ a { color: inherit; }
 .reveal.on, .reveal-left.on, .reveal-right.on { opacity: 1; transform: none; }
 
 .sec-label {
-  font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  font-family: var(--font-body); font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
   color: var(--accent); display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
 }
 .sec-label::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
-.sec-title { font-family: 'Cinzel', serif; font-size: clamp(1.7rem, 3vw, 2.7rem); font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 14px; }
+.sec-title { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 2.7rem); font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 14px; }
 .sec-title span { color: var(--accent); }
-.sec-sub { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--muted); }
+.sec-sub { font-family: var(--font-display); font-size: 1.1rem; font-style: italic; color: var(--muted); }
 
 .wa-icon { width: 20px; height: 20px; flex-shrink: 0; }
 
@@ -68,7 +80,7 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 12px;
   background: var(--accent); color: #fff; text-decoration: none;
   padding: 17px 36px; border-radius: 100px;
-  font-family: 'Jost', sans-serif; font-weight: 600; font-size: .95rem;
+  font-family: var(--font-body); font-weight: 600; font-size: .95rem;
   transition: all .3s; box-shadow: 0 10px 30px rgba(150, 86, 47, .25);
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(150, 86, 47, .32); background: var(--accent-deep); }
@@ -77,9 +89,35 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 8px;
   border: 1.5px solid var(--accent); color: var(--accent);
   text-decoration: none; padding: 17px 32px; border-radius: 100px;
-  font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .15em;
+  font-family: var(--font-display); font-size: .7rem; letter-spacing: .15em;
   text-transform: uppercase; transition: all .3s; background: transparent;
 }
 .btn-outline:hover { background: var(--accent-soft); transform: translateY(-2px); }
 
 .sec-head-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
+
+/* ============================================================
+   Ícones SVG (lucide, via src/components/Icon.tsx)
+   Substituíram os emojis em 07/09/2026. O <Icon> sai com size="1em", então o
+   tamanho vem do `font-size` do contexto e não precisa ser ajustado caso a caso.
+   Estas regras cuidam só do alinhamento com a linha de texto ao lado.
+   ============================================================ */
+svg.lucide {
+  display: inline-block;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+}
+
+/* Fileira de estrelas da avaliação. Era a string '★★★★★', que dependia da fonte
+   do sistema e vinha preta em alguns Android. */
+.stars { display: inline-flex; align-items: center; gap: 2px; color: var(--accent); }
+.stars svg { vertical-align: middle; }
+
+/* Ícone dentro de um bloco que também é o "selo" da seção: vira caixinha com fundo
+   suave em vez de glifo solto, que é o que o emoji parecia. */
+.svc-icon, .tc-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 14px;
+  background: var(--accent-soft); color: var(--accent-deep);
+  font-size: 1.35rem;
+}

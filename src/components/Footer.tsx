@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { professionals, WHATSAPP_LINK } from '../data/professionals';
 import { InstagramIcon, WhatsappIcon } from './icons';
 import './Footer.css';
+import { Icon } from './Icon';
 
 export function Footer() {
   return (
@@ -53,7 +54,7 @@ export function Footer() {
 
         <div className="footer-bottom">
           <span>© 2026 Afrodite Studio. Todos os direitos reservados.</span>
-          <span>Feito com 💅 para você</span>
+          <span className="footer-love">Feito com <Icon name="coracao" fill="currentColor" /> para você</span>
         </div>
       </div>
     </footer>

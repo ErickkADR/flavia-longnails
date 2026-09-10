@@ -12,11 +12,11 @@
 .team-member:hover .team-photo { transform: translateY(-6px); box-shadow: 0 28px 64px rgba(150, 86, 47, .24); }
 .team-photo img { width: 100%; height: 100%; object-fit: cover; }
 
-.team-name { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.team-name { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
 .team-role { font-size: .9rem; color: var(--muted); margin-bottom: 16px; }
 .team-link {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  font-family: var(--font-body); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
   color: var(--accent); font-weight: 600;
 }
 .team-link svg { width: 13px; height: 13px; transition: transform .3s; }

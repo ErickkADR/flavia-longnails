@@ -7,6 +7,7 @@ import { TrabalheConosco } from './pages/TrabalheConosco';
 import { Login } from './pages/staff/Login';
 import { StaffLayout } from './pages/staff/StaffLayout';
 import { Agendamento } from './pages/staff/Agendamento';
+import { Retorno } from './pages/staff/Retorno';
 import { Clientes } from './pages/staff/Clientes';
 import { ContasSalao } from './pages/staff/ContasSalao';
 import { GastosPessoais } from './pages/staff/GastosPessoais';
@@ -26,6 +27,7 @@ export function App() {
         <Route index element={<Login />} />
         <Route element={<StaffLayout />}>
           <Route path="agendamento" element={<Agendamento />} />
+          <Route path="retorno" element={<Retorno />} />
           <Route path="clientes" element={<Clientes />} />
           <Route path="contas" element={<ContasSalao />} />
           <Route path="gastos" element={<GastosPessoais />} />

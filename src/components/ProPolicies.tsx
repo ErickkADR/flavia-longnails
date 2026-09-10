@@ -1,4 +1,5 @@
 import type { Professional } from '../data/professionals';
+import { Icon } from './Icon';
 import './ProPolicies.css';
 
 /**
@@ -21,10 +22,14 @@ export function ProPolicies({ pro }: { pro: Professional }) {
         </div>
         <div className="pol-grid">
           {pro.policies.map((p, i) => (
-            <div className="pol-card reveal" style={{ transitionDelay: `${i * .05}s` }} key={p.title}>
-              <div className="pol-title">{p.title}</div>
+            <article className="pol-card reveal" style={{ transitionDelay: `${i * .05}s` }} key={p.title}>
+              {/* Número em marca d'água: dá ordem de leitura sem virar lista numerada,
+                  que num bloco de condições comerciais soa contrato. */}
+              <span className="pol-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span className="pol-icon"><Icon name={p.icon} /></span>
+              <h3 className="pol-title">{p.title}</h3>
               <p className="pol-text">{p.text}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
 import { priceOf, servicesForName } from '../../data/professionals';
 import type { Service } from '../../data/professionals';
 import { addDays, weekDays } from '../../lib/schedule';
+import { Icon } from '../../components/Icon';
 import { WeekAgenda } from './WeekAgenda';
 import type { AgendaItem } from './WeekAgenda';
 import './StaffModule.css';
@@ -54,6 +56,8 @@ function formatDuration(min: number): string {
 
 export function Agendamento() {
   const { name } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { rows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
   const { rows: clients } = useTable<Client>('clients', 'name');
 
@@ -70,6 +74,22 @@ export function Agendamento() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const comboRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * O painel RETORNO manda a cliente pra cá pelo state da rota, com o botão "Contato
+   * feito". Preenche nome e id, e deixa serviço e horário em aberto, que é o que a
+   * profissional acabou de combinar no WhatsApp.
+   *
+   * O `replace: true` limpa o state depois de usar: sem isso, um F5 (ou voltar pra
+   * esta rota) reinjetaria a mesma cliente por cima do que estivesse sendo digitado.
+   */
+  useEffect(() => {
+    const vindo = location.state as { clientId?: string | null; clientName?: string } | null;
+    if (!vindo?.clientName) return;
+    setClientQuery(vindo.clientName);
+    setClientId(vindo.clientId ?? null);
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.state, location.pathname, navigate]);
 
   const totalPrice = useMemo(() => picked.reduce((sum, s) => sum + priceOf(s), 0), [picked]);
   const totalDuration = useMemo(
@@ -249,7 +269,7 @@ export function Agendamento() {
                   onClick={() => toggleService(s)}
                   aria-pressed={on}
                 >
-                  <span className="svc-chip-ico">{s.icon}</span>
+                  <span className="svc-chip-ico"><Icon name={s.icon} /></span>
                   <span className="svc-chip-name">{s.name}</span>
                   <span className="svc-chip-meta">{s.price} · {formatDuration(s.durationMin)}</span>
                 </button>

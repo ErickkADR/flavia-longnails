@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { WHATSAPP_LINK } from '../data/professionals';
 import { asset } from '../lib/asset';
 import { WhatsappIcon } from './icons';
+import { Icon } from './Icon';
 import './Hero.css';
 
 /**
@@ -93,7 +94,7 @@ export function Hero() {
           <div className="hero-stats">
             <div><span className="stat-num">5+</span><span className="stat-lbl">Anos de Experiência</span></div>
             <div><span className="stat-num">3</span><span className="stat-lbl">Especialistas</span></div>
-            <div><span className="stat-num">4.9★</span><span className="stat-lbl">Avaliação Média</span></div>
+            <div><span className="stat-num">4.9<Icon name="estrela" fill="currentColor" strokeWidth={0} className="stat-star" /></span><span className="stat-lbl">Avaliação Média</span></div>
           </div>
         </div>
       </div>

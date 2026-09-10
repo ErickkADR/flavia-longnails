@@ -3,7 +3,7 @@
   display: flex; align-items: center; gap: 12px;
   background: var(--accent); color: #fff; text-decoration: none;
   padding: 15px 24px; border-radius: 100px;
-  font-family: 'Jost', sans-serif; font-weight: 600; font-size: .88rem;
+  font-family: var(--font-body); font-weight: 600; font-size: .88rem;
   box-shadow: 0 8px 32px rgba(150, 86, 47, .35);
   transition: all .3s; animation: floatBtn 3s ease-in-out infinite;
 }

@@ -43,12 +43,13 @@
 
 /* A borda usa a cor de fundo da seção, não branco: assim o círculo parece recortado
    de dentro do arco em vez de colado por cima com moldura. */
+/* Dois círculos, não um. A borda usa a cor de fundo da seção, não branco: assim eles
+   parecem recortados de dentro do arco em vez de colados por cima com moldura.
+   Tamanhos diferentes de propósito, pra não virar um par simétrico que compete com
+   a foto principal. */
 .rv-inset {
   position: absolute;
   z-index: 3;
-  left: 0;
-  bottom: 0;
-  width: 42%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
@@ -57,13 +58,16 @@
 }
 .rv-inset img { width: 100%; height: 100%; object-fit: cover; }
 
+.rv-inset-cabelo { left: 0; bottom: 4%; width: 40%; }
+.rv-inset-make { left: 20%; top: 2%; width: 27%; border-width: 6px; z-index: 4; }
+
 .resultados-text { font-size: 1.06rem; color: var(--muted); line-height: 1.9; max-width: 520px; margin-bottom: 40px; }
 
 .resultados-stats { display: flex; align-items: center; gap: 28px; margin-bottom: 40px; flex-wrap: wrap; }
 .rs-divider { width: 1px; height: 44px; background: var(--muted-l); }
-.rs-num { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700; color: var(--ink); display: block; line-height: 1.2; }
+.rs-num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--ink); display: block; line-height: 1.2; }
 .rs-rating .rs-num { display: inline; }
-.rs-stars { color: var(--accent); font-size: .8rem; margin-left: 6px; }
+.rs-stars { font-size: .78rem; margin-left: 7px; }
 .rs-lbl { display: block; font-size: .68rem; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
 .rs-avatars { display: flex; }
 .rs-avatar {
@@ -83,5 +87,7 @@
   .resultados-visual { max-width: 380px; margin: 0 auto; padding: 4% 0 10% 0; }
   .rv-main { width: 72%; }
   .rv-ring { width: 72%; right: 10%; }
-  .rv-inset { width: 44%; border-width: 6px; }
+  .rv-inset { border-width: 6px; }
+  .rv-inset-cabelo { width: 42%; }
+  .rv-inset-make { width: 29%; border-width: 5px; }
 }

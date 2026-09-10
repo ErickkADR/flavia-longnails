@@ -127,6 +127,29 @@ create table if not exists public.rent_payments (
 );
 
 -- ============================================================
+-- 6. Retorno de clientes (painel RETORNO)
+-- A LISTA de quem sumiu nao mora aqui: ela e calculada na tela, a partir da data do
+-- ultimo atendimento em `appointments`. Esta tabela guarda so a EXCECAO, ou seja o
+-- que a profissional decidiu sobre aquela cliente:
+--   'recusado'   -> ela disse que nao quer agora; some ate `snooze_until`
+--   'dispensado' -> a profissional apagou o card; some de vez
+-- `client_key` e o nome normalizado (minusculo, sem espaco nas pontas) porque as 260
+-- linhas importadas da planilha nao tem client_id, e sem isso metade da base ficaria
+-- de fora. O client_id vai junto quando existe, so pra rastreabilidade.
+-- ============================================================
+create table if not exists public.client_returns (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  client_key text not null,
+  client_id uuid references public.clients(id) on delete set null,
+  client_name text not null default '',
+  status text not null check (status in ('recusado', 'dispensado')),
+  snooze_until date,
+  created_at timestamptz not null default now(),
+  unique (owner_id, client_key)
+);
+
+-- ============================================================
 -- RLS
 -- ============================================================
 alter table public.clients enable row level security;
@@ -134,6 +157,7 @@ alter table public.appointments enable row level security;
 alter table public.salon_transactions enable row level security;
 alter table public.personal_expenses enable row level security;
 alter table public.rent_payments enable row level security;
+alter table public.client_returns enable row level security;
 
 drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
@@ -187,6 +211,13 @@ create policy "apaga gastos pessoais" on public.personal_expenses
 -- Aluguel: leitura e escrita so pra dona do studio. A Jheny e a Vitoria nao veem esta
 -- tabela nem o proprio status; se um dia isso mudar, o caminho e uma policy de select
 -- extra comparando o e-mail com a coluna `professional`.
+-- Retorno e por profissional, igual a agenda: cada uma cuida das proprias clientes.
+drop policy if exists "cada uma cuida do proprio retorno" on public.client_returns;
+create policy "cada uma cuida do proprio retorno" on public.client_returns
+  for all to authenticated
+  using (owner_id = auth.uid())
+  with check (owner_id = auth.uid());
+
 drop policy if exists "so a dona mexe no aluguel" on public.rent_payments;
 create policy "so a dona mexe no aluguel" on public.rent_payments
   for all to authenticated

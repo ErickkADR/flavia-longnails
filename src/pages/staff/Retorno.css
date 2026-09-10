@@ -1,0 +1,95 @@
+/* Painel RETORNO. A lista é calculada da agenda (ver o comentário no Retorno.tsx);
+   o banco guarda só quem foi recusada ou dispensada. */
+
+.ret-count {
+  font-family: var(--font-body); font-size: .6rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent-deep);
+  background: var(--accent-soft); display: inline-block;
+  padding: 6px 14px; border-radius: 100px; margin-bottom: 20px;
+}
+
+.ret-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
+
+.ret-card {
+  display: flex; flex-direction: column; gap: 16px;
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 20px;
+  padding: 22px 22px 20px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.ret-card:hover { border-color: var(--accent); box-shadow: 0 18px 40px rgba(150, 86, 47, .1); }
+
+.ret-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.ret-nome { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.ret-ultimo { font-size: .78rem; color: var(--muted); line-height: 1.5; }
+.ret-data { display: block; font-size: .72rem; color: var(--muted-l); margin-top: 2px; }
+.ret-data { color: #b4a894; }
+
+.ret-del {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--muted-l); background: var(--bg);
+  color: var(--muted); cursor: pointer; font-size: .95rem;
+  transition: all .2s;
+}
+.ret-del:hover { border-color: #C2705B; color: #A8432F; background: #FBF0ED; }
+
+/* O tempo sem voltar decide a prioridade da fila, então tem o maior peso do card. */
+.ret-tempo { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.ret-tempo-num {
+  font-family: var(--font-display); font-size: 1.65rem; font-weight: 700;
+  color: var(--accent-deep); line-height: 1;
+}
+.ret-tempo-lbl {
+  font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.ret-barra {
+  flex-basis: 100%; height: 5px; border-radius: 100px;
+  background: var(--bg-alt); overflow: hidden; margin-top: 4px;
+}
+/* Enche até 90 dias. Passou disso fica cheia, e quem diz o tamanho real é o número. */
+.ret-barra-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+}
+
+.ret-aviso {
+  font-size: .74rem; color: var(--muted); font-style: italic; line-height: 1.5;
+  padding: 8px 11px; background: var(--bg); border-radius: 9px;
+}
+
+.ret-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.ret-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 14px; border-radius: 100px; cursor: pointer;
+  font-family: var(--font-body); font-size: .78rem;
+  border: 1.5px solid var(--muted-l); background: var(--bg); color: var(--ink);
+  transition: all .2s;
+}
+.ret-btn:hover { border-color: var(--accent); }
+.ret-btn.is-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ret-btn.is-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+.ret-btn.is-ghost { color: var(--muted); }
+.ret-btn.is-ghost:hover { color: #A8432F; border-color: #C2705B; }
+.ret-btn svg { flex-shrink: 0; }
+
+.ret-zero {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  text-align: center; padding: 56px 24px;
+  background: var(--surface); border: 1.5px dashed var(--muted-l); border-radius: 20px;
+  color: var(--muted); font-size: .9rem; line-height: 1.7;
+}
+.ret-zero p { max-width: 420px; }
+.ret-zero-icon { font-size: 1.9rem; color: var(--accent); }
+
+.ret-ocultas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.ret-oculta {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 12px;
+  padding: 11px 16px;
+}
+.ret-oculta-nome { flex: 1; font-size: .88rem; color: var(--ink); }
+
+.ret-reload {
+  border: none; background: none; cursor: pointer; padding: 0;
+  font-family: var(--font-body); font-size: .78rem; color: var(--accent); text-decoration: underline;
+}

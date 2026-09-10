@@ -1,6 +1,7 @@
 import { WHATSAPP_LINK } from '../data/professionals';
 import { WhatsappIcon } from './icons';
 import './Contact.css';
+import { Icon } from './Icon';
 
 export function Contact() {
   return (
@@ -12,28 +13,28 @@ export function Contact() {
           <p className="sec-sub" style={{ marginBottom: 44 }}>Estamos aqui para te atender</p>
 
           <div className="c-item">
-            <div className="c-icon">📍</div>
+            <div className="c-icon"><Icon name="local" /></div>
             <div>
               <div className="c-label">Rua doutor francisco elgenio do amaral, 11</div>
               <div className="c-value">Jardim Peri - Alto, São Paulo - SP, 02281-206</div>
             </div>
           </div>
           <div className="c-item">
-            <div className="c-icon">📱</div>
+            <div className="c-icon"><Icon name="telefone" /></div>
             <div>
               <div className="c-label">WhatsApp</div>
               <div className="c-value">(55) 11 94665-0392</div>
             </div>
           </div>
           <div className="c-item">
-            <div className="c-icon">🕐</div>
+            <div className="c-icon"><Icon name="relogio" /></div>
             <div>
               <div className="c-label">Horário de Atendimento</div>
               <div className="c-value">Seg – Sex: 9h às 19h<br />Sábado: 9h às 17h<br />Domingo: Fechado</div>
             </div>
           </div>
           <div className="c-item">
-            <div className="c-icon">📸</div>
+            <div className="c-icon"><Icon name="instagram" /></div>
             <div>
               <div className="c-label">Instagram</div>
               <div className="c-value">

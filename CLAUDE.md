@@ -9,22 +9,26 @@ No ar em dois lugares:
 
 ## Onde paramos (07/09/2026)
 
-Última sessão fechou em `3233d8d`, tudo commitado e no ar na Vercel. Se você está
-voltando depois de semanas, leia estes três pontos antes de qualquer coisa:
+Se você está voltando depois de semanas, leia estes quatro pontos antes de qualquer coisa:
 
+0. **BLOQUEIO: rodar o `supabase/migration.sql` de novo.** A sessão criou a tabela
+   `client_returns` (painel RETORNO) e ela **ainda não existe no banco**, confirmado por
+   sondagem: `/rest/v1/client_returns` devolve 404. O painel abre mas quebra ao gravar.
+   O arquivo é idempotente, seguro rodar inteiro.
 1. **Os preços da Flávia e da Vitória no site são invenção minha.** Nunca passaram por
    elas. Descobrimos isso pelo portfólio da Jheny, cujos 6 serviços inventados viraram os
    3 reais dela, com preços bem menores. É o risco aberto mais sério do projeto: o site
    anuncia valores que o salão pode não praticar. Detalhe na seção do portfólio.
-2. **O banco está em dia com o código.** O `migration.sql` foi rodado e confirmado por
-   sondagem. Não precisa rodar de novo, a menos que o schema mude.
+2. **As durações também são chute meu**, e o único corrigido foi Manicure (45min → 2h).
+   A agenda desenha os blocos com esses números.
 3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
    deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
-de aluguel, cards de serviço abrindo o WhatsApp, fotos reais das três profissionais e a
-página `/trabalhe-conosco`.
+de aluguel, painel RETORNO, cards de serviço abrindo o WhatsApp, fotos reais das três
+profissionais, a página `/trabalhe-conosco`, troca de toda a tipografia e substituição de
+todo emoji por ícone SVG.
 
 ## Stack
 
@@ -80,8 +84,34 @@ não o contrário. Trocar a ordem sem trocar o span inverte o destaque.
 ## Design
 
 Paleta bege claro + terracota só como acento (nunca fundo grande sólido — já foi feedback
-explícito: "ficou marrom, não quero isso"). Fontes Cinzel/Cinzel Decorative/Cormorant
-Garamond/Jost, mesmas do site antigo.
+explícito: "ficou marrom, não quero isso").
+
+**Tipografia trocada em 07/09/2026** ("as fontes não estão legais"). Era Cinzel + Cinzel
+Decorative + Cormorant Garamond + Jost, herdadas do site antigo, e o conjunto puxava pro
+lado convite-de-casamento. Agora:
+
+| | |
+|---|---|
+| `--font-display` | **Fraunces**, serifa variável com eixo óptico (`opsz`) |
+| `--font-body` | **Manrope**, geométrica |
+
+Os dois tokens estão no `:root` do `global.css` e **são os dois únicos lugares a mexer**
+numa próxima troca. O eixo óptico do Fraunces é o motivo da escolha: ele se ajusta sozinho
+entre título grande e texto pequeno, e `font-optical-sizing: auto` no `body` liga isso.
+
+> Regra aplicada na conversão: **rótulo em caixa alta usa a fonte de corpo, não a de
+> display.** Serifa espaçada em `text-transform: uppercase` a 0.56rem fica pesada e
+> ilegível. O script de troca decidiu isso lendo `text-transform: uppercase` na própria
+> regra CSS.
+
+**Nenhum emoji na interface** (desde 07/09/2026). Todo ícone vem de
+`src/components/Icon.tsx`, que é um mapa nome → ícone da `lucide-react`. Emoji renderiza
+diferente em cada sistema, não herda a cor da marca e não escala com o texto. O `<Icon>`
+sai com `size="1em"`, então o tamanho vem do `font-size` do contexto.
+
+> `lucide-react` **removeu os ícones de marca**: não existe `Instagram`. O contato usa
+> `AtSign` no lugar. O `InstagramIcon` desenhado à mão continua em `components/icons.tsx`
+> e é o que aparece nas redes do rodapé.
 
 **Nunca usar travessão (—) em texto visível.** Feedback explícito do Erick: "parece site
 feito por IA". Vale pra qualquer copy nova, não só aqui — está registrado na memória global
@@ -178,8 +208,17 @@ Agora são três planos em `Resultados.css`: um contorno fino deslocado ao fundo
 principal no meio (topo abaulado, base reta, proporção 3/4 igual à das fotos do Instagram,
 então não corta nada) e um círculo menor à frente mordendo o canto inferior esquerdo.
 
-A borda do círculo menor usa `var(--bg-alt)`, a cor de fundo da própria seção, e não branco:
-é isso que faz ele parecer recortado de dentro do arco em vez de colado por cima.
+A borda dos círculos menores usa `var(--bg-alt)`, a cor de fundo da própria seção, e não
+branco: é isso que faz eles parecerem recortados de dentro do arco em vez de colados por
+cima.
+
+**Desde 07/09/2026 são três fotos, não duas**, uma por especialidade: a grande é unha
+(`ig-flavia-4`), e os dois círculos são cabelo e maquiagem. Serve pra dizer sem texto que
+o studio faz três coisas. **A de cabelo (`vitoria-look-1-stock.jpg`) ainda é banco de
+imagem**, a Vitória não passou material de trabalho.
+
+> Cuidado ao escolher outra foto de cabelo no acervo: `vitoria-look-2-stock.jpg` é um
+> retrato masculino, e a Vitória atende corte feminino. Sobrou da leva de stock original.
 
 ### Como esse material foi obtido, e por que não vale repetir sem pensar
 
@@ -362,6 +401,47 @@ no chute e não foram validados. Não aparecem no site público, só na agenda.
 O preço continua sendo string (`'R$120'`), porque nasceu pro site público onde é texto
 puro. `priceOf()` deriva o número. Preferi uma fonte só a dois campos que divergem.
 
+### O painel RETORNO (`/area-colaboradora/retorno`)
+
+Lista de quem sumiu, pra a profissional chamar de volta. Criado em 07/09/2026.
+
+**A lista não é uma tabela no banco.** Ela é calculada na tela a partir da data do último
+atendimento em `appointments`, cruzada com `clients` pra pegar o telefone. Isso é
+deliberado: se fosse tabela, alguém teria que alimentar e ela envelheceria sozinha. Do
+jeito que está, a cliente entra sem ninguém fazer nada e **sai no momento em que um
+atendimento novo é marcado**, porque a data do último muda.
+
+O que entra na lista: último atendimento há **14 dias ou mais** (`RETURN_AFTER_DAYS`),
+sem cancelamento contando como visita e sem nenhum agendamento futuro.
+
+`client_returns` guarda só a **exceção**, o que a profissional decidiu:
+
+| status | efeito |
+|---|---|
+| `recusado` | some por 14 dias (`SNOOZE_DAYS`), volta sozinha depois |
+| `dispensado` | some de vez, só volta se ela devolver na seção "Fora da lista" |
+
+> **A marca só vale se for posterior ao último atendimento.** Se a cliente foi dispensada
+> e depois voltou ao salão, a linha antiga é ignorada e o ciclo recomeça. Sem essa regra,
+> um "dispensado" de um ano atrás esconderia pra sempre uma cliente que voltou a ser
+> frequente.
+
+`client_key` é o **nome normalizado**, não o `client_id`: as 260 linhas importadas da
+planilha não têm id, e chavear por id deixaria metade da base de fora. O id vai junto
+quando existe, só pra rastreabilidade.
+
+As três ações do card:
+
+- **Enviar mensagem** monta o texto com o nome, o tempo sem voltar e o último serviço.
+  Com telefone no cadastro abre o WhatsApp direto; **sem telefone copia pra área de
+  transferência**, que é o caso dos 110 clientes importados (vieram só com nome). O card
+  avisa qual dos dois vai acontecer antes de ela clicar.
+- **Contato feito** navega pro Agendamento passando a cliente no `state` da rota. O
+  formulário preenche nome e id e deixa serviço e horário em aberto. O `useEffect` que lê
+  isso limpa o state com `replace: true`: sem isso, um F5 reinjetaria a mesma cliente por
+  cima do que estivesse sendo digitado.
+- **Recusado** e a **lixeira** gravam em `client_returns`.
+
 ### Funcionalidades específicas
 
 - **Clientes VIP** (`Clientes.tsx`): calculado automaticamente, não é campo manual. Cruza
@@ -448,6 +528,12 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
 
 ### Aberto, em ordem de risco
 
+- **Rodar o `supabase/migration.sql`.** A tabela `client_returns` não existe no banco
+  (sondado: 404). O painel RETORNO abre, monta a lista da agenda, mas quebra ao gravar
+  "recusado" ou ao dispensar. Idempotente, seguro rodar inteiro.
+- **Nada desta sessão foi conferido em tela.** Tipografia nova, ícones no lugar dos
+  emojis, políticas em 3 colunas, Resultados com três fotos e o painel RETORNO inteiro
+  passaram só por compilação e build. Vale abrir e olhar antes de considerar pronto.
 - **Os serviços e preços da Flávia e da Vitória foram inventados por mim** e nunca foram
   validados com elas. O portfólio da Jheny provou que esse tipo de chute erra feio: os 6
   serviços dela que estavam no ar não existiam, e os preços reais são bem menores. **Pedir

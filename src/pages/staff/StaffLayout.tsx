@@ -4,6 +4,7 @@ import './StaffLayout.css';
 
 const NAV_ITEMS = [
   { to: '/area-colaboradora/agendamento', label: 'Agendamento de Clientes' },
+  { to: '/area-colaboradora/retorno', label: 'Retorno de Clientes' },
   { to: '/area-colaboradora/clientes', label: 'Registro de Clientes' },
   { to: '/area-colaboradora/contas', label: 'Contas do Salão' },
   { to: '/area-colaboradora/gastos', label: 'Gastos Pessoais' },

@@ -1,5 +1,6 @@
 import type { Service } from '../data/professionals';
 import { whatsappForService } from '../data/professionals';
+import { Icon } from './Icon';
 import './ServiceGrid.css';
 
 export function ServiceGrid({ name, services }: { name: string; services: Service[] }) {
@@ -22,7 +23,7 @@ export function ServiceGrid({ name, services }: { name: string; services: Servic
               rel="noopener noreferrer"
             >
               {s.popular && <div className="feat-badge">Popular</div>}
-              <span className="svc-icon">{s.icon}</span>
+              <span className="svc-icon"><Icon name={s.icon} /></span>
               <div className="svc-name">{s.name}</div>
               <div className="svc-desc">{s.desc}</div>
               <div className="svc-price">

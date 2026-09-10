@@ -58,7 +58,7 @@
 .hero-copy { grid-column: 1; }
 
 .hero-title {
-  font-family: 'Cinzel', serif; font-size: clamp(2.4rem, 3.6vw, 3.6rem);
+  font-family: var(--font-display); font-size: clamp(2.4rem, 3.6vw, 3.6rem);
   font-weight: 600; line-height: 1.14; color: var(--ink); margin-bottom: 24px;
 }
 .hero-title span { color: var(--accent); }
@@ -68,7 +68,8 @@
 .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 46px; }
 
 .hero-stats { display: flex; gap: 40px; padding-top: 30px; border-top: 1px solid var(--muted-l); flex-wrap: wrap; }
-.stat-num { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }
+.stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }
+.stat-star { font-size: .6em; margin-left: 3px; vertical-align: .1em; }
 .stat-lbl { font-size: .7rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 
 /* Indicador da especialidade em cena, no canto do lado do vídeo. Serve de legenda
@@ -79,7 +80,7 @@
   display: flex; align-items: center; gap: 10px;
 }
 .hero-dots-lbl {
-  font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  font-family: var(--font-body); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
   color: var(--accent-deep); margin-right: 4px;
   background: rgba(var(--bg-rgb), .7); padding: 5px 11px; border-radius: 100px;
   backdrop-filter: blur(8px);

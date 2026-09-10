@@ -1,5 +1,6 @@
 import { WHATSAPP_LINK } from '../data/professionals';
 import { WhatsappIcon } from '../components/icons';
+import { Icon } from '../components/Icon';
 import './TrabalheConosco.css';
 
 /**
@@ -38,13 +39,19 @@ const PILARES = [
 ];
 
 const PRIMEIRO_DIA = [
-  { icone: '🌐', titulo: 'Espaço no site do studio', texto: 'Você aparece na vitrine que já traz cliente, com o nome e a credibilidade do studio por trás.' },
-  { icone: '💎', titulo: 'Uma página só sua', texto: 'Com o seu nome, os seus serviços e os seus preços. Feita e mantida pelo studio, sem você mexer em nada técnico.' },
-  { icone: '💬', titulo: 'WhatsApp direto', texto: 'A cliente escolhe o serviço na sua página e cai na sua conversa com a mensagem já escrita.' },
-  { icone: '📊', titulo: 'Sistema interno', texto: 'Sua conta para registrar clientes, montar a agenda, controlar gastos e acompanhar os seus números.' },
+  { icone: 'site', titulo: 'Espaço no site do studio', texto: 'Você aparece na vitrine que já traz cliente, com o nome e a credibilidade do studio por trás.' },
+  { icone: 'gel', titulo: 'Uma página só sua', texto: 'Com o seu nome, os seus serviços e os seus preços. Feita e mantida pelo studio, sem você mexer em nada técnico.' },
+  { icone: 'whatsapp', titulo: 'WhatsApp direto', texto: 'A cliente escolhe o serviço na sua página e cai na sua conversa com a mensagem já escrita.' },
+  { icone: 'sistema', titulo: 'Sistema interno', texto: 'Sua conta para registrar clientes, montar a agenda, controlar gastos e acompanhar os seus números.' },
 ];
 
-const ESPECIALIDADES = ['💇‍♀️ Cabelo', '💅 Unhas', '💄 Maquiagem', '👁️ Lash', '💆‍♀️ Massagem'];
+const ESPECIALIDADES = [
+  { icone: 'corte', nome: 'Cabelo' },
+  { icone: 'manicure', nome: 'Unhas' },
+  { icone: 'make', nome: 'Maquiagem' },
+  { icone: 'olho', nome: 'Lash' },
+  { icone: 'massagem', nome: 'Massagem' },
+];
 
 const JUNTAS = [
   { titulo: 'Cliente nova sem esforço', texto: 'Quem veio fazer o cabelo conhece o seu trabalho ali do lado.' },
@@ -54,10 +61,10 @@ const JUNTAS = [
 ];
 
 const AVALIACAO = [
-  { icone: '📈', titulo: 'Evolução', itens: 'Comprometimento, engajamento e vontade de crescer' },
-  { icone: '🎯', titulo: 'Serviço', itens: 'Tempo de atendimento e qualidade do trabalho' },
-  { icone: '🤍', titulo: 'Comportamento', itens: 'Gentileza, educação, compreensão e ética' },
-  { icone: '⭐', titulo: 'Feedback das clientes', itens: 'Tempo, qualidade, valor e tratativa' },
+  { icone: 'evolucao', titulo: 'Evolução', itens: 'Comprometimento, engajamento e vontade de crescer' },
+  { icone: 'alvo', titulo: 'Serviço', itens: 'Tempo de atendimento e qualidade do trabalho' },
+  { icone: 'coracao', titulo: 'Comportamento', itens: 'Gentileza, educação, compreensão e ética' },
+  { icone: 'estrela', titulo: 'Feedback das clientes', itens: 'Tempo, qualidade, valor e tratativa' },
 ];
 
 const CAMINHO = [
@@ -138,7 +145,7 @@ export function TrabalheConosco() {
           <div className="tc-grid-4">
             {PRIMEIRO_DIA.map((p, i) => (
               <div className="tc-card reveal" style={{ transitionDelay: `${i * .05}s` }} key={p.titulo}>
-                <span className="tc-icon">{p.icone}</span>
+                <span className="tc-icon"><Icon name={p.icone} /></span>
                 <div className="tc-card-title">{p.titulo}</div>
                 <p className="tc-card-text">{p.texto}</p>
               </div>
@@ -155,7 +162,9 @@ export function TrabalheConosco() {
             <p className="sec-sub">Cinco especialidades no mesmo espaço, e isso muda tudo para quem trabalha aqui</p>
           </div>
           <div className="tc-especialidades reveal">
-            {ESPECIALIDADES.map((e) => <span className="tc-esp" key={e}>{e}</span>)}
+            {ESPECIALIDADES.map((e) => (
+              <span className="tc-esp" key={e.nome}><Icon name={e.icone} /> {e.nome}</span>
+            ))}
           </div>
           <div className="tc-grid-4">
             {JUNTAS.map((j, i) => (
@@ -185,7 +194,7 @@ export function TrabalheConosco() {
           <div className="tc-grid-4">
             {AVALIACAO.map((a, i) => (
               <div className="tc-card reveal" style={{ transitionDelay: `${i * .05}s` }} key={a.titulo}>
-                <span className="tc-icon">{a.icone}</span>
+                <span className="tc-icon"><Icon name={a.icone} /></span>
                 <div className="tc-card-title">{a.titulo}</div>
                 <p className="tc-card-text">{a.itens}</p>
               </div>
