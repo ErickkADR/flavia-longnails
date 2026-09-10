@@ -86,18 +86,26 @@ não o contrário. Trocar a ordem sem trocar o span inverte o destaque.
 Paleta bege claro + terracota só como acento (nunca fundo grande sólido — já foi feedback
 explícito: "ficou marrom, não quero isso").
 
-**Tipografia trocada em 07/09/2026** ("as fontes não estão legais"). Era Cinzel + Cinzel
-Decorative + Cormorant Garamond + Jost, herdadas do site antigo, e o conjunto puxava pro
-lado convite-de-casamento. Agora:
+**Tipografia: foram três tentativas em 07/09/2026**, e vale saber o que já foi rejeitado
+pra não voltar pra lá.
 
-| | |
-|---|---|
-| `--font-display` | **Fraunces**, serifa variável com eixo óptico (`opsz`) |
-| `--font-body` | **Manrope**, geométrica |
+| Tentativa | Fontes | Por que saiu |
+|---|---|---|
+| 1a | Cinzel + Cinzel Decorative + Cormorant Garamond + Jost | Herdadas do site antigo. Puxavam pro lado convite-de-casamento |
+| 2a | Fraunces + Manrope | Fraunces tem eixos SOFT e WONK: lê como "criativo", não como "profissional" |
+| **3a** | **Lora + Inter** | Ficou |
+
+O pedido literal do Erick foi "profissional e elegante, mas legível". Lora é serifa
+desenhada **para tela**, com contraste moderado e curvas de pincel: dá elegância sem virar
+enfeite e continua legível a 0.6rem em caixa alta. Inter é o padrão de legibilidade em
+interface.
 
 Os dois tokens estão no `:root` do `global.css` e **são os dois únicos lugares a mexer**
-numa próxima troca. O eixo óptico do Fraunces é o motivo da escolha: ele se ajusta sozinho
-entre título grande e texto pequeno, e `font-optical-sizing: auto` no `body` liga isso.
+numa próxima troca, mais o `@import` no topo do arquivo.
+
+> `font-feature-settings: 'cv05' 1` no `body` liga o "l" com cauda do Inter. Sem isso,
+> `1`, `l` e `I` ficam quase idênticos, o que atrapalha justamente em preço e horário,
+> que é o que a tela da colaboradora mais mostra.
 
 > Regra aplicada na conversão: **rótulo em caixa alta usa a fonte de corpo, não a de
 > display.** Serifa espaçada em `text-transform: uppercase` a 0.56rem fica pesada e
@@ -204,13 +212,17 @@ mesmo que se aplica quando entrar material novo:
 Era um círculo único com borda branca de 6px sobre o bege, e o Erick chamou de "muito feio".
 O recorte redondo cortava justamente as pontas das unhas, que é o assunto da foto.
 
-Agora são três planos em `Resultados.css`: um contorno fino deslocado ao fundo, o arco
-principal no meio (topo abaulado, base reta, proporção 3/4 igual à das fotos do Instagram,
-então não corta nada) e um círculo menor à frente mordendo o canto inferior esquerdo.
+Agora são três planos em `Resultados.css`: um contorno fino deslocado ao fundo, o círculo
+principal no meio e dois círculos menores à frente mordendo o canto esquerdo. Chegou a ser
+um arco (topo abaulado, base reta), mas o Erick pediu círculo nos três em 07/09.
+
+> Como as fotos são 3/4 em retrato e o círculo é 1/1, o `object-fit: cover` corta topo e
+> base. O `object-position: center 38%` puxa o enquadramento pro terço superior, que é onde
+> estão unha, rosto e cabelo nas três. Trocar de foto pode exigir ajustar esse número.
 
 A borda dos círculos menores usa `var(--bg-alt)`, a cor de fundo da própria seção, e não
-branco: é isso que faz eles parecerem recortados de dentro do arco em vez de colados por
-cima.
+branco: é isso que faz eles parecerem recortados de dentro do círculo grande em vez de
+colados por cima.
 
 **Desde 07/09/2026 são três fotos, não duas**, uma por especialidade: a grande é unha
 (`ig-flavia-4`), e os dois círculos são cabelo e maquiagem. Serve pra dizer sem texto que

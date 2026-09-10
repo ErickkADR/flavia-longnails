@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Inter:wght@300..700&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -19,14 +19,17 @@
   --muted: #8A7A6C;
   --muted-l: #E3D6C4;
 
-  /* Tipografia. Trocada em 07/09/2026: era Cinzel + Cinzel Decorative + Cormorant
-     Garamond + Jost, que puxava pro lado convite-de-casamento e datava a marca.
-     Fraunces e uma serifa variavel com eixo optico (opsz), entao ela se ajusta
-     sozinha entre titulo grande e texto pequeno. Manrope segura o corpo e os
-     rotulos em caixa alta, onde serifa espacada fica pesada.
-     Trocar de fonte de novo? So estas duas linhas. */
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Tipografia. Terceira tentativa, e a que ficou.
+       1a: Cinzel + Cinzel Decorative + Cormorant Garamond + Jost, herdadas do site
+           antigo. Puxavam pro lado convite-de-casamento.
+       2a: Fraunces + Manrope. Fraunces tem eixos SOFT e WONK e sai caracteristica
+           demais: le como "criativo", nao como "profissional".
+       3a: Lora + Inter. Lora e serifa desenhada PRA TELA, com contraste moderado e
+           curvas de pincel: da elegancia sem virar enfeite, e continua legivel a
+           0.6rem em caixa alta. Inter e o padrao de legibilidade em interface.
+     Trocar de novo? So estas duas linhas e o @import la em cima. */
+  --font-display: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Ritmo vertical das secoes.
      Era clamp(90px, 14vw, 170px) espalhado por cada componente. O 14vw escala com a
@@ -42,9 +45,10 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-weight: 400;
-  /* Deixa o Fraunces escolher o corte certo por tamanho, que e o motivo de ter
-     escolhido uma variavel com eixo optico. */
-  font-optical-sizing: auto;
+  /* Inter tem numeros e letras muito proximos em algumas formas (1/l/I). O `cv05`
+     liga o "l" com cauda, que resolve isso em preco e horario. */
+  font-feature-settings: 'cv05' 1;
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   line-height: 1.7;
 }

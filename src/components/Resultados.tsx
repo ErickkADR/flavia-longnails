@@ -29,8 +29,8 @@ export function Resultados() {
           </div>
           <div className="rv-inset rv-inset-make">
             <img
-              src={asset('images/ig-jheny-2.jpg')}
-              alt="Maquiagem com olhos trabalhados em tons frios, feita no Afrodite Studio"
+              src={asset('images/ig-jheny-3.jpg')}
+              alt="Maquiagem social com delineado gráfico e acabamento em tons quentes, feita no Afrodite Studio"
             />
           </div>
         </div>
