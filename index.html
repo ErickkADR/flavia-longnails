@@ -8,7 +8,10 @@
 <link rel="icon" href="%BASE_URL%favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- A fonte de verdade é o @import no topo de src/styles/global.css — esse era um
+     <link> duplicado que ficou apontando pra fonte antiga (Cinzel) depois da troca
+     pra Lora+Inter em 07/09/2026, sem ninguém notar. Removido pra não haver dois
+     lugares pra manter em sincronia. -->
 <script>
   // Restaura a rota real depois do redirect do 404.html (GitHub Pages não tem rewrite de servidor)
   (function (l) {

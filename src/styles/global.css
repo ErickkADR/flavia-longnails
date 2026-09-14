@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Inter:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -19,17 +19,20 @@
   --muted: #8A7A6C;
   --muted-l: #E3D6C4;
 
-  /* Tipografia. Terceira tentativa, e a que ficou.
+  /* Tipografia. Quarta tentativa.
        1a: Cinzel + Cinzel Decorative + Cormorant Garamond + Jost, herdadas do site
            antigo. Puxavam pro lado convite-de-casamento.
        2a: Fraunces + Manrope. Fraunces tem eixos SOFT e WONK e sai caracteristica
            demais: le como "criativo", nao como "profissional".
-       3a: Lora + Inter. Lora e serifa desenhada PRA TELA, com contraste moderado e
-           curvas de pincel: da elegancia sem virar enfeite, e continua legivel a
-           0.6rem em caixa alta. Inter e o padrao de legibilidade em interface.
+       3a: Lora + Inter. Ficou uma semana; funcionava bem (legivel em caixa alta
+           a 0.6rem), mas nao era mais o que o Erick queria.
+       4a: SF Pro (nativa no Apple, via -apple-system/BlinkMacSystemFont) com Inter
+           de fallback em todo o resto. Pedido explicito em 14/09/2026, apontando
+           https://rahab-portfolio-tau.vercel.app/ como referencia — um stack so,
+           sem serifa nenhuma, pra --font-display e --font-body.
      Trocar de novo? So estas duas linhas e o @import la em cima. */
-  --font-display: 'Lora', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-display);
 
   /* Ritmo vertical das secoes.
      Era clamp(90px, 14vw, 170px) espalhado por cada componente. O 14vw escala com a
