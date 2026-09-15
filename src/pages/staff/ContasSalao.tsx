@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
 import { useMonthFilter } from '../../hooks/useMonthFilter';
@@ -42,7 +43,7 @@ const DEFAULT_RENT = 500;
 const money = (n: number) => `R$${n.toFixed(2)}`;
 
 export function ContasSalao() {
-  const { isOwner, name } = useAuth();
+  const { isOwner } = useAuth();
   const { rows, loading, error, insert, remove } = useTable<Transaction>('salon_transactions', 'occurred_on');
   const { filtered, label, month, prevMonth, nextMonth } = useMonthFilter(rows, 'occurred_on');
 
@@ -54,10 +55,7 @@ export function ContasSalao() {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  // Só a Flávia (dona do studio) escolhe o nome livremente aqui — as outras lançam
-  // sempre no próprio nome, sem opção de trocar. Pedido do Erick em 15/09/2026: antes
-  // qualquer uma podia lançar em nome de outra, o que bagunçava o extrato por pessoa.
-  const [professional, setProfessional] = useState(isOwner ? PROFESSIONALS[0] : name);
+  const [professional, setProfessional] = useState(PROFESSIONALS[0]);
   const [occurredOn, setOccurredOn] = useState(() => new Date().toISOString().slice(0, 10));
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -131,11 +129,16 @@ export function ContasSalao() {
     }
   }
 
+  // Trava de rota: além do link sumir da sidebar (StaffLayout), quem digitar a URL direto
+  // também é mandada embora daqui. A RLS de salon_transactions também foi apertada pra
+  // Flávia-only no migration.sql, então isso é defesa em profundidade, não a única trava.
+  if (!isOwner) return <Navigate to="/area-colaboradora/gastos" replace />;
+
   return (
     <div>
       <div className="mod-header">
         <div className="mod-title">Controle de Contas do Salão</div>
-        <div className="mod-sub">Entradas e saídas compartilhadas entre todas</div>
+        <div className="mod-sub">Caixa do salão, visível só pra você</div>
       </div>
 
       <MonthNav label={label} onPrev={prevMonth} onNext={nextMonth} />
@@ -177,13 +180,9 @@ export function ContasSalao() {
         </label>
         <label className="mod-field">
           <span>Profissional</span>
-          {isOwner ? (
-            <select value={professional} onChange={(e) => setProfessional(e.target.value)}>
-              {PROFESSIONALS.map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
-          ) : (
-            <input value={name} disabled readOnly />
-          )}
+          <select value={professional} onChange={(e) => setProfessional(e.target.value)}>
+            {PROFESSIONALS.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
         </label>
         <label className="mod-field">
           <span>Data</span>

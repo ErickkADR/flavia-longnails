@@ -42,10 +42,14 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 7. ~~A galeria da Mayte só tinha a foto de perfil~~ → **resolvida em 15/09/2026**, 6 fotos
    reais de trabalho puxadas do `@espaco.seixas`.
 8. **Sessão de 15/09 (parte 2)** somou: fundo removido do hero no mobile, 4º círculo
-   (cílios) na seção Resultados, placeholder do login com a Mayte, campo "Profissional" do
-   Contas do Salão travado no próprio nome pra quem não é a Flávia, 2 depoimentos
-   fictícios da Mayte (mesmo esquema de todos os outros, ver "Depoimentos" abaixo) e um
-   manifest de PWA pra instalar a Área da Colaboradora como app. Detalhes em cada seção.
+   (cílios) na seção Resultados, placeholder do login com a Mayte, Mayte entrou em
+   `RENT_PAYERS` (paga aluguel de posto), 2 depoimentos fictícios da Mayte (mesmo esquema
+   de todos os outros) e um manifest de PWA pra instalar a Área da Colaboradora como app.
+9. **Contas do Salão virou exclusiva da Flávia (15/09/2026).** As outras colaboradoras não
+   veem mais essa tela — usam Gastos Pessoais com âmbito "Salão", que já somava por pessoa
+   pra ela. RLS de `salon_transactions` apertada pra só o e-mail dela. **Falta rodar o
+   `migration.sql` atualizado no Supabase** pra essa policy nova valer de verdade (o código
+   já bloqueia a navegação, mas sem isso a API ainda aceitaria escrita de qualquer uma).
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -491,18 +495,22 @@ Supabase de produção da Jet IA/Bannerjet — são projetos totalmente separado
   RLS é `owner_id`. Formulário não deixa mais escolher profissional — sempre insere no nome
   de quem está logada (`useAuth().name`). `owner_id` é `nullable` de propósito: linha órfã
   (sem match de e-mail no backfill) fica invisível pra todo mundo em vez de travar a migração.
-- `salon_transactions` — contas do salão, compartilhado entre todas (RLS: qualquer
-  `authenticated` lê/escreve tudo — é ledger único de propósito, diferente de `appointments`
-  e `personal_expenses`, que são por pessoa).
-  **Desde 15/09/2026, o campo "Profissional" do formulário só é editável pra quem é
-  `isOwner` (a Flávia).** As outras veem o próprio nome fixo, num `<input disabled>`
-  preenchido com `useAuth().name` (`ContasSalao.tsx`). Pedido do Erick: antes qualquer
-  colaboradora podia lançar em nome de outra, o que bagunçava o extrato por pessoa.
-  **Isso é só trava de UI, não RLS** — a policy continua `using (true)`, então uma
-  chamada direta à API do Supabase ainda conseguiria gravar em nome de outra pessoa.
-  Não apertei a RLS junto porque o dado em si é compartilhado por natureza (é o caixa do
-  salão, todo mundo já vê tudo); se um dia isso precisar virar trava de verdade, o caminho
-  é comparar `auth.jwt() ->> 'email'` com o nome no `insert`, igual foi feito pro aluguel.
+- `salon_transactions` — **desde 15/09/2026, é só da Flávia.** Virou de ledger
+  compartilhado (`using (true)`) pra RLS igual `rent_payments`: compara
+  `auth.jwt() ->> 'email'` com o e-mail dela. Decisão do Erick depois de eu sugerir juntar
+  Contas do Salão com Gastos Pessoais numa tela só com abas — ele preferiu simplificar na
+  direção oposta: **as outras colaboradoras nem veem mais essa tela.** O link some da
+  sidebar pra quem não é `isOwner` (`StaffLayout.tsx`, `NAV_ITEMS[].ownerOnly`) e a própria
+  página redireciona pra Gastos Pessoais se alguém tentar entrar direto pela URL
+  (`ContasSalao.tsx`, `if (!isOwner) return <Navigate .../>`) — a RLS nova é a trava real,
+  as outras duas são só UX. **O trecho anterior deste arquivo sobre travar só o campo
+  "Profissional" (mantendo a tela visível pra todas) foi revertido**, durou poucas horas:
+  o pedido evoluiu de "trava o campo" pra "a tela nem deveria existir pras outras".
+  O que substitui Contas do Salão pras colaboradoras é o âmbito `scope: 'salao'` que
+  `personal_expenses` **já tinha** desde 05/09/2026 (ver comentário na criação da coluna) —
+  cada uma lança lá o que pôs no salão, e a Flávia já enxergava a soma por pessoa em
+  "Visão Geral da Equipe" (`GastosPessoais.tsx`) sem precisar de nada novo. Isso já existia
+  antes mesmo de o Erick pedir explicitamente; só faltava fechar a porta de `salon_transactions`.
 - `rent_payments` — aluguel do posto de trabalho das colaboradoras, uma linha por pessoa
   por mês. **RLS deixa só a Flávia ler e escrever** (compara o e-mail no JWT), então pra
   Jheny e Vitória a consulta volta vazia e o painel nem renderiza. Elas não veem nem o

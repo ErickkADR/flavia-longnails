@@ -7,12 +7,14 @@ const NAV_ITEMS = [
   { to: '/area-colaboradora/agendamento', label: 'Agendamento de Clientes' },
   { to: '/area-colaboradora/retorno', label: 'Retorno de Clientes' },
   { to: '/area-colaboradora/clientes', label: 'Registro de Clientes' },
-  { to: '/area-colaboradora/contas', label: 'Contas do Salão' },
+  // Só a Flávia vê Contas do Salão (pedido do Erick, 15/09/2026): as outras usam Gastos
+  // Pessoais com âmbito "Salão", que já soma pra ela em "Visão Geral da Equipe".
+  { to: '/area-colaboradora/contas', label: 'Contas do Salão', ownerOnly: true },
   { to: '/area-colaboradora/gastos', label: 'Gastos Pessoais' },
 ];
 
 export function StaffLayout() {
-  const { session, loading, name, signOut } = useAuth();
+  const { session, loading, name, isOwner, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ export function StaffLayout() {
           <div className="staff-sidebar-user">Olá, {name}</div>
         </div>
         <nav className="staff-nav">
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.filter((item) => !item.ownerOnly || isOwner).map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

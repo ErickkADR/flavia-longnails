@@ -195,9 +195,17 @@ create policy "edita proprio agendamento" on public.appointments
 create policy "apaga proprio agendamento" on public.appointments
   for delete to authenticated using (owner_id = auth.uid());
 
+-- Antes era "for all to authenticated using (true)": qualquer uma lia/escrevia tudo.
+-- Trocado em 15/09/2026 (pedido do Erick): Contas do Salão passa a ser só da Flávia. As
+-- outras usam Gastos Pessoais com âmbito "Salão" (personal_expenses.scope), que já soma
+-- por pessoa pra ela em "Visão Geral da Equipe" — não precisou mexer em mais nada ali,
+-- a RLS de personal_expenses já deixava a Flávia ler as linhas de todo mundo.
 drop policy if exists "staff logada acessa salon_transactions" on public.salon_transactions;
-create policy "staff logada acessa salon_transactions" on public.salon_transactions
-  for all to authenticated using (true) with check (true);
+drop policy if exists "so a dona acessa salon_transactions" on public.salon_transactions;
+create policy "so a dona acessa salon_transactions" on public.salon_transactions
+  for all to authenticated
+  using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
+  with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
 
 -- versão antiga deste arquivo criava uma única policy "for all" aqui — remove antes de recriar
 drop policy if exists "cada uma so acessa os proprios gastos" on public.personal_expenses;
