@@ -33,7 +33,9 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 5. **A URL da Vercel continua `afroditestudio.vercel.app`.** Renomear é ação no painel dele
    (Settings → General → Project Name) — sem token/CLI da Vercel, não dá pra fazer por aqui.
 6. **A logo em PNG (`public/logo.png`) já substitui o texto em todo lugar** — nav, rodapé e
-   sidebar da área interna. Só falta a galeria de trabalhos reais da Mayte (item acima).
+   sidebar da área interna.
+7. ~~A galeria da Mayte só tinha a foto de perfil~~ → **resolvida em 15/09/2026**, 6 fotos
+   reais de trabalho puxadas do `@espaco.seixas`.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -310,10 +312,20 @@ frágil. Resolução sai limitada a 640x640, igual ao que já se via nas fotos d
 > autorizou o uso dessa foto no site.** O pedido veio do Erick, não dela. Vale a mesma
 > pergunta que foi feita pra Jheny antes de considerar isso resolvido.
 
-**Sem galeria de trabalhos dela ainda** — só a própria foto de perfil repetida em
-`gallery`, pra seção "Trabalhos" da página não ficar vazia. Sem material dela, fica assim.
-Precisa de mais links de post do Instagram (mesma técnica de oEmbed acima) ou de arquivos
-que o Erick mande direto — nenhuma das duas coisas chegou ainda.
+**Galeria de trabalhos real, adicionada em 15/09/2026** (`images/ig-mayte-1.jpg` a `-6.jpg`):
+as 6 fotos mais recentes marcadas como "Photo" (não vídeo/reel) no feed do
+`@espaco.seixas`. Mesma ressalva de consentimento da foto de perfil acima.
+
+**Técnica nova pra pegar a galeria inteira de um perfil** (a do oEmbed só serve pra um post
+de cada vez): abrir o perfil com Playwright (`chromium.launch()` já instalado no scratchpad),
+esperar a rede ficar ociosa e rodar `page.evaluate` coletando todo `img.src` e todo
+`a[href*="/p/"]`/`a[href*="/reel/"]` da página. As URLs do CDN vêm com a assinatura completa
+(`oh=`/`oe=`) porque o browser renderizou o JS — isso resolve o problema que a seção acima
+("Como esse material foi obtido") documentava como frágil: `curl` direto na página não
+funciona (imagens entram por JS) e `WebFetch` converte pra markdown e corta a query string,
+o que devolve 403. O `alt` de cada `<img>` já vem como `"Photo by ... on <data>"` ou
+`"Video by ..."`, então dá pra filtrar só foto sem abrir cada post. As 6 baixadas bateram
+200 de primeira, sem nenhuma corrompida (diferente das 6 de 16 que falharam antes).
 
 **Login na Área da Colaboradora — metade feita em 15/09/2026:**
 1. ✅ `mayte` adicionada em `STAFF_USERS` (`src/auth/staffUsers.ts`), e-mail
@@ -666,8 +678,8 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
   planilha, e ela não separava gasto do salão de gasto pessoal.
 - `phone`/`email`/`notes` dos 110 clientes importados estão vazios: a planilha antiga não
   tinha essas colunas, só nome.
-- Galeria de trabalhos reais da Mayte: hoje é só a foto de perfil repetida. Precisa de mais
-  links de post do Instagram dela ou de arquivos que o Erick mande direto.
+- ~~Galeria de trabalhos reais da Mayte~~ → **resolvida em 15/09/2026**, 6 fotos reais do
+  `@espaco.seixas`. Ver seção "Mayte entra como quarta profissional".
 
 ### Coisas técnicas que valem lembrar
 

@@ -166,8 +166,17 @@ export const professionals: Professional[] = [
       { icon: 'cilios', name: 'Mega Luxo', desc: 'Mais fios por cílio natural que o volume luxo, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
       { icon: 'cilios', name: 'Mega Egípcio', desc: 'Mais fios por cílio natural que o volume egípcio, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
     ],
+    // Trabalhos reais dela, do feed do @espaco.seixas (15/09/2026). Mesma técnica das
+    // outras: página renderizada via Playwright pra pegar as URLs assinadas do CDN
+    // (curl direto na página não funciona, as imagens entram por JS), depois baixadas.
+    // As 6 mais recentes marcadas como "Photo" (não vídeo/reel) no feed dela.
     gallery: [
-      'images/mayte-perfil.jpg',
+      'images/ig-mayte-1.jpg',
+      'images/ig-mayte-2.jpg',
+      'images/ig-mayte-3.jpg',
+      'images/ig-mayte-4.jpg',
+      'images/ig-mayte-5.jpg',
+      'images/ig-mayte-6.jpg',
     ],
   },
 ];
