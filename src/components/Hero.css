@@ -102,14 +102,10 @@
   }
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
   .hero-copy { grid-column: 1; }
-  .hero-video { opacity: 1; } /* só o poster aparece aqui; sem fade pra não piscar */
-  .hero-scrim {
-    background: linear-gradient(to bottom,
-      rgba(var(--bg-rgb), .10) 0%,
-      rgba(var(--bg-rgb), .30) 32%,
-      rgba(var(--bg-rgb), .88) 58%,
-      var(--bg) 82%);
-  }
+  /* Sem vídeo nem poster no celular a pedido do Erick (15/09/2026): a foto de fundo
+     brigava com o texto numa tela estreita. Sobra só o fundo sólido da seção. */
+  .hero-stage { display: none; }
+  .hero-scrim { display: none; }
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
   .hero-stats { justify-content: center; gap: 32px; }

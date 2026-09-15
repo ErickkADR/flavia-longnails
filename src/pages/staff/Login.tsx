@@ -46,7 +46,7 @@ export function Login() {
             autoComplete="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="flavia, jheny ou vitoria"
+            placeholder="flavia, jheny, vitoria ou mayte"
             required
           />
         </label>

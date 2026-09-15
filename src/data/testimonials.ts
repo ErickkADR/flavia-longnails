@@ -75,6 +75,24 @@ export const testimonials: Testimonial[] = [
     avatar: 'images/review-camila-stock.jpg',
     verified: true,
   },
+  {
+    initials: 'LP',
+    name: 'Larissa Prado',
+    service: 'Volume Brasileiro',
+    professional: 'Mayte',
+    text: 'Meu olhar ficou completamente diferente, super natural e ao mesmo tempo marcante. A Mayte é cuidadosa demais com a aplicação, nem senti o tempo passar de tão relaxante.',
+    avatar: 'images/review-larissa-stock.jpg',
+    verified: true,
+  },
+  {
+    initials: 'PG',
+    name: 'Patrícia Gomes',
+    service: 'Design de Sobrancelhas',
+    professional: 'Mayte',
+    text: 'Nunca tinha visto minhas sobrancelhas combinarem tanto com o meu rosto. A Mayte explica cada etapa e o ambiente é super acolhedor, saí de lá renovada.',
+    avatar: 'images/review-patricia-stock.jpg',
+    verified: true,
+  },
 ];
 
 export interface RankedService {

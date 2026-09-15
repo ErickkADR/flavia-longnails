@@ -1,0 +1,15 @@
+{
+  "name": "Lummier Studio — Área da Colaboradora",
+  "short_name": "Lummier Staff",
+  "description": "Acesso rápido à área interna do Lummier Studio: agenda, clientes, contas e gastos.",
+  "start_url": "area-colaboradora",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2EFEB",
+  "theme_color": "#F2EFEB",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

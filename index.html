@@ -6,6 +6,14 @@
 <meta name="description" content="Lummier Studio: unhas, maquiagem e cabelo em um só lugar. Agende pelo WhatsApp.">
 <title>Lummier Studio | Unhas, Maquiagem e Cabelo</title>
 <link rel="icon" href="%BASE_URL%favicon.png" type="image/png">
+<!-- PWA: permite "Adicionar à Tela de Início" e abrir a Área da Colaboradora como um
+     app, sem passar pelo navegador. Ver CLAUDE.md, seção "Acesso tipo app" (15/09/2026). -->
+<link rel="manifest" href="%BASE_URL%manifest.json">
+<meta name="theme-color" content="#F2EFEB">
+<link rel="apple-touch-icon" href="%BASE_URL%icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Lummier Staff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- A fonte de verdade é o @import no topo de src/styles/global.css — esse era um

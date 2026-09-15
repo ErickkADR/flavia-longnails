@@ -81,8 +81,9 @@ export function Hero() {
             Beleza que <span>Transforma</span> Você
           </h1>
           <p className="hero-desc">
-            Unhas, maquiagem e cabelo em um só lugar. Três especialistas, uma só experiência:
-            do alongamento perfeito à make dos sonhos, passando pelo cabelo que você sempre quis.
+            Unhas, maquiagem, cabelo e cílios em um só lugar. Quatro especialistas, uma só
+            experiência: do alongamento perfeito à make dos sonhos, passando pelo cabelo que
+            você sempre quis.
           </p>
           <div className="hero-actions">
             <a href={WHATSAPP_LINK} className="btn-primary" target="_blank" rel="noopener noreferrer">
@@ -93,7 +94,7 @@ export function Hero() {
           </div>
           <div className="hero-stats">
             <div><span className="stat-num">5+</span><span className="stat-lbl">Anos de Experiência</span></div>
-            <div><span className="stat-num">3</span><span className="stat-lbl">Especialistas</span></div>
+            <div><span className="stat-num">4</span><span className="stat-lbl">Especialistas</span></div>
             <div><span className="stat-num">4.9<Icon name="estrela" fill="currentColor" strokeWidth={0} className="stat-star" /></span><span className="stat-lbl">Avaliação Média</span></div>
           </div>
         </div>

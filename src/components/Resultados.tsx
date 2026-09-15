@@ -18,8 +18,9 @@ export function Resultados() {
               alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Lummier Studio"
             />
           </div>
-          {/* Os dois círculos menores existem pra dizer, sem texto, que o studio faz
-              três coisas: a foto grande é unha, e as pequenas são cabelo e maquiagem.
+          {/* Os três círculos menores existem pra dizer, sem texto, que o studio faz
+              quatro coisas: a foto grande é unha, e as pequenas são cabelo, maquiagem
+              e cílios (adicionado em 15/09/2026, ver rv-inset-cilios).
               A de cabelo ainda é banco de imagem, a Vitória não passou material. */}
           <div className="rv-inset rv-inset-cabelo">
             <img
@@ -33,14 +34,23 @@ export function Resultados() {
               alt="Maquiagem social com delineado gráfico e acabamento em tons quentes, feita no Lummier Studio"
             />
           </div>
+          {/* Quarto círculo, adicionado em 15/09/2026 quando a Mayte entrou (cílios e
+              sobrancelhas). Morde o canto inferior direito do círculo principal, espelhando
+              como o rv-inset-make morde o topo. */}
+          <div className="rv-inset rv-inset-cilios">
+            <img
+              src={asset('images/ig-mayte-1.jpg')}
+              alt="Extensão de cílios em close, trabalho feito no Lummier Studio"
+            />
+          </div>
         </div>
 
         <div className="reveal-right">
           <div className="sec-label">Portfolio</div>
           <h2 className="sec-title">Resultados que <span>Falam por Si</span></h2>
           <p className="resultados-text">
-            Cada atendimento no studio é pensado pra durar, na unha, na make ou no cabelo,
-            com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
+            Cada atendimento no studio é pensado pra durar, na unha, na make, no cabelo ou
+            nos cílios, com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
           </p>
           <div className="resultados-stats">
             <div className="rs-rating">

@@ -29,7 +29,7 @@ interface RentPayment {
   created_at: string;
 }
 
-const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória'];
+const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória', 'Mayte'];
 
 /**
  * Quem paga aluguel de posto de trabalho hoje. A Flávia é dona do studio e não paga
@@ -42,7 +42,7 @@ const DEFAULT_RENT = 500;
 const money = (n: number) => `R$${n.toFixed(2)}`;
 
 export function ContasSalao() {
-  const { isOwner } = useAuth();
+  const { isOwner, name } = useAuth();
   const { rows, loading, error, insert, remove } = useTable<Transaction>('salon_transactions', 'occurred_on');
   const { filtered, label, month, prevMonth, nextMonth } = useMonthFilter(rows, 'occurred_on');
 
@@ -54,7 +54,10 @@ export function ContasSalao() {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [professional, setProfessional] = useState(PROFESSIONALS[0]);
+  // Só a Flávia (dona do studio) escolhe o nome livremente aqui — as outras lançam
+  // sempre no próprio nome, sem opção de trocar. Pedido do Erick em 15/09/2026: antes
+  // qualquer uma podia lançar em nome de outra, o que bagunçava o extrato por pessoa.
+  const [professional, setProfessional] = useState(isOwner ? PROFESSIONALS[0] : name);
   const [occurredOn, setOccurredOn] = useState(() => new Date().toISOString().slice(0, 10));
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -132,7 +135,7 @@ export function ContasSalao() {
     <div>
       <div className="mod-header">
         <div className="mod-title">Controle de Contas do Salão</div>
-        <div className="mod-sub">Entradas e saídas compartilhadas entre as três</div>
+        <div className="mod-sub">Entradas e saídas compartilhadas entre todas</div>
       </div>
 
       <MonthNav label={label} onPrev={prevMonth} onNext={nextMonth} />
@@ -174,9 +177,13 @@ export function ContasSalao() {
         </label>
         <label className="mod-field">
           <span>Profissional</span>
-          <select value={professional} onChange={(e) => setProfessional(e.target.value)}>
-            {PROFESSIONALS.map((p) => <option key={p} value={p}>{p}</option>)}
-          </select>
+          {isOwner ? (
+            <select value={professional} onChange={(e) => setProfessional(e.target.value)}>
+              {PROFESSIONALS.map((p) => <option key={p} value={p}>{p}</option>)}
+            </select>
+          ) : (
+            <input value={name} disabled readOnly />
+          )}
         </label>
         <label className="mod-field">
           <span>Data</span>

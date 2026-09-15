@@ -26,16 +26,26 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
    são chute, ainda sem correção nenhuma.
 3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
    deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
-4. **A Mayte só tem metade do login na Área da Colaboradora.** Código pronto (usuário em
-   `STAFF_USERS`, constraint do banco atualizada no `migration.sql`); falta o Erick criar o
-   usuário dela no painel do Supabase e rodar o `migration.sql` atualizado — ver seção
-   "Mayte entra como quarta profissional" pro passo a passo exato.
-5. **A URL da Vercel continua `afroditestudio.vercel.app`.** Renomear é ação no painel dele
-   (Settings → General → Project Name) — sem token/CLI da Vercel, não dá pra fazer por aqui.
+4. ~~A Mayte só tinha metade do login~~ → **resolvida em 15/09/2026**: usuário criado no
+   painel do Supabase e `migration.sql` atualizado já rodado (confirmado pelo Erick). Login
+   dela funciona igual ao das outras 3.
+5. **Renomear o projeto na Vercel está em andamento, sem confirmação final.** O campo
+   "Project Name" foi trocado pra `lummier-studio`, mas isso só afeta a URL de cada deploy
+   (a de hash tipo `lummierstudio-<hash>-erickkadrs-projects.vercel.app`), não o domínio fixo
+   em uso — esse continua sendo escolhido manualmente em **Settings → Domains**, e até o
+   momento só `afroditestudio.vercel.app` aparecia lá. Passei o passo a passo pro Erick
+   (clicar no **+** ao lado de "Domains" e adicionar `lummier-studio.vercel.app` na mão);
+   **ainda não confirmou se funcionou**. Ver `README.md` e o topo deste arquivo pra
+   atualizar assim que ele confirmar — hoje os dois ainda citam a URL antiga.
 6. **A logo em PNG (`public/logo.png`) já substitui o texto em todo lugar** — nav, rodapé e
    sidebar da área interna.
 7. ~~A galeria da Mayte só tinha a foto de perfil~~ → **resolvida em 15/09/2026**, 6 fotos
    reais de trabalho puxadas do `@espaco.seixas`.
+8. **Sessão de 15/09 (parte 2)** somou: fundo removido do hero no mobile, 4º círculo
+   (cílios) na seção Resultados, placeholder do login com a Mayte, campo "Profissional" do
+   Contas do Salão travado no próprio nome pra quem não é a Flávia, 2 depoimentos
+   fictícios da Mayte (mesmo esquema de todos os outros, ver "Depoimentos" abaixo) e um
+   manifest de PWA pra instalar a Área da Colaboradora como app. Detalhes em cada seção.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -71,6 +81,30 @@ no build):
 
 **Depois de mudar env var na Vercel, precisa forçar Redeploy manual** — ela não aplica em
 builds já existentes sozinha.
+
+## Acesso tipo app (PWA), 15/09/2026
+
+Pedido do Erick: as colaboradoras acessarem a Área da Colaboradora sem precisar digitar a
+URL toda vez, tipo um app. Resolvido com um **manifest de PWA** (`public/manifest.json` +
+ícones em `public/icons/`), sem service worker:
+
+- `start_url` e `scope` no manifest usam **caminho relativo** (`"area-colaboradora"`, `"."`),
+  não absoluto. Isso importa porque o manifest é resolvido contra a própria URL dele, e essa
+  URL muda entre os dois hosts (`/manifest.json` na Vercel, `/flavia-longnails/manifest.json`
+  no Pages) — com caminho relativo o mesmo arquivo funciona nos dois sem gerar dois manifests.
+  Mesma lógica pros `icons.src`.
+- O link no `index.html` usa `%BASE_URL%manifest.json`, igual já era feito pro favicon —
+  o Vite substitui `%BASE_URL%` pelo `base` certo em cada build.
+- Ícones gerados a partir do `public/logo.png` (400×400 com transparência), colados sobre
+  fundo sólido `#F2EFEB` num canvas maior (logo ocupa ~62% do quadro) pra sobrar respiro nas
+  bordas — sem isso o monograma fica colado na borda do ícone no celular.
+- **Sem service worker de propósito.** Daria o prompt de instalação nativo do Chrome/Android
+  (hoje só funciona via "Adicionar à Tela de Início" no menu do navegador, em iOS e Android),
+  mas cache de service worker é fonte clássica de dor de cabeça: sem uma estratégia de
+  invalidação bem pensada, ele serve JS/CSS antigo depois de um deploy novo e vira um bug
+  difícil de depurar remotamente. Pro objetivo real (ícone na tela, abre direto sem
+  navegador) o manifest sozinho já resolve. Se um dia quiser o prompt nativo ou uso offline
+  de verdade, aí sim vale considerar `vite-plugin-pwa` com uma estratégia de cache pensada.
 
 ## Marca — o rebrand de 05/09/2026
 
@@ -173,6 +207,23 @@ Carrossel infinito (`src/components/Marquee.tsx`) usado em avaliações, tags e 
   `ResizeObserver`). Com poucos itens (ex.: só 3 fotos) um único grupo pode ser mais estreito
   que a tela num monitor largo, e a técnica clássica de "2 cópias + translateX(-50%)" deixa um
   vão vazio a cada volta. Não regredir pra 2 cópias fixas.
+
+### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
+
+Dois ajustes pedidos pelo Erick depois de ver o site no celular:
+
+- **`.hero-video`/`.hero-scrim` viraram `display: none` abaixo de 900px** (`Hero.css`). Antes,
+  sem vídeo rodando, o que aparecia era só o poster (`images/hero-nails-o-0j6oBo.jpg`) com um
+  degradê por cima — ele achou que brigava com o texto numa tela estreita. Sobrou o fundo
+  sólido da seção (`var(--bg)`). O poster continua existindo e é usado normalmente acima de
+  900px, só não referenciado mais no mobile.
+- **A composição de círculos da seção Resultados ganhou um 4º** (`.rv-inset-cilios`), com
+  a foto `images/ig-mayte-1.jpg` (o close de olho com extensão de cílios, uma das 6 baixadas
+  do Instagram dela). Antes eram só 3 (unha grande + cabelo + make), pensados pra dizer "o
+  studio faz três coisas" sem texto — com a Mayte esse número virou quatro. O círculo novo
+  morde o canto inferior direito do principal, espelhando como o `.rv-inset-make` já mordia
+  o topo. O texto da seção e as estatísticas "Especialistas" do Hero (`3` → `4`) também
+  foram corrigidos, estavam desatualizados desde que ela entrou.
 
 ## Fotos — o que veio do Instagram (05/09/2026)
 
@@ -327,18 +378,27 @@ o que devolve 403. O `alt` de cada `<img>` já vem como `"Photo by ... on <data>
 `"Video by ..."`, então dá pra filtrar só foto sem abrir cada post. As 6 baixadas bateram
 200 de primeira, sem nenhuma corrompida (diferente das 6 de 16 que falharam antes).
 
-**Login na Área da Colaboradora — metade feita em 15/09/2026:**
+**Dois depoimentos fictícios pra ela, adicionados em 15/09/2026** (`src/data/testimonials.ts`,
+Larissa Prado e Patrícia Gomes), mesmo esquema de todos os outros: nome, texto e foto
+inventados, `verified: true` só como elemento visual (ver o comentário no topo do arquivo).
+As fotos (`review-larissa-stock.jpg`, `review-patricia-stock.jpg`) vieram do
+`randomuser.me` — serviço público feito justamente pra avatar de mockup/placeholder, ao
+invés de puxar foto de uma pessoa real de algum lugar pra representar uma cliente que não
+existe.
+
+**Login na Área da Colaboradora — resolvido em 15/09/2026:**
 1. ✅ `mayte` adicionada em `STAFF_USERS` (`src/auth/staffUsers.ts`), e-mail
    `mayte@studioflaviaalves.app`, mesmo padrão das outras 3.
-2. ⏳ **Falta criar o usuário no painel do Supabase** — Authentication → Users → Add User,
-   e-mail `mayte@studioflaviaalves.app`, senha à escolha, "Auto Confirm User" marcado. Só o
-   Erick faz isso (não tenho acesso ao painel).
+2. ✅ Usuário criado no painel do Supabase pelo Erick (Authentication → Users → Add User,
+   "Auto Confirm User" marcado). Senha sugerida por mim, no mesmo padrão das outras:
+   `Mayte@Studio25`.
 3. ✅ `check` de `professional` da tabela `appointments` em `migration.sql` já inclui
    `'Mayte'`, tanto no `create table` quanto num `alter table ... drop/add constraint`
    novo (pra funcionar mesmo com a tabela já existindo em produção).
-4. ⏳ **Falta rodar esse `migration.sql` atualizado no SQL Editor do Supabase** — sem isso o
-   `alter table` do item 3 só existe no arquivo, a constraint em produção continua sem
-   `'Mayte'` e um agendamento dela seria rejeitado pelo banco.
+4. ✅ `migration.sql` atualizado rodado pelo Erick no SQL Editor do Supabase (confirmado).
+
+O placeholder do campo "Usuário" na tela de login (`src/pages/staff/Login.tsx`) também foi
+corrigido pra citar a Mayte — antes só dizia "flavia, jheny ou vitoria".
 
 ## Fotos placeholder — o histórico
 
@@ -431,8 +491,18 @@ Supabase de produção da Jet IA/Bannerjet — são projetos totalmente separado
   RLS é `owner_id`. Formulário não deixa mais escolher profissional — sempre insere no nome
   de quem está logada (`useAuth().name`). `owner_id` é `nullable` de propósito: linha órfã
   (sem match de e-mail no backfill) fica invisível pra todo mundo em vez de travar a migração.
-- `salon_transactions` — contas do salão, compartilhado entre as 3 (RLS: qualquer
-  `authenticated` lê/escreve tudo).
+- `salon_transactions` — contas do salão, compartilhado entre todas (RLS: qualquer
+  `authenticated` lê/escreve tudo — é ledger único de propósito, diferente de `appointments`
+  e `personal_expenses`, que são por pessoa).
+  **Desde 15/09/2026, o campo "Profissional" do formulário só é editável pra quem é
+  `isOwner` (a Flávia).** As outras veem o próprio nome fixo, num `<input disabled>`
+  preenchido com `useAuth().name` (`ContasSalao.tsx`). Pedido do Erick: antes qualquer
+  colaboradora podia lançar em nome de outra, o que bagunçava o extrato por pessoa.
+  **Isso é só trava de UI, não RLS** — a policy continua `using (true)`, então uma
+  chamada direta à API do Supabase ainda conseguiria gravar em nome de outra pessoa.
+  Não apertei a RLS junto porque o dado em si é compartilhado por natureza (é o caixa do
+  salão, todo mundo já vê tudo); se um dia isso precisar virar trava de verdade, o caminho
+  é comparar `auth.jwt() ->> 'email'` com o nome no `insert`, igual foi feito pro aluguel.
 - `rent_payments` — aluguel do posto de trabalho das colaboradoras, uma linha por pessoa
   por mês. **RLS deixa só a Flávia ler e escrever** (compara o e-mail no JWT), então pra
   Jheny e Vitória a consulta volta vazia e o painel nem renderiza. Elas não veem nem o
@@ -652,6 +722,11 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
   Agora) e **não foi conferido visualmente em tela média**. Pode ter ficado apertado.
 - **Publicar ou não o valor da locação** em `/trabalhe-conosco`. Hoje está fora de
   propósito, ver a seção daquela página. É decisão do Erick, não esquecimento.
+- **A Mayte paga aluguel de posto ou não?** Não sei, então não mexi em `RENT_PAYERS`
+  (`ContasSalao.tsx`) nem no `check` de `rent_payments` no `migration.sql` — hoje só Jheny e
+  Vitória aparecem lá. Ela entrou no dropdown de `salon_transactions` (compartilhado, sem
+  relação com aluguel), mas fica fora do painel "Aluguel das Colaboradoras" até o Erick
+  confirmar se ela paga e por quanto.
 
 ### Decisões que ficaram registradas, não são pendência
 
