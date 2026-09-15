@@ -6,8 +6,7 @@
   display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
 }
 .staff-sidebar-top { margin-bottom: 40px; }
-.staff-sidebar-logo { font-family: var(--font-display); font-size: .95rem; font-weight: 700; color: var(--accent); }
-.staff-sidebar-logo span { color: var(--accent-deep); font-weight: 400; }
+.staff-sidebar-logo-img { height: 40px; width: auto; display: block; }
 .staff-sidebar-user { margin-top: 10px; font-size: .8rem; color: var(--muted); }
 
 .staff-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }

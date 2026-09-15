@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { WHATSAPP_LINK } from '../data/professionals';
 import { WhatsappIcon } from './icons';
+import { asset } from '../lib/asset';
 import './Nav.css';
 import { Icon } from './Icon';
 
@@ -27,7 +28,7 @@ export function Nav() {
       <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link to="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
-            Lummier <span>Studio</span>
+            <img src={asset('logo.png')} alt="Lummier Studio" className="nav-logo-img" />
           </Link>
           <ul className="nav-links">
             <li><Link to="/cursos">Cursos</Link></li>

@@ -21,13 +21,19 @@ create table if not exists public.clients (
 create table if not exists public.appointments (
   id uuid primary key default gen_random_uuid(),
   client_name text not null,
-  professional text not null check (professional in ('Flávia', 'Jheny', 'Vitória')),
+  professional text not null check (professional in ('Flávia', 'Jheny', 'Vitória', 'Mayte')),
   service text not null,
   scheduled_at timestamptz not null,
   price numeric(10, 2),
   status text not null default 'agendado' check (status in ('agendado', 'concluido', 'cancelado')),
   created_at timestamptz not null default now()
 );
+
+-- Mayte entrou em 15/09/2026 (4ª profissional). A tabela já existia em produção com o
+-- check antigo, então "create table if not exists" acima não altera o que já está lá —
+-- precisa dropar e recriar o constraint explicitamente.
+alter table public.appointments drop constraint if exists appointments_professional_check;
+alter table public.appointments add constraint appointments_professional_check check (professional in ('Flávia', 'Jheny', 'Vitória', 'Mayte'));
 
 -- Cada profissional só vê os próprios agendamentos (antes era compartilhado e a Jheny via
 -- o histórico da Flávia inteiro). owner_id fica nullable de propósito: linhas antigas sem
@@ -226,12 +232,13 @@ create policy "so a dona mexe no aluguel" on public.rent_payments
 
 -- ============================================================
 -- Depois de rodar isso: vá em Authentication -> Users -> Add User
--- e crie as 3 colaboradoras com estes e-mails (a senha é você quem escolhe):
+-- e crie as 4 colaboradoras com estes e-mails (a senha é você quem escolhe):
 --   flavia@studioflaviaalves.app
 --   jheny@studioflaviaalves.app
 --   vitoria@studioflaviaalves.app
--- No login do site elas digitam só "flavia" / "jheny" / "vitoria" (sem o
--- e-mail todo) + a senha que você definir. Marque "Auto Confirm User" ao
--- criar, senão o Supabase espera confirmação por e-mail que nunca vai chegar
--- (os e-mails acima não são caixas reais).
+--   mayte@studioflaviaalves.app
+-- No login do site elas digitam só "flavia" / "jheny" / "vitoria" / "mayte"
+-- (sem o e-mail todo) + a senha que você definir. Marque "Auto Confirm User"
+-- ao criar, senão o Supabase espera confirmação por e-mail que nunca vai
+-- chegar (os e-mails acima não são caixas reais).
 -- ============================================================

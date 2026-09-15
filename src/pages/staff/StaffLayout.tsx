@@ -1,5 +1,6 @@
 import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
+import { asset } from '../../lib/asset';
 import './StaffLayout.css';
 
 const NAV_ITEMS = [
@@ -35,7 +36,9 @@ export function StaffLayout() {
     <div className="staff-shell">
       <aside className="staff-sidebar">
         <div className="staff-sidebar-top">
-          <Link to="/" className="staff-sidebar-logo">Lummier <span>Studio</span></Link>
+          <Link to="/" className="staff-sidebar-logo">
+            <img src={asset('logo.png')} alt="Lummier Studio" className="staff-sidebar-logo-img" />
+          </Link>
           <div className="staff-sidebar-user">Olá, {name}</div>
         </div>
         <nav className="staff-nav">

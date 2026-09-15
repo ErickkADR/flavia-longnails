@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { professionals, WHATSAPP_LINK } from '../data/professionals';
 import { InstagramIcon, WhatsappIcon } from './icons';
+import { asset } from '../lib/asset';
 import './Footer.css';
 import { Icon } from './Icon';
 
@@ -10,7 +11,9 @@ export function Footer() {
       <div className="container">
         <div className="footer-top">
           <div>
-            <Link to="/" className="footer-logo">Lummier Studio</Link>
+            <Link to="/" className="footer-logo">
+              <img src={asset('logo.png')} alt="Lummier Studio" className="footer-logo-img" />
+            </Link>
             <p className="footer-tagline">Unhas, maquiagem e cabelo em um só lugar</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/flavia_longnails/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

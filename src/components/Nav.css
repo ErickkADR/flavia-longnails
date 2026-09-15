@@ -8,8 +8,9 @@
 }
 .nav.scrolled { background: rgba(251, 246, 239, .96); padding: 14px 0; box-shadow: 0 4px 32px rgba(83, 77, 69, .06); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-.nav-logo { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--accent); text-decoration: none; }
-.nav-logo span { color: var(--accent-deep); font-weight: 400; }
+.nav-logo { display: flex; align-items: center; text-decoration: none; }
+.nav-logo-img { height: 38px; width: auto; display: block; transition: height .4s; }
+.nav.scrolled .nav-logo-img { height: 30px; }
 .nav-links { display: flex; list-style: none; gap: 36px; align-items: center; }
 .nav-links a { font-family: var(--font-body); font-size: .65rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--ink); text-decoration: none; transition: color .3s; }
 .nav-links a:hover { color: var(--accent); }

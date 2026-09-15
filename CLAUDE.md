@@ -26,8 +26,14 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
    são chute, ainda sem correção nenhuma.
 3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
    deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
-4. **A Mayte ainda não tem login na Área da Colaboradora**, só perfil público. Ver a seção
-   "Marca" (rebrand de 15/09) pra saber o que falta se o Erick decidir dar acesso a ela.
+4. **A Mayte só tem metade do login na Área da Colaboradora.** Código pronto (usuário em
+   `STAFF_USERS`, constraint do banco atualizada no `migration.sql`); falta o Erick criar o
+   usuário dela no painel do Supabase e rodar o `migration.sql` atualizado — ver seção
+   "Mayte entra como quarta profissional" pro passo a passo exato.
+5. **A URL da Vercel continua `afroditestudio.vercel.app`.** Renomear é ação no painel dele
+   (Settings → General → Project Name) — sem token/CLI da Vercel, não dá pra fazer por aqui.
+6. **A logo em PNG (`public/logo.png`) já substitui o texto em todo lugar** — nav, rodapé e
+   sidebar da área interna. Só falta a galeria de trabalhos reais da Mayte (item acima).
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -71,9 +77,10 @@ pedido do Erick. Fecha a questão de marca que estava em aberto desde o projeto 
 "Long Nails" (e depois o nome próprio da Flávia) comunicava só uma pessoa e uma
 especialidade, e o salão é multi-especialidade com três profissionais.
 
-No logo, a ênfase é em **Afrodite**: o `<span>` do `.nav-logo` e do `.staff-sidebar-logo` é
-a parte *leve* (accent-deep, weight 400), então a marcação ficou `Afrodite <span>Studio</span>`,
-não o contrário. Trocar a ordem sem trocar o span inverte o destaque.
+No logo, a ênfase era em **Afrodite**: o `<span>` do `.nav-logo` e do `.staff-sidebar-logo` era
+a parte *leve* (accent-deep, weight 400), então a marcação ficava `Afrodite <span>Studio</span>`,
+não o contrário. **Isso não existe mais** — em 15/09/2026 o logo de texto foi substituído pela
+imagem em todo lugar (ver seção "Segundo rebrand" abaixo).
 
 > **Três nomes NÃO mudaram no rebrand, de propósito:**
 >
@@ -101,11 +108,16 @@ motivo (e-mails de auth, nome do repo, "studio" minúsculo).
 **Não renomeei o projeto nem o domínio da Vercel** (`afroditestudio.vercel.app`) — só o
 texto que aparece na tela. Ficou uma inconsistência cosmética (a URL ainda diz "afrodite",
 o site mostra "Lummier") até o Erick decidir se quer renomear o projeto na Vercel ou
-apontar um domínio próprio.
+apontar um domínio próprio. **Isso não dá pra fazer por aqui** — não tenho token/CLI da
+Vercel, é ação no painel dele (Settings → General → Project Name, e opcionalmente
+Settings → Domains pra apontar um domínio novo/subdomínio `.vercel.app` renomeado).
+Renomear o projeto muda a URL automaticamente para `<novo-nome>.vercel.app`.
 
-**A logo em PNG não está em uso em lugar nenhum do site ainda**, só como favicon. Se o
-pedido for usar a logo como o `.nav-logo`/`.staff-sidebar-logo` (em vez do texto "Lummier
-Studio"), falta esse trabalho.
+**A logo em PNG passou a estar em uso em todo o site desde 15/09/2026**: substitui o texto
+"Lummier Studio" no `.nav-logo` (`Nav.tsx`), no `.footer-logo` (`Footer.tsx`) e no
+`.staff-sidebar-logo` (`StaffLayout.tsx`) — os três agora renderizam só `<img src={asset('logo.png')}>`
+dentro do mesmo `<Link>` que já existia, sem span nem texto. O arquivo fonte é
+`public/logo.png` (400×400, RGBA com transparência real, mesma arte do favicon).
 
 ## Design
 
@@ -300,16 +312,21 @@ frágil. Resolução sai limitada a 640x640, igual ao que já se via nas fotos d
 
 **Sem galeria de trabalhos dela ainda** — só a própria foto de perfil repetida em
 `gallery`, pra seção "Trabalhos" da página não ficar vazia. Sem material dela, fica assim.
+Precisa de mais links de post do Instagram (mesma técnica de oEmbed acima) ou de arquivos
+que o Erick mande direto — nenhuma das duas coisas chegou ainda.
 
-**Não tem login na Área da Colaboradora.** Pra dar acesso a ela, falta: (1) adicionar
-`mayte` em `STAFF_USERS` (`src/auth/staffUsers.ts`) com um e-mail fixo no mesmo padrão dos
-outros; (2) criar o usuário no painel do Supabase (Authentication → Add User, com "Auto
-Confirm User" marcado); (3) incluir `'Mayte'` no `check` de `professional` da tabela
-`appointments` no `migration.sql` (hoje só aceita `'Flávia' | 'Jheny' | 'Vitória'`, um
-insert dela seria rejeitado pelo banco); (4) atualizar esse mesmo `check` na tabela já
-existente no Supabase (o `migration.sql` sozinho não altera uma constraint que já foi
-criada com outro `check` — precisa de um `alter table ... drop constraint` +
-`add constraint` novo, não só rodar o arquivo de novo).
+**Login na Área da Colaboradora — metade feita em 15/09/2026:**
+1. ✅ `mayte` adicionada em `STAFF_USERS` (`src/auth/staffUsers.ts`), e-mail
+   `mayte@studioflaviaalves.app`, mesmo padrão das outras 3.
+2. ⏳ **Falta criar o usuário no painel do Supabase** — Authentication → Users → Add User,
+   e-mail `mayte@studioflaviaalves.app`, senha à escolha, "Auto Confirm User" marcado. Só o
+   Erick faz isso (não tenho acesso ao painel).
+3. ✅ `check` de `professional` da tabela `appointments` em `migration.sql` já inclui
+   `'Mayte'`, tanto no `create table` quanto num `alter table ... drop/add constraint`
+   novo (pra funcionar mesmo com a tabela já existindo em produção).
+4. ⏳ **Falta rodar esse `migration.sql` atualizado no SQL Editor do Supabase** — sem isso o
+   `alter table` do item 3 só existe no arquivo, a constraint em produção continua sem
+   `'Mayte'` e um agendamento dela seria rejeitado pelo banco.
 
 ## Fotos placeholder — o histórico
 
@@ -649,6 +666,8 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
   planilha, e ela não separava gasto do salão de gasto pessoal.
 - `phone`/`email`/`notes` dos 110 clientes importados estão vazios: a planilha antiga não
   tinha essas colunas, só nome.
+- Galeria de trabalhos reais da Mayte: hoje é só a foto de perfil repetida. Precisa de mais
+  links de post do Instagram dela ou de arquivos que o Erick mande direto.
 
 ### Coisas técnicas que valem lembrar
 
