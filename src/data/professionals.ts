@@ -16,7 +16,7 @@ export interface Service {
 }
 
 export interface Professional {
-  slug: 'flavia' | 'jheny' | 'vitoria';
+  slug: 'flavia' | 'jheny' | 'vitoria' | 'mayte';
   name: string;
   role: string;
   avatar: string;
@@ -137,6 +137,39 @@ export const professionals: Professional[] = [
       'images/vitoria-look-5-stock.jpg',
     ],
   },
+  {
+    slug: 'mayte',
+    name: 'Mayte',
+    role: 'Cílios & Sobrancelhas',
+    // Foto real dela, do post do Instagram @espaco.seixas que o Erick indicou (15/09/2026).
+    // Baixada via oEmbed publico do Instagram (thumbnail_url), sem precisar de login.
+    avatar: 'images/mayte-perfil.jpg',
+    photoIsPlaceholder: false,
+    bio: 'Mayte é especialista em cílios, sobrancelhas e cuidados com a pele, com um atendimento que vai muito além da técnica: aroma relaxante, massagem facial e todo o acolhimento para você viver um momento de autocuidado de verdade. Do design perfeito das sobrancelhas aos cílios dos sonhos, cada detalhe é pensado com carinho para realçar sua beleza.',
+    instagram: 'espaco.seixas',
+    instagramIsReal: true,
+    // Preços e nomes exatos que o Erick passou em 15/09/2026, do catálogo dela no
+    // Instagram (@espaco.seixas). As durações são estimativa minha, como nos demais
+    // perfis: corrigir aqui quando ela confirmar o tempo real de cada procedimento.
+    services: [
+      { icon: 'sobrancelha', name: 'Design de Sobrancelhas', desc: 'Modelagem personalizada que analisa o formato do seu rosto para desenhar a sobrancelha ideal, com acabamento natural.', price: 'R$40', durationMin: 30 },
+      { icon: 'henna', name: 'Design com Henna/Tintura', desc: 'Modelagem com aplicação de henna ou tintura, que preenche falhas e reforça o desenho por mais tempo.', price: 'R$50', durationMin: 40 },
+      { icon: 'depilacao', name: 'Depilação Buço', desc: 'Depilação egípcia com linha, técnica delicada e precisa para a região do buço.', price: 'R$10', durationMin: 15 },
+      { icon: 'dermaplaning', name: 'Dermaplaning', desc: 'Esfoliação profunda que remove células mortas e buço fino, deixando a pele mais lisa e luminosa.', price: 'R$100', durationMin: 45 },
+      { icon: 'cilios', name: 'Lash Lifting', desc: 'Alonga e curva os cílios naturais, sem aplicação de fios, para um olhar aberto e descansado.', price: 'R$120', durationMin: 60 },
+      { icon: 'cilios', name: 'Volume Brasileiro', desc: 'Técnica com fio em formato Y, para um volume denso e natural.', price: 'R$120', durationMin: 120 },
+      { icon: 'cilios', name: 'Volume Egípcio', desc: 'Técnica com fios no formato W, para um volume marcante.', price: 'R$120', durationMin: 120 },
+      { icon: 'cilios', name: 'Volume Luxo', desc: 'Técnica feita com fio 5D, para quem gosta de um volume mais intenso.', price: 'R$120', durationMin: 150 },
+      { icon: 'cilios', name: 'Volume Castanho', desc: 'Fios em tom castanho, para um efeito mais suave e natural.', price: 'R$120', durationMin: 120 },
+      { icon: 'cilios', name: 'Volume Fox', desc: 'Efeito alongado e puxado para cima nos cantos externos, para um olhar felino.', price: 'R$150', durationMin: 150 },
+      { icon: 'cilios', name: 'Mega Brasileiro', desc: 'Mais fios por cílio natural que o volume brasileiro, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
+      { icon: 'cilios', name: 'Mega Luxo', desc: 'Mais fios por cílio natural que o volume luxo, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
+      { icon: 'cilios', name: 'Mega Egípcio', desc: 'Mais fios por cílio natural que o volume egípcio, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
+    ],
+    gallery: [
+      'images/mayte-perfil.jpg',
+    ],
+  },
 ];
 
 export function getProfessional(slug: string): Professional | undefined {
@@ -170,6 +203,6 @@ export function servicesForName(name: string): Service[] {
  */
 export function whatsappForService(serviceName: string, professionalName?: string): string {
   const comQuem = professionalName ? ` com a ${professionalName}` : '';
-  const texto = `Oi! Vim pelo site do Afrodite Studio e queria agendar ${serviceName}${comQuem}.`;
+  const texto = `Oi! Vim pelo site do Lummier Studio e queria agendar ${serviceName}${comQuem}.`;
   return `${WHATSAPP_LINK}?text=${encodeURIComponent(texto)}`;
 }

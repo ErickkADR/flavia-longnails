@@ -1,15 +1,19 @@
-# Afrodite Studio
+# Lummier Studio
 
-Site institucional + área interna (login) de um studio de beleza com três profissionais:
-Flávia (unhas, dona do studio), Jheny (maquiagem) e Vitória (cabelo).
+Site institucional + área interna (login) de um studio de beleza com quatro profissionais:
+Flávia (unhas, dona do studio), Jheny (maquiagem), Vitória (cabelo) e Mayte (cílios,
+sobrancelhas e pele, desde 15/09/2026).
 
 No ar em dois lugares:
 - **GitHub Pages**: https://erickkadr.github.io/flavia-longnails/ (branch `gh-pages`, deploy via `npm run deploy`)
 - **Vercel**: https://afroditestudio.vercel.app (deploy automático a cada push na `main`, projeto Vercel se chama "afrodite_studio")
+  **A URL e o nome do projeto Vercel continuam com o nome antigo** (Afrodite) mesmo depois
+  do rebrand pra Lummier em 15/09/2026 — renomear o projeto/domínio é decisão do Erick,
+  não fiz sozinho. O site nesse endereço já mostra "Lummier Studio" em tudo que é texto.
 
-## Onde paramos (07/09/2026)
+## Onde paramos (15/09/2026)
 
-Se você está voltando depois de semanas, leia estes quatro pontos antes de qualquer coisa:
+Se você está voltando depois de um tempo, leia estes pontos antes de qualquer coisa:
 
 0. ~~Rodar o `migration.sql`~~ → **rodado em 07/09/2026**, `client_returns` confirmada por
    sondagem (200). O banco está em dia com o código e a Vercel também.
@@ -18,15 +22,20 @@ Se você está voltando depois de semanas, leia estes quatro pontos antes de qua
    3 reais dela, com preços bem menores. É o risco aberto mais sério do projeto: o site
    anuncia valores que o salão pode não praticar. Detalhe na seção do portfólio.
 2. **As durações também são chute meu**, e o único corrigido foi Manicure (45min → 2h).
-   A agenda desenha os blocos com esses números.
+   A agenda desenha os blocos com esses números. Os da Mayte (adicionada em 15/09) também
+   são chute, ainda sem correção nenhuma.
 3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
    deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
+4. **A Mayte ainda não tem login na Área da Colaboradora**, só perfil público. Ver a seção
+   "Marca" (rebrand de 15/09) pra saber o que falta se o Erick decidir dar acesso a ela.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
 de aluguel, painel RETORNO, cards de serviço abrindo o WhatsApp, fotos reais das três
 profissionais, a página `/trabalhe-conosco`, troca de toda a tipografia e substituição de
-todo emoji por ícone SVG.
+todo emoji por ícone SVG. A sessão de 14 a 15/09 trocou a tipografia de novo (Lora+Inter →
+SF Pro/Inter), trocou a paleta de cor toda, rebrandou de novo (Afrodite → Lummier) e somou
+a Mayte como quarta profissional.
 
 ## Stack
 
@@ -78,6 +87,25 @@ não o contrário. Trocar a ordem sem trocar o span inverte o destaque.
 >    o GitHub Pages até o próximo deploy.
 > 3. **`studio` em minúsculo** como substantivo comum ("clientes do studio", "Voltar para o
 >    Studio") continua em vários componentes. Não é marca, lê bem com o nome novo.
+
+### Segundo rebrand: Afrodite Studio → Lummier Studio (15/09/2026)
+
+A pedido do Erick, junto com uma logo nova (monograma dourado "UL", entregue como PNG e
+salva em `public/favicon.png`, substituindo a anterior). Mesmo mecanismo do primeiro
+rebrand: busca-e-troca de `Afrodite` por `Lummier` nos arquivos de marca (`Nav.tsx`,
+`Footer.tsx`, `StaffLayout.tsx`, `Contact.tsx`, `Resultados.tsx`, `TrabalheConosco.tsx`,
+`Login.tsx`, `Retorno.tsx`, `professionals.ts`, `index.html`, `public/404.html`,
+`README.md`). Os mesmos três nomes do item acima **continuaram intocados** pelo mesmo
+motivo (e-mails de auth, nome do repo, "studio" minúsculo).
+
+**Não renomeei o projeto nem o domínio da Vercel** (`afroditestudio.vercel.app`) — só o
+texto que aparece na tela. Ficou uma inconsistência cosmética (a URL ainda diz "afrodite",
+o site mostra "Lummier") até o Erick decidir se quer renomear o projeto na Vercel ou
+apontar um domínio próprio.
+
+**A logo em PNG não está em uso em lugar nenhum do site ainda**, só como favicon. Se o
+pedido for usar a logo como o `.nav-logo`/`.staff-sidebar-logo` (em vez do texto "Lummier
+Studio"), falta esse trabalho.
 
 ## Design
 
@@ -244,6 +272,44 @@ sem URL que expira, sem scraping.
 > **A Jheny autorizou** o uso das fotos dela no site (confirmado pelo Erick em 05/09/2026).
 > Isso era decisão dela e não questão técnica: ela é colaboradora com contrato ainda sendo
 > redigido, não dona do negócio.
+
+## Mayte entra como quarta profissional (15/09/2026)
+
+O Erick mandou o link de um post do Instagram dela (`@espaco.seixas`, negócio próprio
+"Espaço Seixas": cílios, sobrancelhas e cuidados com a pele) e pediu pra usar a foto de lá
+como avatar. Perfil e slug `mayte` adicionados em `src/data/professionals.ts`, com os 13
+serviços e preços que ele passou (do catálogo dela no Instagram) e durações estimadas por
+mim, como nos outros perfis — nenhuma delas foi confirmada com ela ainda.
+
+**Técnica nova pra pegar foto de um post específico do Instagram, sem login e sem
+scraping frágil:** o endpoint público de oEmbed devolve `thumbnail_url`, um link de CDN
+que baixa direto:
+
+```bash
+curl -s "https://www.instagram.com/api/v1/oembed/?url=<link do post>"
+# -> JSON com author_name, title (a legenda) e thumbnail_url (até 640x640)
+```
+
+Funciona pra um post específico (que foi o caso aqui); não serve pra puxar a galeria toda
+de um perfil, que é o problema que a seção anterior (fotos da Flávia/Jheny) documenta como
+frágil. Resolução sai limitada a 640x640, igual ao que já se via nas fotos da Flávia/Jheny.
+
+> **Diferente da Jheny (ver nota abaixo), não há confirmação registrada de que a Mayte
+> autorizou o uso dessa foto no site.** O pedido veio do Erick, não dela. Vale a mesma
+> pergunta que foi feita pra Jheny antes de considerar isso resolvido.
+
+**Sem galeria de trabalhos dela ainda** — só a própria foto de perfil repetida em
+`gallery`, pra seção "Trabalhos" da página não ficar vazia. Sem material dela, fica assim.
+
+**Não tem login na Área da Colaboradora.** Pra dar acesso a ela, falta: (1) adicionar
+`mayte` em `STAFF_USERS` (`src/auth/staffUsers.ts`) com um e-mail fixo no mesmo padrão dos
+outros; (2) criar o usuário no painel do Supabase (Authentication → Add User, com "Auto
+Confirm User" marcado); (3) incluir `'Mayte'` no `check` de `professional` da tabela
+`appointments` no `migration.sql` (hoje só aceita `'Flávia' | 'Jheny' | 'Vitória'`, um
+insert dela seria rejeitado pelo banco); (4) atualizar esse mesmo `check` na tabela já
+existente no Supabase (o `migration.sql` sozinho não altera uma constraint que já foi
+criada com outro `check` — precisa de um `alter table ... drop constraint` +
+`add constraint` novo, não só rodar o arquivo de novo).
 
 ## Fotos placeholder — o histórico
 

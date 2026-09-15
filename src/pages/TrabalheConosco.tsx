@@ -20,7 +20,7 @@ import './TrabalheConosco.css';
  */
 
 const WHATSAPP_VAGA = `${WHATSAPP_LINK}?text=${encodeURIComponent(
-  'Oi! Vi a página Trabalhe Conosco no site do Afrodite Studio e queria conversar sobre a vaga.'
+  'Oi! Vi a página Trabalhe Conosco no site do Lummier Studio e queria conversar sobre a vaga.'
 )}`;
 
 const PILARES = [
@@ -107,7 +107,7 @@ export function TrabalheConosco() {
           <div className="sec-label" style={{ justifyContent: 'center' }}>Trabalhe conosco</div>
           <h1 className="tc-title">Seu lugar <span>é aqui</span></h1>
           <p className="tc-lead">
-            Este é o convite para você fazer parte do Afrodite Studio. Aqui você não paga por um
+            Este é o convite para você fazer parte do Lummier Studio. Aqui você não paga por um
             metro quadrado: você faz parte de uma experiência inteira que a sua cliente vai viver,
             e é essa experiência que faz o seu trabalho valer mais.
           </p>

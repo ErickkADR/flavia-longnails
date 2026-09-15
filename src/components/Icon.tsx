@@ -39,6 +39,12 @@ const MAPA: Record<string, LucideIcon> = {
   coloracao: Palette,
   luzes: Sun,
   penteado: Crown,
+  // cílios, sobrancelhas e pele
+  cilios: Eye,
+  sobrancelha: Brush,
+  henna: Palette,
+  depilacao: Sparkle,
+  dermaplaning: Sparkles,
   // interface e página de recrutamento
   site: Globe,
   whatsapp: MessageCircle,

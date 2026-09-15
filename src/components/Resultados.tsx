@@ -15,7 +15,7 @@ export function Resultados() {
           <div className="rv-main">
             <img
               src={asset('images/ig-flavia-4.jpg')}
-              alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Afrodite Studio"
+              alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Lummier Studio"
             />
           </div>
           {/* Os dois círculos menores existem pra dizer, sem texto, que o studio faz
@@ -30,7 +30,7 @@ export function Resultados() {
           <div className="rv-inset rv-inset-make">
             <img
               src={asset('images/ig-jheny-3.jpg')}
-              alt="Maquiagem social com delineado gráfico e acabamento em tons quentes, feita no Afrodite Studio"
+              alt="Maquiagem social com delineado gráfico e acabamento em tons quentes, feita no Lummier Studio"
             />
           </div>
         </div>

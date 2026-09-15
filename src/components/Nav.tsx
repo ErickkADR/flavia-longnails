@@ -27,7 +27,7 @@ export function Nav() {
       <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link to="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
-            Afrodite <span>Studio</span>
+            Lummier <span>Studio</span>
           </Link>
           <ul className="nav-links">
             <li><Link to="/cursos">Cursos</Link></li>

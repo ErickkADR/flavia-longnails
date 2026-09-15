@@ -151,7 +151,7 @@ export function Retorno() {
   function mensagemPara(c: Candidato): string {
     const primeiro = c.nome.trim().split(/\s+/)[0];
     return (
-      `Oi ${primeiro}! Aqui é a ${name}, do Afrodite Studio.\n\n` +
+      `Oi ${primeiro}! Aqui é a ${name}, do Lummier Studio.\n\n` +
       `Passando pra saber de você: já faz ${tempoSem(c.dias)} desde o seu último atendimento` +
       `${c.ultimoServico ? ` (${c.ultimoServico})` : ''}.\n\n` +
       `Que tal fazer a manutenção? Se preferir experimentar outra coisa, também consigo ` +

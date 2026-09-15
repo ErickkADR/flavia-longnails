@@ -1,4 +1,4 @@
-# Afrodite Studio
+# Lummier Studio
 
 Site institucional para um studio de beleza com três especialistas: Flávia (unhas), Jheny (maquiagem)
 e Vitória (cabelo). Home one-page com resultados, equipe, avaliações e ranking de serviços, mais uma

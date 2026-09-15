@@ -35,7 +35,7 @@ export function StaffLayout() {
     <div className="staff-shell">
       <aside className="staff-sidebar">
         <div className="staff-sidebar-top">
-          <Link to="/" className="staff-sidebar-logo">Afrodite <span>Studio</span></Link>
+          <Link to="/" className="staff-sidebar-logo">Lummier <span>Studio</span></Link>
           <div className="staff-sidebar-user">Olá, {name}</div>
         </div>
         <nav className="staff-nav">
