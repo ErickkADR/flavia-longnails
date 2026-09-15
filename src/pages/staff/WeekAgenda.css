@@ -105,7 +105,7 @@
   font-size: .58rem; color: var(--accent-deep); opacity: 0; transition: opacity .15s;
   pointer-events: none;
 }
-.wk-slot.is-free:hover { background: rgba(190, 114, 72, .14); box-shadow: inset 0 0 0 1px var(--accent); }
+.wk-slot.is-free:hover { background: rgba(123, 112, 94, .14); box-shadow: inset 0 0 0 1px var(--accent); }
 .wk-slot.is-free:hover .wk-slot-hint { opacity: 1; }
 .wk-slot:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .wk-slot:disabled { cursor: default; }

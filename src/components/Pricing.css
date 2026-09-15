@@ -6,7 +6,7 @@
 .rank-spotlight {
   display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
   background: linear-gradient(135deg, var(--accent-soft), var(--bg-alt) 120%);
-  border: 1.5px solid rgba(190, 114, 72, .35);
+  border: 1.5px solid rgba(123, 112, 94, .35);
   border-radius: 28px; padding: 40px 46px;
 }
 .rank-spotlight-left { display: flex; align-items: center; gap: 24px; }
@@ -14,7 +14,7 @@
   width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
   background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display); font-size: 1.35rem; font-weight: 700;
-  box-shadow: 0 12px 30px rgba(150, 86, 47, .32);
+  box-shadow: 0 12px 30px rgba(83, 77, 69, .32);
 }
 .rank-spotlight-tag { font-family: var(--font-body); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-deep); margin-bottom: 8px; }
 .rank-spotlight-name { font-family: var(--font-display); font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 700; color: var(--ink); }
@@ -23,7 +23,7 @@
 
 .rank-others { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .rank-card { background: var(--surface); border: 1px solid var(--muted-l); border-radius: 18px; padding: 24px; transition: all .3s; }
-.rank-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 18px 40px rgba(150, 86, 47, .12); }
+.rank-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 18px 40px rgba(83, 77, 69, .12); }
 .rank-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .rank-card-num {
   width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
@@ -53,5 +53,5 @@
 /* Ranking: destaque e cards também levam pro WhatsApp com o serviço já na mensagem. */
 .rank-spotlight, .rank-card { text-decoration: none; color: inherit; }
 .rank-spotlight { transition: all .3s; }
-.rank-spotlight:hover { border-color: var(--accent); box-shadow: 0 20px 48px rgba(150, 86, 47, .16); }
+.rank-spotlight:hover { border-color: var(--accent); box-shadow: 0 20px 48px rgba(83, 77, 69, .16); }
 .rank-spotlight:focus-visible, .rank-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

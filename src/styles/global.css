@@ -3,21 +3,29 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Bege claro — fundo dominante do site (nunca terracota sólido em áreas grandes) */
-  --bg: #FBF6EF;
+  /* Paleta trocada em 15/09/2026, a partir de um moodboard que o Erick mandou
+     (referência: template "Beauty Salon", 4 círculos de cor: #DCC29C / #F2EFEB /
+     #2C2C2C / #5E5E5E). --bg, --ink e --muted são os valores literais do
+     moodboard. --accent* são derivados escurecendo o tan (#DCC29C) em direção ao
+     #2C2C2C: o tan puro falha contraste de texto contra o fundo claro (2.6:1,
+     precisa de 4.5:1) — teria ficado ilegível em rótulo/preço/link. accent-soft
+     é o único lugar que usa o tan puro, porque ali é fundo (com --ink em cima,
+     8.1:1 de contraste), não texto. Se for trocar nas cores de novo, os 4 hex
+     do moodboard bastam — o resto é derivado por mistura, com a razão descrita
+     aqui do lado de cada um. */
+  --bg: #F2EFEB;
   /* Mesmo bege, em componentes: o scrim do hero precisa dele com alpha variavel. */
-  --bg-rgb: 251, 246, 239;
-  --bg-alt: #F3E7D8;
+  --bg-rgb: 242, 239, 235;
+  --bg-alt: #EDE5DA;
   --surface: #ffffff;
 
-  /* Terracota — só para acentos: botões, links, ícones, bordas finas */
-  --accent: #BE7248;
-  --accent-soft: #ECD9C4;
-  --accent-deep: #96562F;
+  --accent: #7B705E;      /* tan (#DCC29C) misturado 55% com #2C2C2C — 4.2:1 sobre --bg */
+  --accent-soft: #DCC29C; /* tan puro do moodboard — só como FUNDO, nunca como texto */
+  --accent-deep: #534D45; /* tan misturado 78% com #2C2C2C — hover/pressed, 6.9:1 sobre --bg */
 
-  --ink: #2E2620;
-  --muted: #8A7A6C;
-  --muted-l: #E3D6C4;
+  --ink: #2C2C2C;
+  --muted: #5E5E5E;
+  --muted-l: #E6D6C0;
 
   /* Tipografia. Quarta tentativa.
        1a: Cinzel + Cinzel Decorative + Cormorant Garamond + Jost, herdadas do site
@@ -88,9 +96,9 @@ a { color: inherit; }
   background: var(--accent); color: #fff; text-decoration: none;
   padding: 17px 36px; border-radius: 100px;
   font-family: var(--font-body); font-weight: 600; font-size: .95rem;
-  transition: all .3s; box-shadow: 0 10px 30px rgba(150, 86, 47, .25);
+  transition: all .3s; box-shadow: 0 10px 30px rgba(83, 77, 69, .25);
 }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(150, 86, 47, .32); background: var(--accent-deep); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(83, 77, 69, .32); background: var(--accent-deep); }
 
 .btn-outline {
   display: inline-flex; align-items: center; gap: 8px;

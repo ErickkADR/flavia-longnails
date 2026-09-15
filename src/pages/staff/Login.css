@@ -5,7 +5,7 @@
 .staff-login-card {
   width: 100%; max-width: 420px; background: var(--surface);
   border: 1.5px solid var(--muted-l); border-radius: 24px;
-  padding: 44px 40px; box-shadow: 0 24px 70px rgba(150, 86, 47, .1);
+  padding: 44px 40px; box-shadow: 0 24px 70px rgba(83, 77, 69, .1);
 }
 .staff-login-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
 .staff-login-sub { font-size: .88rem; color: var(--muted); margin-bottom: 30px; }

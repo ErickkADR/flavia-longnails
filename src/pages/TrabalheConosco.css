@@ -66,7 +66,7 @@
 .tc-pact {
   background: var(--surface); border: 1.5px solid var(--muted-l); border-radius: 20px; padding: 30px 32px;
 }
-.tc-pact.is-studio { background: var(--accent-soft); border-color: rgba(190, 114, 72, .35); }
+.tc-pact.is-studio { background: var(--accent-soft); border-color: rgba(123, 112, 94, .35); }
 .tc-pact-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 18px; }
 .tc-list { list-style: none; }
 .tc-list li {

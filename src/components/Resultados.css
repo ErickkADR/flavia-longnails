@@ -25,7 +25,7 @@
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 34px 72px rgba(150, 86, 47, .22);
+  box-shadow: 0 34px 72px rgba(83, 77, 69, .22);
 }
 .rv-main img { width: 100%; height: 100%; object-fit: cover; object-position: center 38%; }
 
@@ -56,7 +56,7 @@
   border-radius: 50%;
   overflow: hidden;
   border: 8px solid var(--bg-alt);
-  box-shadow: 0 20px 44px rgba(150, 86, 47, .24);
+  box-shadow: 0 20px 44px rgba(83, 77, 69, .24);
 }
 .rv-inset img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
 

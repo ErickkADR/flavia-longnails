@@ -3,10 +3,10 @@
   padding: 22px 0;
   background: rgba(251, 246, 239, .82);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(190, 114, 72, .12);
+  border-bottom: 1px solid rgba(123, 112, 94, .12);
   transition: all .4s;
 }
-.nav.scrolled { background: rgba(251, 246, 239, .96); padding: 14px 0; box-shadow: 0 4px 32px rgba(150, 86, 47, .06); }
+.nav.scrolled { background: rgba(251, 246, 239, .96); padding: 14px 0; box-shadow: 0 4px 32px rgba(83, 77, 69, .06); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 .nav-logo { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--accent); text-decoration: none; }
 .nav-logo span { color: var(--accent-deep); font-weight: 400; }
@@ -17,9 +17,9 @@
   display: flex !important; align-items: center; gap: 8px;
   background: var(--accent) !important; color: #fff !important;
   padding: 12px 22px; border-radius: 100px; transition: all .3s !important;
-  box-shadow: 0 4px 16px rgba(150, 86, 47, .22);
+  box-shadow: 0 4px 16px rgba(83, 77, 69, .22);
 }
-.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(150, 86, 47, .32) !important; background: var(--accent-deep) !important; }
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(83, 77, 69, .32) !important; background: var(--accent-deep) !important; }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--accent); transition: all .3s; }
 
@@ -34,7 +34,7 @@
 .mob-cta { color: var(--accent) !important; border: 1.5px solid var(--accent); padding: 14px 28px; border-radius: 100px; font-size: .78rem !important; }
 .mob-close {
   position: absolute; top: 24px; right: 24px; background: none;
-  border: 1px solid rgba(190, 114, 72, .3); color: var(--accent);
+  border: 1px solid rgba(123, 112, 94, .3); color: var(--accent);
   font-size: 1.2rem; width: 44px; height: 44px; border-radius: 12px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
