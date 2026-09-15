@@ -115,14 +115,15 @@ alter table public.personal_expenses add constraint personal_expenses_scope_chec
 
 -- ============================================================
 -- 5. Aluguel das colaboradoras (so a Flavia enxerga e mexe)
--- Controle de quem pagou os R$ 500 do mes. Hoje sao Jheny e Vitoria; a Flavia e dona
--- do studio e nao paga aluguel pra si mesma, por isso ela nao entra no check.
+-- Controle de quem pagou os R$ 500 do mes. Hoje sao Jheny, Vitoria e Mayte (confirmado
+-- pelo Erick em 15/09/2026); a Flavia e dona do studio e nao paga aluguel pra si mesma,
+-- por isso ela nao entra no check.
 -- A unique(professional, reference_month) e o que deixa a tela usar upsert e nao
 -- duplicar linha quando a Flavia clica duas vezes no mesmo mes.
 -- ============================================================
 create table if not exists public.rent_payments (
   id uuid primary key default gen_random_uuid(),
-  professional text not null check (professional in ('Jheny', 'Vitória')),
+  professional text not null check (professional in ('Jheny', 'Vitória', 'Mayte')),
   reference_month date not null,
   amount numeric(10, 2) not null default 500,
   paid boolean not null default false,
@@ -131,6 +132,12 @@ create table if not exists public.rent_payments (
   created_at timestamptz not null default now(),
   unique (professional, reference_month)
 );
+
+-- A tabela ja existia em producao com o check antigo (so Jheny/Vitoria) quando a Mayte
+-- entrou como quarta profissional, entao o "create table if not exists" acima nao altera
+-- o que ja esta la. Mesmo padrao aplicado em appointments.professional.
+alter table public.rent_payments drop constraint if exists rent_payments_professional_check;
+alter table public.rent_payments add constraint rent_payments_professional_check check (professional in ('Jheny', 'Vitória', 'Mayte'));
 
 -- ============================================================
 -- 6. Retorno de clientes (painel RETORNO)

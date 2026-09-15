@@ -36,7 +36,7 @@ const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória', 'Mayte'];
  * pra si mesma, por isso não entra. Se entrar colaboradora nova, some aqui e no check
  * da tabela `rent_payments` no migration.sql, senão o insert é recusado pelo banco.
  */
-const RENT_PAYERS = ['Jheny', 'Vitória'];
+const RENT_PAYERS = ['Jheny', 'Vitória', 'Mayte'];
 const DEFAULT_RENT = 500;
 
 const money = (n: number) => `R$${n.toFixed(2)}`;

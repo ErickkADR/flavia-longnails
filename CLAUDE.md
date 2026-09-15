@@ -722,11 +722,13 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
   Agora) e **não foi conferido visualmente em tela média**. Pode ter ficado apertado.
 - **Publicar ou não o valor da locação** em `/trabalhe-conosco`. Hoje está fora de
   propósito, ver a seção daquela página. É decisão do Erick, não esquecimento.
-- **A Mayte paga aluguel de posto ou não?** Não sei, então não mexi em `RENT_PAYERS`
-  (`ContasSalao.tsx`) nem no `check` de `rent_payments` no `migration.sql` — hoje só Jheny e
-  Vitória aparecem lá. Ela entrou no dropdown de `salon_transactions` (compartilhado, sem
-  relação com aluguel), mas fica fora do painel "Aluguel das Colaboradoras" até o Erick
-  confirmar se ela paga e por quanto.
+- ~~A Mayte paga aluguel de posto ou não?~~ → **confirmado pelo Erick em 15/09/2026: paga,
+  igual Jheny e Vitória.** Entrou em `RENT_PAYERS` (`ContasSalao.tsx`) e no `check` de
+  `rent_payments` no `migration.sql`, com o mesmo `alter table drop/add constraint` que
+  `appointments` já usava, pra funcionar mesmo com a tabela existindo em produção. **Falta
+  rodar esse `migration.sql` atualizado no SQL Editor do Supabase** — sem isso o `alter
+  table` só existe no arquivo, e marcar o aluguel da Mayte como pago seria rejeitado pelo
+  banco.
 
 ### Decisões que ficaram registradas, não são pendência
 
