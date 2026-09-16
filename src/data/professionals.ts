@@ -104,8 +104,6 @@ export const professionals: Professional[] = [
       'images/ig-jheny-2.jpg',
       'images/ig-jheny-3.jpg',
       'images/jheny-trabalho-1.jpg',
-      'images/jheny-trabalho-2.jpg',
-      'images/jheny-trabalho-3.jpg',
       'images/jheny-trabalho-4.jpg',
       'images/jheny-trabalho-5.jpg',
     ],
