@@ -14,8 +14,8 @@ export function Resultados() {
           <div className="rv-ring" aria-hidden="true" />
           <div className="rv-main">
             <img
-              src={asset('images/ig-flavia-4.jpg')}
-              alt="Unhas em cromado com francesinha e detalhe de estrela, feitas no Lummier Studio"
+              src={asset('images/flavia-trabalho-1.jpg')}
+              alt="Unhas com francesinha em glitter, feitas no Lummier Studio"
             />
           </div>
           {/* Os três círculos menores existem pra dizer, sem texto, que o studio faz
@@ -30,8 +30,8 @@ export function Resultados() {
           </div>
           <div className="rv-inset rv-inset-make">
             <img
-              src={asset('images/ig-jheny-3.jpg')}
-              alt="Maquiagem social com delineado gráfico e acabamento em tons quentes, feita no Lummier Studio"
+              src={asset('images/jheny-trabalho-1.jpg')}
+              alt="Maquiagem com delineado gráfico, feita no Lummier Studio"
             />
           </div>
           {/* Quarto círculo, adicionado em 15/09/2026 quando a Mayte entrou (cílios e

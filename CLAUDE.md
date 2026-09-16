@@ -50,6 +50,9 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
    pra ela. RLS de `salon_transactions` apertada pra só o e-mail dela. **Falta rodar o
    `migration.sql` atualizado no Supabase** pra essa policy nova valer de verdade (o código
    já bloqueia a navegação, mas sem isso a API ainda aceitaria escrita de qualquer uma).
+10. **Galeria da Flávia e da Jheny trocada por fotos reais em resolução cheia (16/09/2026)**,
+    e as capas da seção Resultados também. Bio da Mayte reescrita com o texto que o Erick
+    passou. Ver "Fotos em resolução cheia, enviadas direto pelo Erick".
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -251,6 +254,35 @@ em `src/data/professionals.ts`, nada foi apagado.
 >
 > **O avatar do Instagram da Flávia é um desenho, não foto.** Por isso ela ficou com a foto
 > de trabalho que já estava lá.
+
+### Fotos em resolução cheia, enviadas direto pelo Erick (16/09/2026)
+
+**Resolveu a pendência de resolução** registrada acima: o Erick mandou fotos reais por
+WhatsApp (`/Users/erickk/Downloads/imagens long nails/`, pasta local, fora do repo), em
+resolução bem maior que o Instagram entregava (até 1600px no lado maior, contra 640px).
+Processadas com Pillow: `ImageOps.exif_transpose` (uma tinha EXIF de rotação), redimensionado
+pro lado maior não passar de 1000px, `quality=82` — equilíbrio entre nitidez e peso de
+página, não o objetivo era manter o arquivo bruto de 1-2MB.
+
+- **Galeria da Flávia**: as 6 fotos do Instagram (`ig-flavia-N.jpg`, continuam no repo)
+  foram substituídas por 2 fotos novas (`flavia-trabalho-1.jpg`, `-2.jpg`). Foram só essas
+  2 que vieram, por isso a galeria encolheu — o carrossel (`Marquee.tsx`) já foi desenhado
+  pra repetir o grupo e não deixar vão mesmo com poucos itens.
+- **Galeria da Jheny**: as 3 do Instagram (`ig-jheny-N.jpg`, continuam no repo) foram
+  substituídas por 5 fotos novas (`jheny-trabalho-1.jpg` a `-5.jpg`), do mesmo ensaio
+  fotográfico. **Duas delas (`WhatsApp...23.21.11.jpeg` e a `(1)`) vieram com o conteúdo
+  girado 90°** (sem EXIF de orientação pra corrigir sozinho) — corrigidas com
+  `im.rotate(-90, expand=True)` antes de salvar.
+- **Capas da seção Resultados** (`Resultados.tsx`, `.rv-main` e `.rv-inset-make`) trocaram
+  de `ig-flavia-4.jpg`/`ig-jheny-3.jpg` pra `flavia-trabalho-1.jpg`/`jheny-trabalho-1.jpg`
+  — os arquivos vieram nomeados "unha capa.jpeg"/"make capa.jpeg" na pasta original,
+  claramente pensados pra esse uso.
+- **Corrigi a legenda da galeria** (`InstaGallery.tsx`) de "Fotos reais dos trabalhos dela,
+  direto do Instagram @X" pra "Fotos reais dos trabalhos dela. Mais no Instagram @X" — a
+  frase antiga afirmava a origem errada agora que nem toda foto vem do Instagram (essas
+  vieram do WhatsApp). Vale igual pra Flávia e pra Jheny.
+- **Avatares não mudaram**, só a galeria. O pedido do Erick foi especificamente sobre o
+  "portfólio" das duas.
 
 ### O portfólio da Jheny (07/09/2026) e o que ele corrigiu
 
@@ -746,15 +778,16 @@ duas chaves do Supabase), o `supabase/import-flavia-data.sql` (PII) e o `projeto
   a privacidade que motivou a mudança de 04/09. Se incomodar, o caminho é uma view ou RPC
   que devolve só a contagem agregada, sem expor as linhas.
 - **O selo de verificado está em depoimentos fictícios.** Ver a seção de fotos placeholder.
-- **A galeria da Flávia perdeu resolução** ao migrar pro Instagram (1280x1920 → 640px).
-  Decisão consciente dele depois da ressalva.
+- ~~A galeria da Flávia perdeu resolução ao migrar pro Instagram~~ → **superado em
+  16/09/2026**: a galeria atual usa fotos novas em resolução bem maior (ver "Fotos em
+  resolução cheia, enviadas direto pelo Erick").
 
 ### Esperando dado de terceiro
 
 - Depoimentos reais. A Flávia tem 110 clientes na base e VIPs identificadas (Maria, Dona
   Maria, Gabi, Thais). Com eles, o campo `verified` passa a ser verdade.
-- Fotos em resolução cheia da Flávia e da Jheny. O que está no ar veio do Instagram em
-  640px, exceto o avatar da Jheny (900x900, recortado do portfólio dela).
+- ~~Fotos em resolução cheia da Flávia e da Jheny~~ → **resolvido em 16/09/2026**, galeria
+  das duas trocada por fotos novas enviadas pelo Erick. Avatares continuam como estavam.
 - Galeria de trabalhos da Vitória: continua banco de imagem, só o rosto dela é real. Ela
   também não tem Instagram; o da Jheny (`@jhenyluanyybeauty`) é real.
 - Confirmar o encaixe de 30min da agenda com a Flávia. Dias (terça a domingo) e horário

@@ -60,17 +60,12 @@ export const professionals: Professional[] = [
       { icon: 'nailart', name: 'Nail Art', desc: 'Designs únicos e personalizados. Das flores delicadas aos padrões geométricos, crie o visual dos seus sonhos.', price: 'R$20', priceNote: '/ design', durationMin: 30 },
       { icon: 'blindagem', name: 'Blindagem', desc: 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', price: 'R$80', durationMin: 60 },
     ],
-    // Puxadas do @flavia_longnails em 05/09/2026, a pedido do Erick.
-    // As `gallery-N-*.jpg` continuam no repo e sao MAIORES (1280x1920 contra 640px daqui):
-    // o Instagram comprime tudo e nao deixa pedir resolucao maior (a assinatura da URL
-    // cobre o parametro de tamanho). Reverter e so voltar a lista antiga.
+    // Fotos reais enviadas pelo Erick por WhatsApp em 16/09/2026, em resolucao bem maior
+    // que os 480x640 que o Instagram entregava (ver `ig-flavia-N.jpg`, que continuam no
+    // repo). Substituem a galeria antiga, que era puxada do @flavia_longnails.
     gallery: [
-      'images/ig-flavia-1.jpg',
-      'images/ig-flavia-2.jpg',
-      'images/ig-flavia-3.jpg',
-      'images/ig-flavia-4.jpg',
-      'images/ig-flavia-5.jpg',
-      'images/ig-flavia-6.jpg',
+      'images/flavia-trabalho-1.jpg',
+      'images/flavia-trabalho-2.jpg',
     ],
   },
   {
@@ -95,11 +90,15 @@ export const professionals: Professional[] = [
       { icon: 'make', name: 'Maquiagem Social', desc: 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', price: 'R$90', popular: true, durationMin: 120 },
       { icon: 'blindada', name: 'Maquiagem Blindada', desc: 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', price: 'R$110', durationMin: 150 },
     ],
-    // Makes que ela fez de verdade, do Instagram dela. Antes eram banco de imagem.
+    // Fotos reais enviadas pelo Erick por WhatsApp em 16/09/2026, em resolucao bem maior
+    // que os 480x640 que o Instagram entregava (ver `ig-jheny-N.jpg`, que continuam no
+    // repo). Substituem a galeria antiga, que era puxada do Instagram dela.
     gallery: [
-      'images/ig-jheny-1.jpg',
-      'images/ig-jheny-2.jpg',
-      'images/ig-jheny-3.jpg',
+      'images/jheny-trabalho-1.jpg',
+      'images/jheny-trabalho-2.jpg',
+      'images/jheny-trabalho-3.jpg',
+      'images/jheny-trabalho-4.jpg',
+      'images/jheny-trabalho-5.jpg',
     ],
     policies: [
       { icon: 'sinal', title: 'Sinal de agendamento', text: 'Para reservar o horário é necessário o pagamento de 30% do valor do serviço. O agendamento só é confirmado após o sinal, e o restante é pago no dia do atendimento.' },
@@ -145,7 +144,8 @@ export const professionals: Professional[] = [
     // Baixada via oEmbed publico do Instagram (thumbnail_url), sem precisar de login.
     avatar: 'images/mayte-perfil.jpg',
     photoIsPlaceholder: false,
-    bio: 'Mayte é especialista em cílios, sobrancelhas e cuidados com a pele, com um atendimento que vai muito além da técnica: aroma relaxante, massagem facial e todo o acolhimento para você viver um momento de autocuidado de verdade. Do design perfeito das sobrancelhas aos cílios dos sonhos, cada detalhe é pensado com carinho para realçar sua beleza.',
+    // Texto passado pelo Erick em 16/09/2026, substituindo o trecho inicial que eu tinha escrito.
+    bio: 'Seu atendimento vai além da técnica: é um momento de cuidado, acolhimento e autoestima. Cada procedimento é realizado com dedicação, atenção aos detalhes e compromisso com a qualidade, para que você se sinta especial em cada visita. Do olhar marcante à sobrancelha que valoriza seus traços, cada detalhe é pensado com carinho para proporcionar uma experiência de beleza, conforto e autocuidado.',
     instagram: 'espaco.seixas',
     instagramIsReal: true,
     // Preços e nomes exatos que o Erick passou em 15/09/2026, do catálogo dela no
