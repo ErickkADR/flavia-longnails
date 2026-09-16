@@ -264,13 +264,13 @@ Processadas com Pillow: `ImageOps.exif_transpose` (uma tinha EXIF de rotação),
 pro lado maior não passar de 1000px, `quality=82` — equilíbrio entre nitidez e peso de
 página, não o objetivo era manter o arquivo bruto de 1-2MB.
 
-- **Galeria da Flávia**: as 6 fotos do Instagram (`ig-flavia-N.jpg`, continuam no repo)
-  foram substituídas por 2 fotos novas (`flavia-trabalho-1.jpg`, `-2.jpg`). Foram só essas
-  2 que vieram, por isso a galeria encolheu — o carrossel (`Marquee.tsx`) já foi desenhado
-  pra repetir o grupo e não deixar vão mesmo com poucos itens.
-- **Galeria da Jheny**: as 3 do Instagram (`ig-jheny-N.jpg`, continuam no repo) foram
-  substituídas por 5 fotos novas (`jheny-trabalho-1.jpg` a `-5.jpg`), do mesmo ensaio
-  fotográfico. **Duas delas (`WhatsApp...23.21.11.jpeg` e a `(1)`) vieram com o conteúdo
+- **Galeria da Flávia**: as 2 fotos novas (`flavia-trabalho-1.jpg`, `-2.jpg`) foram
+  **somadas** às 6 do Instagram (`ig-flavia-N.jpg`), não trocadas — na primeira tentativa
+  eu substituí a lista inteira e o Erick corrigiu: o pedido era adicionar. Gallery final
+  tem as 6 antigas + as 2 novas, nessa ordem.
+- **Galeria da Jheny**: mesma coisa — as 5 fotos novas (`jheny-trabalho-1.jpg` a `-5.jpg`,
+  do mesmo ensaio fotográfico) foram somadas às 3 do Instagram (`ig-jheny-N.jpg`), não
+  trocadas. **Duas delas (`WhatsApp...23.21.11.jpeg` e a `(1)`) vieram com o conteúdo
   girado 90°** (sem EXIF de orientação pra corrigir sozinho) — corrigidas com
   `im.rotate(-90, expand=True)` antes de salvar.
 - **Capas da seção Resultados** (`Resultados.tsx`, `.rv-main` e `.rv-inset-make`) trocaram
