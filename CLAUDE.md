@@ -310,6 +310,17 @@ e o título da seção Resultados ("Resultados que Falam por Si", `Resultados.ts
 > de cada lado (~890px e ~920px), e pelo menos duas desktop reais (1440px, 1920px) —
 > não só ir até ~900px e assumir que "mobile" cobre tudo.
 
+**Entrada em cascata no título do hero, 16/09/2026**: o Erick achou "Beleza que Transforma
+Você" sem graça parado. Em vez de trocar o texto (é a tagline do site, decisão de marca que
+não é minha pra tomar sozinho), cada trecho (`Beleza` / `que` / `Transforma Você`, span
+`.htw` em `Hero.tsx`) agora entra em sequência com um pequeno atraso (`transitionDelay`
+inline, `0s/.1s/.2s`) — mesmo mecanismo do resto do site (`.reveal.on`, `transitionDelay`
+por item em `Team.tsx`/`ProPolicies.tsx`), só que a `.on` que dispara é a do próprio
+`.hero-copy` (`.hero-copy.on .htw`), não uma nova instância do observer. `prefers-reduced-
+motion` desativa (mesmo padrão do vídeo do hero). Cor do acento saiu de `.hero-title span`
+(genérico) pra `.hero-accent` (específico), porque agora `span` também embrulha cada palavra
+pro efeito. Se o pedido era mudar as *palavras*, não só a entrada, isso ainda está em aberto.
+
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
 Dois ajustes pedidos pelo Erick depois de ver o site no celular:

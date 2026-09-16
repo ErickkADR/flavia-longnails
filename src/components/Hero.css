@@ -62,7 +62,18 @@
   font-weight: 600; line-height: 1.14; color: var(--ink); margin-bottom: 24px;
   text-wrap: balance;
 }
-.hero-title span { color: var(--accent); }
+.hero-accent { color: var(--accent); }
+
+/* Cada trecho do título entra em sequência (mesmo mecanismo do .reveal-left do resto
+   do site: opacity/transform parados até o ancestral ganhar .on via IntersectionObserver,
+   só que aqui em cascata por palavra em vez de tudo de uma vez). */
+.htw {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.hero-copy.on .htw { opacity: 1; transform: none; }
 
 .hero-desc { font-size: 1.08rem; color: var(--muted); max-width: 540px; margin-bottom: 40px; line-height: 1.8; }
 
@@ -114,4 +125,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-video { transition: none; }
+  .htw { transition: none; opacity: 1; transform: none; }
 }

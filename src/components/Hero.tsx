@@ -79,7 +79,11 @@ export function Hero() {
       <div className="container hero-grid">
         <div className="hero-copy reveal-left">
           <h1 className="hero-title">
-            Beleza que <span>Transforma</span>&nbsp;Você
+            <span className="htw" style={{ transitionDelay: '0s' }}>Beleza</span>{' '}
+            <span className="htw" style={{ transitionDelay: '.1s' }}>que</span>{' '}
+            <span className="htw" style={{ transitionDelay: '.2s' }}>
+              <span className="hero-accent">Transforma</span>&nbsp;Você
+            </span>
           </h1>
           <p className="hero-desc">
             Unhas, maquiagem, cabelo e cílios em um só lugar. Quatro especialistas, uma só
