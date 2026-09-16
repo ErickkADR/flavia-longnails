@@ -60,6 +60,7 @@
 .hero-title {
   font-family: var(--font-display); font-size: clamp(2.4rem, 3.6vw, 3.6rem);
   font-weight: 600; line-height: 1.14; color: var(--ink); margin-bottom: 24px;
+  text-wrap: balance;
 }
 .hero-title span { color: var(--accent); }
 

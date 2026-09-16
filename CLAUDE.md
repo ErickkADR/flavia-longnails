@@ -101,6 +101,12 @@ no build):
 **Depois de mudar env var na Vercel, precisa forçar Redeploy manual** — ela não aplica em
 builds já existentes sozinha.
 
+**Regra permanente do Erick (16/09/2026): sempre commitar e dar push na `main` ao final de
+qualquer tarefa neste projeto, sem perguntar antes.** Push na `main` já dispara o deploy
+automático na Vercel, então "commita e sobe" são a mesma ação aqui. Isso é diferente do
+`ERP Módulo Técnico`, onde push também publica na hora mas ainda assim exige perguntar antes
+— lá o repo é de outra pessoa (o Victor); aqui é projeto do próprio Erick.
+
 ## Acesso tipo app (PWA), 15/09/2026
 
 Pedido do Erick: as colaboradoras acessarem a Área da Colaboradora sem precisar digitar a
@@ -275,6 +281,19 @@ Carrossel infinito (`src/components/Marquee.tsx`) usado em avaliações, tags e 
   `ResizeObserver`). Com poucos itens (ex.: só 3 fotos) um único grupo pode ser mais estreito
   que a tela num monitor largo, e a técnica clássica de "2 cópias + translateX(-50%)" deixa um
   vão vazio a cada volta. Não regredir pra 2 cópias fixas.
+
+**Títulos quebrando com palavra órfã sozinha na última linha, corrigido em 16/09/2026**:
+o hero ("Beleza que Transforma Você", `Hero.tsx`) virava "Beleza que Transforma" / "Você"
+entre ~440-620px de largura (tablet/janela intermediária), e o título da seção Resultados
+("Resultados que Falam por Si", `Resultados.tsx`) virava "...Falam por" / "Si" perto de
+390px. Primeira tentativa foi prender as duas últimas palavras com `&nbsp;`, mas isso
+estourava o texto pra fora da tela em telas bem estreitas (abaixo de ~330px, o `nbsp`
+impede a quebra mesmo quando não cabe). **Solução final: `text-wrap: balance` em
+`.hero-title` (`Hero.css`) e `.sec-title` (`global.css`)** — deixa o browser escolher o
+ponto de quebra que melhor equilibra as linhas, sem nunca forçar conteúdo pra fora do
+container. Cobre de graça qualquer outro título com `.sec-title` (Contact, ServiceGrid,
+TrabalheConosco) que vier a ter o mesmo problema. Sem suporte em navegador muito antigo,
+cai de volta na quebra padrão (nunca piora, só deixa de melhorar).
 
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
