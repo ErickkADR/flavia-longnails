@@ -79,7 +79,7 @@ export function Hero() {
       <div className="container hero-grid">
         <div className="hero-copy reveal-left">
           <h1 className="hero-title">
-            Beleza que <span>Transforma</span> Você
+            Beleza que <span>Transforma</span>&nbsp;Você
           </h1>
           <p className="hero-desc">
             Unhas, maquiagem, cabelo e cílios em um só lugar. Quatro especialistas, uma só

@@ -283,17 +283,32 @@ Carrossel infinito (`src/components/Marquee.tsx`) usado em avaliações, tags e 
   vão vazio a cada volta. Não regredir pra 2 cópias fixas.
 
 **Títulos quebrando com palavra órfã sozinha na última linha, corrigido em 16/09/2026**:
-o hero ("Beleza que Transforma Você", `Hero.tsx`) virava "Beleza que Transforma" / "Você"
-entre ~440-620px de largura (tablet/janela intermediária), e o título da seção Resultados
-("Resultados que Falam por Si", `Resultados.tsx`) virava "...Falam por" / "Si" perto de
-390px. Primeira tentativa foi prender as duas últimas palavras com `&nbsp;`, mas isso
-estourava o texto pra fora da tela em telas bem estreitas (abaixo de ~330px, o `nbsp`
-impede a quebra mesmo quando não cabe). **Solução final: `text-wrap: balance` em
-`.hero-title` (`Hero.css`) e `.sec-title` (`global.css`)** — deixa o browser escolher o
-ponto de quebra que melhor equilibra as linhas, sem nunca forçar conteúdo pra fora do
-container. Cobre de graça qualquer outro título com `.sec-title` (Contact, ServiceGrid,
-TrabalheConosco) que vier a ter o mesmo problema. Sem suporte em navegador muito antigo,
-cai de volta na quebra padrão (nunca piora, só deixa de melhorar).
+o hero ("Beleza que Transforma Você", `Hero.tsx`) virava "Beleza que Transforma" / "Você",
+e o título da seção Resultados ("Resultados que Falam por Si", `Resultados.tsx`) virava
+"...Falam por" / "Si". Duas voltas até fechar:
+
+1. Primeira tentativa: `&nbsp;` entre as duas últimas palavras. Resolvia, mas estourava o
+   texto pra fora da tela em telas muito estreitas (abaixo de ~315px — praticamente nenhum
+   aparelho real, mas ainda assim um regressão).
+2. Troquei pra `text-wrap: balance` em `.hero-title` (`Hero.css`) e `.sec-title`
+   (`global.css`), que nunca estoura (só reequilibra entre pontos de quebra que já existem).
+   **Só que eu tinha testado apenas o layout mobile (viewport < 900px, coluna full-width)**,
+   nunca a coluna real do desktop: acima de 900px o `.hero-grid` vira
+   `minmax(0, 620px) 1fr`, então o texto sempre disputa uma coluna de ~620px de largura
+   **independente do quão largo é o monitor** — só a fonte cresce com o viewport (`clamp`
+   até 3.6rem). O Erick mandou print do PC confirmando que ainda quebrava feio ali, porque
+   nenhum dos meus testes (só até 900px) cobria esse caso.
+3. **Solução final: os dois mecanismos juntos** — `&nbsp;` prendendo as duas últimas
+   palavras (`Transforma&nbsp;Você`, `por&nbsp;Si`) garante o resultado em qualquer
+   navegador, e o `text-wrap: balance` continua no CSS como reforço pros outros
+   `.sec-title` do site (Contact, ServiceGrid, TrabalheConosco). Testado de 320px a
+   2560px, sem estouro em nenhuma largura real.
+
+> **Lição de processo**: ao testar responsividade de um elemento que muda de layout
+> (`@media (max-width: 900px)`), testar as duas metades do breakpoint, não só a mobile.
+> Larguras de teste que cobrem isso: uma bem estreita (~320px), uma perto do breakpoint
+> de cada lado (~890px e ~920px), e pelo menos duas desktop reais (1440px, 1920px) —
+> não só ir até ~900px e assumir que "mobile" cobre tudo.
 
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 

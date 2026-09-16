@@ -47,7 +47,7 @@ export function Resultados() {
 
         <div className="reveal-right">
           <div className="sec-label">Portfolio</div>
-          <h2 className="sec-title">Resultados que <span>Falam por Si</span></h2>
+          <h2 className="sec-title">Resultados que <span>Falam por&nbsp;Si</span></h2>
           <p className="resultados-text">
             Cada atendimento no studio é pensado pra durar, na unha, na make, no cabelo ou
             nos cílios, com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
