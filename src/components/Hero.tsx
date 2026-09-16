@@ -82,7 +82,7 @@ export function Hero() {
             <span className="htw" style={{ transitionDelay: '0s' }}>Beleza</span>{' '}
             <span className="htw" style={{ transitionDelay: '.1s' }}>que</span>{' '}
             <span className="htw" style={{ transitionDelay: '.2s' }}>
-              <span className="hero-accent">Transforma</span>&nbsp;Você
+              <span className="hero-accent">Transforma&nbsp;Você</span>
             </span>
           </h1>
           <p className="hero-desc">

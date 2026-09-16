@@ -62,7 +62,32 @@
   font-weight: 600; line-height: 1.14; color: var(--ink); margin-bottom: 24px;
   text-wrap: balance;
 }
-.hero-accent { color: var(--accent); }
+.hero-accent {
+  color: var(--accent); /* fallback caso background-clip: text não seja suportado */
+  text-transform: uppercase;
+  /* Maiúscula "pesa" mais que a mesma palavra em caixa normal (sem ascendentes/descendentes
+     pra arejar) — reduzir um pouco o tamanho é prática tipográfica padrão, e também evita
+     que "TRANSFORMA VOCÊ" (que não pode quebrar, ver &nbsp; no Hero.tsx) estoure a tela em
+     celulares estreitos. */
+  font-size: .78em;
+  background: linear-gradient(100deg,
+    var(--accent-deep) 20%, var(--accent) 38%, var(--accent-soft) 50%,
+    var(--accent) 62%, var(--accent-deep) 80%);
+  background-size: 250% auto;
+  animation: hero-shimmer 6s linear infinite;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-accent {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+@keyframes hero-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: -200% 50%; }
+}
 
 /* Cada trecho do título entra em sequência (mesmo mecanismo do .reveal-left do resto
    do site: opacity/transform parados até o ancestral ganhar .on via IntersectionObserver,
@@ -126,4 +151,5 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-video { transition: none; }
   .htw { transition: none; opacity: 1; transform: none; }
+  .hero-accent { animation: none; background-position: 35% 50%; }
 }

@@ -321,6 +321,24 @@ motion` desativa (mesmo padrão do vídeo do hero). Cor do acento saiu de `.hero
 (genérico) pra `.hero-accent` (específico), porque agora `span` também embrulha cada palavra
 pro efeito. Se o pedido era mudar as *palavras*, não só a entrada, isso ainda está em aberto.
 
+**"Transforma Você" em caixa alta com brilho dourado animado, mesma sessão**: pedido do
+Erick em cima do item acima. Três decisões que não são óbvias olhando só o CSS final:
+
+1. **Caixa alta estourava a tela em celular estreito.** "TRANSFORMA VOCÊ" maiúsculo é ~30%
+   mais largo que "Transforma Você", e como as duas palavras não podem quebrar (`&nbsp;`,
+   ver item acima — sem isso volta o órfão) o bloco não cabia mais em ~320-414px.
+   Corrigido com `font-size: .78em` no `.hero-accent`: também é prática tipográfica correta
+   (maiúscula sem ascendente/descendente "pesa" mais no mesmo tamanho que texto normal), não
+   só workaround de layout.
+2. **O brilho é `background-clip: text`** (gradiente `accent-deep → accent → accent-soft →
+   accent → accent-deep`, animando `background-position`), envolto num `@supports` com
+   fallback pra `color: var(--accent)` sólido — se o navegador não suportar recorte de
+   gradiente em texto, ainda sobra a cor de acento normal, nunca texto invisível.
+3. **`accent-soft` é o único tom do moodboard marcado como "só fundo, nunca texto"**
+   (`global.css`, contraste insuficiente sobre `--bg`). Aqui ele aparece como texto, mas só
+   como o pico breve e móvel do brilho, nunca a cor inteira parada — é o uso que a nota
+   original queria evitar (texto sólido nesse tom), não o brilho passageiro.
+
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
 Dois ajustes pedidos pelo Erick depois de ver o site no celular:
