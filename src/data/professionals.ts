@@ -60,10 +60,16 @@ export const professionals: Professional[] = [
       { icon: 'nailart', name: 'Nail Art', desc: 'Designs únicos e personalizados. Das flores delicadas aos padrões geométricos, crie o visual dos seus sonhos.', price: 'R$20', priceNote: '/ design', durationMin: 30 },
       { icon: 'blindagem', name: 'Blindagem', desc: 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', price: 'R$80', durationMin: 60 },
     ],
-    // Fotos reais enviadas pelo Erick por WhatsApp em 16/09/2026, em resolucao bem maior
-    // que os 480x640 que o Instagram entregava (ver `ig-flavia-N.jpg`, que continuam no
-    // repo). Substituem a galeria antiga, que era puxada do @flavia_longnails.
+    // Puxadas do @flavia_longnails em 05/09/2026, a pedido do Erick.
+    // Em 16/09/2026 o Erick mandou 2 fotos novas por WhatsApp, em resolucao bem maior
+    // (ate 1600px, contra os 480x640 do Instagram) — SOMADAS a estas, nao no lugar.
     gallery: [
+      'images/ig-flavia-1.jpg',
+      'images/ig-flavia-2.jpg',
+      'images/ig-flavia-3.jpg',
+      'images/ig-flavia-4.jpg',
+      'images/ig-flavia-5.jpg',
+      'images/ig-flavia-6.jpg',
       'images/flavia-trabalho-1.jpg',
       'images/flavia-trabalho-2.jpg',
     ],
@@ -90,10 +96,13 @@ export const professionals: Professional[] = [
       { icon: 'make', name: 'Maquiagem Social', desc: 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', price: 'R$90', popular: true, durationMin: 120 },
       { icon: 'blindada', name: 'Maquiagem Blindada', desc: 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', price: 'R$110', durationMin: 150 },
     ],
-    // Fotos reais enviadas pelo Erick por WhatsApp em 16/09/2026, em resolucao bem maior
-    // que os 480x640 que o Instagram entregava (ver `ig-jheny-N.jpg`, que continuam no
-    // repo). Substituem a galeria antiga, que era puxada do Instagram dela.
+    // Makes que ela fez de verdade, do Instagram dela. Antes eram banco de imagem.
+    // Em 16/09/2026 o Erick mandou 5 fotos novas por WhatsApp, em resolucao bem maior
+    // (ate 1600px, contra os 480x640 do Instagram) — SOMADAS a estas, nao no lugar.
     gallery: [
+      'images/ig-jheny-1.jpg',
+      'images/ig-jheny-2.jpg',
+      'images/ig-jheny-3.jpg',
       'images/jheny-trabalho-1.jpg',
       'images/jheny-trabalho-2.jpg',
       'images/jheny-trabalho-3.jpg',
