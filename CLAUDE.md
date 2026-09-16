@@ -348,15 +348,17 @@ a palavra mesmo, tirei print pra confirmar antes de seguir). Resolvido em duas c
 `@media (max-width: 359px) { .hero-accent { font-size: .7em } }` só pra sub-360px, faixa
 que hoje é essencialmente nula de tráfego mas ainda assim não deixei quebrado.
 
-**Vídeo do hero de Cílios recortado bem mais fechado no olho, 16/09/2026** (`public/
-videos/hero-cilios.mp4`, ver `LEIA-ME.md` da pasta pra o crop exato). O Erick achou o
-clipe "muito pequeno" — era um plano de meio-rosto onde o olho ocupava só uma fração do
-quadro. Encontrei o master 4K original (mesmo Pexels `5243789`) ainda no scratchpad de uma
-sessão anterior e recortei de novo a partir **dele**, não do 1920x1080 já processado —
-evita ampliar um recorte que já tinha perdido nitidez. Também mapei o clipe inteiro
-frame a frame antes de escolher o trecho: ele pisca perto de 0s e de novo em ~3.2-3.4s,
-então o `-ss 0.8 -t 2.2` usado no v3 é justamente o miolo sem piscada, pra não parecer que
-o vídeo está "com defeito" no loop.
+**Tentativa de recortar o vídeo do hero de Cílios mais fechado no olho, revertida no mesmo
+dia (16/09/2026)** (`public/videos/hero-cilios.mp4`, detalhe completo no `LEIA-ME.md` da
+pasta). O Erick achou o clipe "muito pequeno" — plano de meio-rosto, olho só uma fração do
+quadro — e pediu foco no olho/cílios. Recortei de novo a partir do master 4K original
+(mesmo Pexels `5243789`, achado no scratchpad de uma sessão anterior), mapeando o clipe
+inteiro frame a frame antes pra escolher um trecho sem piscada. Testei em várias larguras
+antes de subir e pareceu bem enquadrado, mas o Erick reportou **"totalmente desalinhado"**
+ao ver ao vivo e pediu reverter — não confirmei a causa (pode ser proporção de tela dele,
+algo no crop que meu teste automatizado não pegou, ou outra coisa). **Voltou pro
+enquadramento anterior.** Lição: testar mudança de vídeo do hero direto no navegador dele
+antes de dar como pronta, screenshot automatizado em algumas larguras não bastou aqui.
 
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
