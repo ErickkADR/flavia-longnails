@@ -65,16 +65,19 @@
 .hero-accent {
   color: var(--accent); /* fallback caso background-clip: text não seja suportado */
   text-transform: uppercase;
+  font-weight: 800;
   /* Maiúscula "pesa" mais que a mesma palavra em caixa normal (sem ascendentes/descendentes
      pra arejar) — reduzir um pouco o tamanho é prática tipográfica padrão, e também evita
      que "TRANSFORMA VOCÊ" (que não pode quebrar, ver &nbsp; no Hero.tsx) estoure a tela em
-     celulares estreitos. */
-  font-size: .78em;
+     celulares estreitos. Pedido do Erick foi maior e mais bold que o resto do título: o
+     ganho de peso (800) já alarga a palavra sozinho, então o tamanho subiu bem menos do
+     que se fosse só aumentar a fonte mantendo o peso 600 original. */
+  font-size: .85em;
   background: linear-gradient(100deg,
     var(--accent-deep) 20%, var(--accent) 38%, var(--accent-soft) 50%,
     var(--accent) 62%, var(--accent-deep) 80%);
   background-size: 250% auto;
-  animation: hero-shimmer 6s linear infinite;
+  animation: hero-shimmer 2.4s linear infinite;
 }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .hero-accent {
@@ -146,6 +149,13 @@
   .hero-desc { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
   .hero-stats { justify-content: center; gap: 32px; }
+}
+
+/* Abaixo de 360px (aparelho raro hoje, mas existe) "TRANSFORMA VOCÊ" em .85em/800
+   encosta na borda — não quebra porque não pode (nbsp, ver acima), então precisa
+   ficar um pouco menor só nessa faixa em vez de cortar. */
+@media (max-width: 359px) {
+  .hero-accent { font-size: .7em; }
 }
 
 @media (prefers-reduced-motion: reduce) {

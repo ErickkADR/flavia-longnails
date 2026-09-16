@@ -339,6 +339,15 @@ Erick em cima do item acima. Três decisões que não são óbvias olhando só o
    como o pico breve e móvel do brilho, nunca a cor inteira parada — é o uso que a nota
    original queria evitar (texto sólido nesse tom), não o brilho passageiro.
 
+**Ajuste fino, mesma sessão: maior, bold (800) e brilho mais rápido (6s → 2.4s).** Erick
+pediu na sequência. Aumentar tamanho E peso ao mesmo tempo quase voltou o estouro do item
+1 (peso 800 sozinho já alarga a palavra): o `.78em` original não bastava, e o primeiro
+chute maior (`.88em`) cortava "VOCÊ" de verdade em ~320-360px (não só encostava, cortava
+a palavra mesmo, tirei print pra confirmar antes de seguir). Resolvido em duas camadas:
+`.85em` como tamanho normal (cobre 360px+, que é praticamente todo aparelho real hoje) e
+`@media (max-width: 359px) { .hero-accent { font-size: .7em } }` só pra sub-360px, faixa
+que hoje é essencialmente nula de tráfego mas ainda assim não deixei quebrado.
+
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
 Dois ajustes pedidos pelo Erick depois de ver o site no celular:
