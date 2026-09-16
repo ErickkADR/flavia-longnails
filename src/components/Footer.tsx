@@ -16,7 +16,7 @@ export function Footer() {
             </Link>
             <p className="footer-tagline">Unhas, maquiagem e cabelo em um só lugar</p>
             <div className="footer-social">
-              <a href="https://www.instagram.com/flavia_longnails/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/lummier_studiobeauty/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <InstagramIcon />
               </a>
               <a href={WHATSAPP_LINK} className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">

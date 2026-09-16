@@ -60,6 +60,11 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
     origem dos outros 3), recortado de um clipe vertical. Ver `public/videos/LEIA-ME.md`,
     que também foi reescrito (a versão anterior estava desatualizada desde o redesign do
     hero: dizia que o texto ficava na coluna da direita, e é o contrário).
+13. **VIP passou de 3 para 10 visitas** (`Clientes.tsx`), a pedido do Erick — ver seção
+    "Funcionalidades específicas" pra saber por que isso pode esvaziar a lista de VIPs.
+14. **Cada profissional ganhou WhatsApp próprio (16/09/2026)** — antes todo mundo caía no
+    número da Flávia. Endereço e Instagram do salão também atualizados. Ver seção
+    "Contato, WhatsApp por profissional e Instagram do salão" logo abaixo.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -119,6 +124,47 @@ URL toda vez, tipo um app. Resolvido com um **manifest de PWA** (`public/manifes
   difícil de depurar remotamente. Pro objetivo real (ícone na tela, abre direto sem
   navegador) o manifest sozinho já resolve. Se um dia quiser o prompt nativo ou uso offline
   de verdade, aí sim vale considerar `vite-plugin-pwa` com uma estratégia de cache pensada.
+
+## Contato, WhatsApp por profissional e Instagram do salão (16/09/2026)
+
+**Endereço mudou de rua** (`Contact.tsx`): agora é Rua Ministro Lins de Barros, 465 - cs 13.
+O Erick disse que bairro/cidade/CEP continuavam os mesmos ("Jardim Peri - Alto ...
+02281-206"), mas **isso não batia com a realidade**: consultei o ViaCEP pela rua nova e o
+CEP oficial dela é `02674-000`, bairro **Jardim Santa Cruz** — outro bairro. Perguntei e ele
+confirmou usar o CEP correto. Lição: **não confiar cegamente que só uma parte do endereço
+mudou** quando a rua inteira é diferente — vale conferir no ViaCEP antes de publicar.
+O `<iframe>` do mapa trocou de formato: era um embed com place ID específico (gerado pelo
+"Compartilhar → Incorporar mapa" do Google, preso a um Google Business Profile antigo,
+"Flávia LongNails") e virou uma busca por texto (`google.com/maps?q=<endereço>&output=embed`)
+— não tenho como gerar um embed com place ID pra um endereço novo sem acesso ao Google
+Business Profile do salão, mas o formato por texto funciona sem precisar de chave de API
+nem de place ID, só geocodifica o endereço direto.
+
+**Cada profissional ganhou WhatsApp próprio.** Antes, `whatsappForService` e o botão
+"Agendar pelo WhatsApp" de cada página (`ProHero.tsx`) mandavam tudo pro mesmo número
+(`WHATSAPP_NUMBER`, o da Flávia) — só o texto da mensagem dizia com quem era, quem recebia
+tinha que redirecionar na mão. Agora `Professional` tem um campo `whatsapp: string | null`:
+`null` cai no número principal (é o caso da Flávia, dona, sempre foi esse número mesmo),
+as outras três têm o próprio:
+
+| Profissional | Número |
+|---|---|
+| Jheny | 5511967218862 |
+| Vitória | 5511940498740 |
+| Mayte | 5511958290432 |
+
+Função nova, `numberFor(nome)` (privada, `professionals.ts`), resolve o número certo; usada
+tanto no `whatsappForService` (cards de serviço) quanto no `whatsappForProfessional`
+(botão da página da profissional, que não está preso a um serviço específico). Os pontos de
+contato **gerais** do site (CTA do Hero, do Nav, o WhatsApp do Contact/Footer, o botão
+flutuante, `/trabalhe-conosco`) continuam todos no número principal — fazem sentido pra
+Flávia/salão, não pra uma profissional específica.
+
+**Instagram do salão trocou pra uma conta nova, `@lummier_studiobeauty`** — antes o rodapé e
+o Contato linkavam pro Instagram pessoal da Flávia (`@flavia_longnails`). A conta nova é do
+salão **e também da Flávia**, então o `instagram` dela em `professionals.ts` mudou junto
+(era pessoal, virou a mesma do salão). Jheny, Vitória e Mayte mantêm os Instagrams próprios,
+sem mudança.
 
 ## Marca — o rebrand de 05/09/2026
 

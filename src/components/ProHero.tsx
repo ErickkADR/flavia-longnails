@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Professional } from '../data/professionals';
-import { WHATSAPP_LINK } from '../data/professionals';
+import { whatsappForProfessional } from '../data/professionals';
 import { asset } from '../lib/asset';
 import { ArrowLeftIcon, InstagramIcon, WhatsappIcon } from './icons';
 import './ProHero.css';
@@ -29,7 +29,7 @@ export function ProHero({ pro }: { pro: Professional }) {
             <h1 className="pro-hero-name">{pro.name}</h1>
             <p className="pro-hero-bio">{pro.bio}</p>
             <div className="pro-hero-actions">
-              <a href={WHATSAPP_LINK} className="btn-primary" target="_blank" rel="noopener noreferrer">
+              <a href={whatsappForProfessional(pro.name)} className="btn-primary" target="_blank" rel="noopener noreferrer">
                 <WhatsappIcon className="wa-icon" />
                 Agendar pelo WhatsApp
               </a>

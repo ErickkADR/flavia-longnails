@@ -24,6 +24,13 @@ export interface Professional {
   bio: string;
   instagram: string | null;
   instagramIsReal: boolean;
+  /**
+   * WhatsApp próprio da profissional (só dígitos, com DDI 55), pra quem já tem número
+   * separado do studio (Jheny, Vitória, Mayte, desde 16/09/2026). `null` = usa o número
+   * principal do salão (`WHATSAPP_NUMBER`) — é o caso da Flávia, que é a dona e sempre
+   * foi esse número mesmo.
+   */
+  whatsapp: string | null;
   services: Service[];
   gallery: string[];
   /**
@@ -50,8 +57,11 @@ export const professionals: Professional[] = [
     avatar: 'images/flavia-perfil.jpg',
     photoIsPlaceholder: false,
     bio: 'Especialista em unhas longas e nail art, com anos de experiência transformando as mãos das clientes em verdadeiras obras de arte. Cada atendimento é único e personalizado, com produtos de alta qualidade e técnicas modernas, resultados duradouros e acabamento impecável.',
-    instagram: 'flavia_longnails',
+    // Trocado em 16/09/2026: @flavia_longnails era o Instagram antigo, pessoal. O novo
+    // (@lummier_studiobeauty) é do salão, e também passa a ser o dela por ser a dona.
+    instagram: 'lummier_studiobeauty',
     instagramIsReal: true,
+    whatsapp: null,
     services: [
       { icon: 'manicure', name: 'Manicure', desc: 'Cuidado completo para suas unhas naturais, incluindo cutícula, lixa e esmaltação. Acabamento perfeito para o dia a dia.', price: 'R$40', durationMin: 120 },
       { icon: 'pedicure', name: 'Pedicure', desc: 'Tratamento completo para os pés, com hidratação, esfoliação e esmaltação. Cuide dos seus pés com todo o carinho.', price: 'R$50', durationMin: 60 },
@@ -88,6 +98,8 @@ export const professionals: Professional[] = [
     bio: 'Tenho 21 anos e minha paixão pela maquiagem começou aos 15, quando comecei a me maquiar, praticar e descobrir o quanto eu amava transformar e realçar a beleza. Acredito que a maquiagem vai muito além da beleza: é sobre autoestima, confiança e se sentir bem consigo mesma. Por isso busco oferecer uma experiência personalizada, valorizando os traços e a personalidade de cada cliente.',
     instagram: 'jhenyluanyybeauty',
     instagramIsReal: true,
+    // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
+    whatsapp: '5511967218862',
     // Os 3 servicos REAIS, com preco e tempo do portfolio em PDF que ela entregou em
     // 07/09/2026. Antes havia 6 servicos inventados por mim, com precos entre R$40 e
     // R$350: nao existiam. Nao repor sem material dela.
@@ -126,6 +138,8 @@ export const professionals: Professional[] = [
     bio: 'Vitória é cabeleireira especializada em cortes, coloração e tratamentos capilares, sempre buscando o equilíbrio entre saúde e estilo. Atenta às tendências, ela personaliza cada atendimento para valorizar a textura e o formato natural do seu cabelo.',
     instagram: null,
     instagramIsReal: false,
+    // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
+    whatsapp: '5511940498740',
     services: [
       { icon: 'corte', name: 'Corte Feminino', desc: 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', price: 'R$70', durationMin: 60 },
       { icon: 'escova', name: 'Escova Modelada', desc: 'Escova com acabamento liso ou volumoso, pronta para o seu dia ou a sua noite.', price: 'R$60', durationMin: 45 },
@@ -154,6 +168,8 @@ export const professionals: Professional[] = [
     bio: 'Seu atendimento vai além da técnica: é um momento de cuidado, acolhimento e autoestima. Cada procedimento é realizado com dedicação, atenção aos detalhes e compromisso com a qualidade, para que você se sinta especial em cada visita. Do olhar marcante à sobrancelha que valoriza seus traços, cada detalhe é pensado com carinho para proporcionar uma experiência de beleza, conforto e autocuidado.',
     instagram: 'espaco.seixas',
     instagramIsReal: true,
+    // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
+    whatsapp: '5511958290432',
     // Preços e nomes exatos que o Erick passou em 15/09/2026, do catálogo dela no
     // Instagram (@espaco.seixas). As durações são estimativa minha, como nos demais
     // perfis: corrigir aqui quando ela confirmar o tempo real de cada procedimento.
@@ -216,8 +232,25 @@ export function servicesForName(name: string): Service[] {
  * Nao adiciona botao nenhum na tela: o proprio card vira link. O CLAUDE.md registra
  * pedido explicito de nao encher o site de botao "Agendar pelo WhatsApp".
  */
+/**
+ * Número que recebe a mensagem: o da própria profissional, se ela tiver um cadastrado
+ * (`Professional.whatsapp`), senão cai no número principal do salão. Assim o card de
+ * serviço da Jheny manda a mensagem pro WhatsApp dela, não pro da Flávia.
+ */
+function numberFor(professionalName?: string): string {
+  const pro = professionals.find((p) => p.name === professionalName);
+  return pro?.whatsapp ?? WHATSAPP_NUMBER;
+}
+
 export function whatsappForService(serviceName: string, professionalName?: string): string {
   const comQuem = professionalName ? ` com a ${professionalName}` : '';
   const texto = `Oi! Vim pelo site do Lummier Studio e queria agendar ${serviceName}${comQuem}.`;
-  return `${WHATSAPP_LINK}?text=${encodeURIComponent(texto)}`;
+  return `https://wa.me/${numberFor(professionalName)}?text=${encodeURIComponent(texto)}`;
+}
+
+/** Mesma ideia do `whatsappForService`, pro botão "Agendar pelo WhatsApp" da página da
+ * própria profissional (`ProHero.tsx`), que não está preso a um serviço específico. */
+export function whatsappForProfessional(professionalName: string): string {
+  const texto = `Oi! Vim pelo site do Lummier Studio e queria agendar um horário com a ${professionalName}.`;
+  return `https://wa.me/${numberFor(professionalName)}?text=${encodeURIComponent(texto)}`;
 }
