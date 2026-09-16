@@ -4,11 +4,15 @@ Site institucional + área interna (login) de um studio de beleza com quatro pro
 Flávia (unhas, dona do studio), Jheny (maquiagem), Vitória (cabelo) e Mayte (cílios,
 sobrancelhas e pele, desde 15/09/2026).
 
-No ar em dois lugares:
-- **GitHub Pages**: https://erickkadr.github.io/flavia-longnails/ (branch `gh-pages`, deploy via `npm run deploy`)
-- **Vercel**: https://lummier-studio.vercel.app (deploy automático a cada push na `main`,
-  projeto Vercel se chama `lummier-studio-oficial`). **Renomeado em 16/09/2026** — a URL
-  antiga (`afroditestudio.vercel.app`) continua funcionando, só redireciona (307) pra essa.
+**No ar só na Vercel**, https://lummier-studio.vercel.app (deploy automático a cada push na
+`main`, projeto Vercel se chama `lummier-studio-oficial`). **Renomeado em 16/09/2026** — a
+URL antiga (`afroditestudio.vercel.app`) continua funcionando, só redireciona (307) pra essa.
+
+> **O GitHub Pages foi abandonado em 16/09/2026** (o Erick decidiu não usar mais). A infra
+> dual-host continua no código (`vite.config.ts` detecta `VERCEL`, `public/404.html`, o
+> `base: '/flavia-longnails/'`) porque removê-la é trabalho à parte e não muda nada
+> funcionando hoje — só não vale mais **manter o Pages atualizado** (`npm run deploy`).
+> Se algum dia quiser tirar essa infra de vez, é decisão dele, não faço sozinho.
 
 ## Onde paramos (15/09/2026)
 
@@ -23,8 +27,8 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 2. **As durações também são chute meu**, e o único corrigido foi Manicure (45min → 2h).
    A agenda desenha os blocos com esses números. Os da Mayte (adicionada em 15/09) também
    são chute, ainda sem correção nenhuma.
-3. **O GitHub Pages está desatualizado**, ainda com a marca antiga. Só a Vercel recebe
-   deploy no push; o Pages precisa de `npm run deploy` à parte e ninguém rodou.
+3. ~~O GitHub Pages está desatualizado~~ → **não é mais pendência**: o Erick abandonou o
+   Pages em 16/09/2026, o site é só Vercel agora. Ver nota no topo deste arquivo.
 4. ~~A Mayte só tinha metade do login~~ → **resolvida em 15/09/2026**: usuário criado no
    painel do Supabase e `migration.sql` atualizado já rodado (confirmado pelo Erick). Login
    dela funciona igual ao das outras 3.
@@ -39,9 +43,9 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
    de todos os outros) e um manifest de PWA pra instalar a Área da Colaboradora como app.
 9. **Contas do Salão virou exclusiva da Flávia (15/09/2026).** As outras colaboradoras não
    veem mais essa tela — usam Gastos Pessoais com âmbito "Salão", que já somava por pessoa
-   pra ela. RLS de `salon_transactions` apertada pra só o e-mail dela. **Falta rodar o
-   `migration.sql` atualizado no Supabase** pra essa policy nova valer de verdade (o código
-   já bloqueia a navegação, mas sem isso a API ainda aceitaria escrita de qualquer uma).
+   pra ela. RLS de `salon_transactions` apertada pra só o e-mail dela. `migration.sql`
+   atualizado já foi rodado pelo Erick (confirmado em 16/09/2026) — a policy nova está
+   valendo de verdade, não só bloqueada no código.
 10. **Galeria da Flávia e da Jheny trocada por fotos reais em resolução cheia (16/09/2026)**,
     e as capas da seção Resultados também. Bio da Mayte reescrita com o texto que o Erick
     passou. Ver "Fotos em resolução cheia, enviadas direto pelo Erick".
@@ -672,9 +676,13 @@ As três ações do card:
 
 - **Clientes VIP** (`Clientes.tsx`): calculado automaticamente, não é campo manual. Cruza
   `clients.name` com `appointments.client_name` (case-insensitive, trim) e considera VIP quem
-  tem **3+ atendimentos concluídos** (`VIP_MIN_VISITS`, ajustável no topo do arquivo).
-  Validado contra a lista real de VIPs que a Flávia já mantinha na planilha (Maria, Dona
-  Maria, Gabi, Thais) — bateu certo depois da importação dos dados reais.
+  tem **10+ atendimentos concluídos** (`VIP_MIN_VISITS`, ajustável no topo do arquivo).
+  **Mudou de 3 pra 10 em 16/09/2026, a pedido do Erick.** O valor `3` original tinha sido
+  validado contra a lista real de VIPs que a Flávia mantinha na planilha (Maria, Dona
+  Maria, Gabi, Thais) e batia certo — com `10`, é bem provável que **menos gente** (ou
+  ninguém dessas 4) ainda bata o critério. Não recontei quem continua VIP com o número
+  novo porque é decisão de negócio dele, não bug a corrigir; se o quadro de VIPs sumir
+  quase todo, é esse motivo.
 - **Filtro de mês** (`useMonthFilter.ts`, usado em Contas do Salão e Gastos Pessoais): abre
   sempre no mês atual, navega com setas. É a tradução pra banco de dados do hábito antigo da
   Flávia de criar uma aba nova por mês na planilha — aqui os dados ficam numa tabela só, só a

@@ -11,13 +11,20 @@ um por especialidade, a cada 8s (`ROTATE_MS`). Todos são vídeo de banco do Pex
 | `hero-unhas.mp4` | Unhas | `7754857` | "A manicurist applying nail polish to the client" |
 | `hero-cabelo.mp4` | Cabelo | — | ver histórico do commit que adicionou |
 | `hero-make.mp4` | Maquiagem | — | ver histórico do commit que adicionou |
-| `hero-cilios.mp4` | Cílios & Sobrancelhas | `7133220` | "Woman having an eyelash extension" (tweezer aplicando extensão, close no olho) |
+| `hero-cilios.mp4` | Cílios & Sobrancelhas | `5243789` | "Close-up video of an eye" (olho fechado abrindo, cílios nítidos, luz de estúdio) |
 
 Baixado de `https://www.pexels.com/download/video/<id>/`. Licença
 [Pexels License](https://www.pexels.com/license/): uso comercial livre, sem atribuição
 obrigatória.
 
-Todos somados: ~4,4 MB depois da compressão.
+Todos somados: ~4,2 MB depois da compressão.
+
+> **`hero-cilios.mp4` já teve uma primeira versão trocada (16/09/2026).** A original (ID
+> `7133220`, pinça aplicando extensão) era um close extremo demais e ficou ilegível/ruim
+> segundo o Erick. Trocado pelo `5243789` (olho abrindo), que também precisou de `hflip`
+> porque o olho saía do lado esquerdo do quadro no original — exatamente onde o texto do
+> hero fica. Lição: **testar o enquadramento final na tela antes de considerar pronto**,
+> um frame estático isolado engana sobre como fica com o degradê e o texto por cima.
 
 Enquanto um arquivo não existir, nada quebra: o `<video>` cai no `poster`
 (`public/images/hero-nails-o-0j6oBo.jpg`) e o hero fica igual, só parado. Um `<source>` que

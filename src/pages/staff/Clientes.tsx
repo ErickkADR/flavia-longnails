@@ -24,7 +24,7 @@ interface AppointmentRef {
  * A partir de quantas visitas a cliente vira VIP automaticamente.
  * Agendamento novo ja conta: cancelado e o unico status que fica de fora.
  */
-const VIP_MIN_VISITS = 3;
+const VIP_MIN_VISITS = 10;
 
 function normalize(name: string) {
   return name.trim().toLowerCase();
