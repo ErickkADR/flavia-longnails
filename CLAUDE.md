@@ -348,6 +348,16 @@ a palavra mesmo, tirei print pra confirmar antes de seguir). Resolvido em duas c
 `@media (max-width: 359px) { .hero-accent { font-size: .7em } }` só pra sub-360px, faixa
 que hoje é essencialmente nula de tráfego mas ainda assim não deixei quebrado.
 
+**Vídeo do hero de Cílios recortado bem mais fechado no olho, 16/09/2026** (`public/
+videos/hero-cilios.mp4`, ver `LEIA-ME.md` da pasta pra o crop exato). O Erick achou o
+clipe "muito pequeno" — era um plano de meio-rosto onde o olho ocupava só uma fração do
+quadro. Encontrei o master 4K original (mesmo Pexels `5243789`) ainda no scratchpad de uma
+sessão anterior e recortei de novo a partir **dele**, não do 1920x1080 já processado —
+evita ampliar um recorte que já tinha perdido nitidez. Também mapei o clipe inteiro
+frame a frame antes de escolher o trecho: ele pisca perto de 0s e de novo em ~3.2-3.4s,
+então o `-ss 0.8 -t 2.2` usado no v3 é justamente o miolo sem piscada, pra não parecer que
+o vídeo está "com defeito" no loop.
+
 ### Hero sem fundo no mobile, e o 4º círculo dos Resultados (15/09/2026)
 
 Dois ajustes pedidos pelo Erick depois de ver o site no celular:

@@ -11,7 +11,7 @@ um por especialidade, a cada 8s (`ROTATE_MS`). Todos são vídeo de banco do Pex
 | `hero-unhas.mp4` | Unhas | `7754857` | "A manicurist applying nail polish to the client" |
 | `hero-cabelo.mp4` | Cabelo | — | ver histórico do commit que adicionou |
 | `hero-make.mp4` | Maquiagem | — | ver histórico do commit que adicionou |
-| `hero-cilios.mp4` | Cílios & Sobrancelhas | `5243789` | "Close-up video of an eye" (olho fechado abrindo, cílios nítidos, luz de estúdio) |
+| `hero-cilios.mp4` | Cílios & Sobrancelhas | `5243789` | "Close-up video of an eye" — recorte fechado no olho/cílios (v3, ver nota abaixo) |
 
 Baixado de `https://www.pexels.com/download/video/<id>/`. Licença
 [Pexels License](https://www.pexels.com/license/): uso comercial livre, sem atribuição
@@ -19,12 +19,23 @@ obrigatória.
 
 Todos somados: ~4,2 MB depois da compressão.
 
-> **`hero-cilios.mp4` já teve uma primeira versão trocada (16/09/2026).** A original (ID
-> `7133220`, pinça aplicando extensão) era um close extremo demais e ficou ilegível/ruim
-> segundo o Erick. Trocado pelo `5243789` (olho abrindo), que também precisou de `hflip`
-> porque o olho saía do lado esquerdo do quadro no original — exatamente onde o texto do
-> hero fica. Lição: **testar o enquadramento final na tela antes de considerar pronto**,
-> um frame estático isolado engana sobre como fica com o degradê e o texto por cima.
+> **`hero-cilios.mp4` já teve duas trocas.** V1 (ID `7133220`, pinça aplicando extensão) era
+> um close extremo demais e ficou ilegível/ruim segundo o Erick. V2 trocou pro `5243789`
+> (olho abrindo) — mesma fonte usada até hoje —, com `hflip` porque o olho saía do lado
+> esquerdo do quadro, exatamente onde o texto do hero fica. Lição da troca V1→V2: **testar
+> o enquadramento final na tela antes de considerar pronto**, um frame estático isolado
+> engana sobre como fica com o degradê e o texto por cima.
+>
+> **V3 (16/09/2026): mesma fonte (`5243789`), recorte muito mais fechado.** O V2 era um
+> plano de meio-rosto (testa, bochecha, cabelo, olho só uma fração do quadro) — o Erick
+> achou "muito pequeno" e pediu foco no olho e nos cílios. V3 parte do **master 4K
+> (3840x2160) do mesmo vídeo Pexels**, não do arquivo já cortado em 1920x1080, pra não
+> ampliar um recorte que já tinha perdido nitidez. Recorte novo:
+> `crop=1550:872:210:340,scale=1920:1080` (ainda 16:9), sobre o trecho `-ss 0.8 -t 2.2`
+> do clipe de 5.64s — esse intervalo é o miolo sem piscada (o clipe original pisca perto
+> de 0s e de novo em ~3.2-3.4s, então o trecho usado evita as duas). Sem `hflip` desta vez:
+> o olho já cai do lado direito do quadro nesse recorte. Master 4K guardado no scratchpad
+> da sessão que fez a troca, não no repo (pesado demais pra git).
 
 Enquanto um arquivo não existir, nada quebra: o `<video>` cai no `poster`
 (`public/images/hero-nails-o-0j6oBo.jpg`) e o hero fica igual, só parado. Um `<source>` que
