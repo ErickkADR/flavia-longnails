@@ -1,80 +1,106 @@
-# Vídeo do hero
+# Vídeos do hero
 
 ## O que está no ar agora
 
-`hero.mp4` é um vídeo de banco, **provisório**, posto em 05/09/2026 enquanto o MCP do
-Magnific não estava conectado.
+O hero da home ([src/components/Hero.tsx](../../src/components/Hero.tsx)) alterna 4 clipes,
+um por especialidade, a cada 8s (`ROTATE_MS`). Todos são vídeo de banco do Pexels,
+**nenhum é filmagem real do studio** — troca por material real é sempre bem-vinda.
 
-| | |
-|---|---|
-| Origem | Pexels, vídeo `7754857` ("A manicurist applying nail polish to the client") |
-| Baixado de | `https://www.pexels.com/download/video/7754857/` |
-| Licença | [Pexels License](https://www.pexels.com/license/): uso comercial livre, sem atribuição obrigatória |
-| Arquivo | 1920x1080, 30fps, 4,8 MB |
+| Arquivo | Especialidade | Pexels ID | Descrição |
+|---|---|---|---|
+| `hero-unhas.mp4` | Unhas | `7754857` | "A manicurist applying nail polish to the client" |
+| `hero-cabelo.mp4` | Cabelo | — | ver histórico do commit que adicionou |
+| `hero-make.mp4` | Maquiagem | — | ver histórico do commit que adicionou |
+| `hero-cilios.mp4` | Cílios & Sobrancelhas | `7133220` | "Woman having an eyelash extension" (tweezer aplicando extensão, close no olho) |
 
-Dois candidatos alternativos foram baixados na mesma leva e ficaram fora: `7754856`
-(aplicando esmalte) e `7987790` (maquiagem numa cliente). Se quiser trocar, é o mesmo
-endereço com o id trocado.
+Baixado de `https://www.pexels.com/download/video/<id>/`. Licença
+[Pexels License](https://www.pexels.com/license/): uso comercial livre, sem atribuição
+obrigatória.
 
-**4,8 MB está acima do ideal de 3 MB descrito abaixo.** Não deu pra comprimir porque não há
-`ffmpeg` na máquina onde isso foi feito. Quando houver, o comando está no fim deste arquivo.
+Todos somados: ~4,4 MB depois da compressão.
 
-O hero da home ([src/components/Hero.tsx](../../src/components/Hero.tsx)) espera um arquivo
-chamado exatamente **`hero.mp4`** nesta pasta.
-
-Enquanto ele não existir, nada quebra: o `<video>` cai no `poster`
+Enquanto um arquivo não existir, nada quebra: o `<video>` cai no `poster`
 (`public/images/hero-nails-o-0j6oBo.jpg`) e o hero fica igual, só parado. Um `<source>` que
 responde 404 não apaga o poster.
 
-## O que o arquivo precisa ser
+## O que cada arquivo precisa ser
 
 | | |
 |---|---|
-| Nome | `hero.mp4` |
 | Codec | H.264 (`libx264`), perfil `high`, `yuv420p` |
 | Resolução | 1920x1080. Não passa disso: o vídeo é fundo, ninguém olha detalhe |
-| Duração | 8 a 15 segundos, cortado pra emendar em loop sem salto |
+| Duração | Curto, ele já roda em `loop`. Não precisa bater exato com os 8s da rotação |
 | Áudio | **Nenhum.** A trilha precisa ser removida, não só mutada |
-| Tamanho | Idealmente abaixo de 3 MB, teto de 5 MB |
+| Tamanho | Idealmente abaixo de 1,5 MB por clipe |
 
 Sem áudio e com `muted` é o que faz o autoplay funcionar. Navegador nenhum deixa um vídeo
-com som tocar sozinho, e se o autoplay for bloqueado o hero fica congelado no primeiro frame.
+com som tocar sozinho, e se o autoplay for bloqueado o hero fica congelado no poster.
 
 ## Enquadramento
 
-O conteúdo (título, botões, números) fica na **coluna da direita**, sobre um degradê que
-vira bege sólido a partir de uns 60% da largura. Ou seja: **a parte interessante do vídeo
-tem que estar do lado esquerdo do quadro.** Um assunto centralizado fica metade escondido
-atrás do texto.
+**O texto (título, botões, números) fica na coluna da ESQUERDA**, sobre um degradê que sai
+opaco ali e abre limpo pro vídeo à direita (`.hero-scrim` em `Hero.css`, gradiente a 96deg).
+Ou seja: **a parte interessante do vídeo tem que estar do lado DIREITO do quadro.** Um
+assunto centralizado ou à esquerda fica escondido atrás do texto.
+
+> Isso já inverteu uma vez: a versão antiga deste arquivo dizia "coluna da direita" pro
+> texto, de quando o layout era diferente. Conferir sempre o `Hero.css` atual antes de
+> confiar neste texto — ele pode voltar a ficar desatualizado.
 
 Movimento lento e contínuo funciona muito melhor que corte rápido: mão trabalhando na unha,
-pincel de maquiagem, secador, detalhe de esmalte. Corte seco a cada segundo compete com a
+pincel de maquiagem, secador, pinça de cílios. Corte seco a cada segundo compete com a
 leitura do texto e cansa.
 
-## Comprimir
+## Comprimir / cortar um vídeo novo
 
-Com o arquivo bruto em `bruto.mp4`, o comando abaixo entrega o formato certo, sem áudio e
-com o `faststart` (que deixa o vídeo começar a tocar antes de baixar inteiro):
+`ffmpeg` não vem instalado neste Mac nem tem Homebrew. Caminho que funcionou em 16/09/2026:
+instalar o pacote `ffmpeg-static` do npm num diretório qualquer (baixa um binário pronto,
+sem precisar de sudo/brew) e chamar o binário direto:
 
 ```bash
-ffmpeg -i bruto.mp4 -t 12 -an \
+npm install ffmpeg-static   # roda em qualquer pasta, ex.: /tmp
+# binário fica em node_modules/ffmpeg-static/ffmpeg
+```
+
+Se o vídeo original já é 16:9 (1920x1080 ou parecido), scale+crop direto:
+
+```bash
+ffmpeg -i bruto.mp4 -an \
   -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080" \
   -c:v libx264 -profile:v high -pix_fmt yuv420p \
   -crf 26 -preset slow -movflags +faststart \
-  hero.mp4
+  hero-NOME.mp4
 ```
 
-Se passar de 5 MB, sobe o `-crf` (28, 30). Quanto maior o número, menor o arquivo e pior a
-imagem. Em vídeo de fundo velado por degradê dá pra ir longe sem ninguém perceber.
+Se o original é vertical (9:16, comum em clipe de celular/Reels — foi o caso do
+`hero-cilios.mp4`), corta uma faixa horizontal da região que interessa **antes** de
+escalar, senão o assunto sai espremido ou cortado errado:
 
-## Onde ele NÃO é carregado
+```bash
+# exemplo real usado no hero-cilios.mp4, fonte 1080x1920:
+ffmpeg -i bruto.mp4 -an \
+  -vf "crop=1080:608:0:550,scale=1920:1080" \
+  -c:v libx264 -profile:v high -pix_fmt yuv420p \
+  -crf 26 -preset slow -movflags +faststart \
+  hero-NOME.mp4
+```
 
-Abaixo de 900px de largura, e para quem liga "reduzir movimento" no sistema, o `<source>`
-nem chega a ser renderizado, então o mp4 não é baixado. Nesses casos aparece só o poster.
-A regra está no `useEffect` do `Hero.tsx`, se quiser mudar o corte.
+O `crop=W:H:X:Y` recorta W×H a partir do canto (X,Y) do vídeo original — ajustar Y pra
+mirar na parte que interessa (geralmente o meio do quadro vertical). Depois `scale` estica
+pro 1920x1080 final; alguma perda de nitidez é esperada e aceitável, o vídeo fica atrás do
+degradê.
 
-## Este arquivo vai pro git
+Se passar de ~1,5 MB, sobe o `-crf` (28, 30). Quanto maior o número, menor o arquivo e pior
+a imagem. Em vídeo de fundo velado por degradê dá pra ir bem longe sem ninguém perceber.
 
-Diferente do `.env` e do `projeto-expansao/`, o `hero.mp4` **precisa** estar commitado: o
-GitHub Pages e a Vercel constroem o site a partir do repo, não tem storage separado. É por
-isso que o limite de tamanho importa.
+## Onde os vídeos NÃO são carregados
+
+Abaixo de 900px de largura, e para quem liga "reduzir movimento" no sistema, nenhum
+`<source>` chega a ser renderizado, então nenhum mp4 é baixado — só o poster aparece. A
+regra está no primeiro `useEffect` do `Hero.tsx` (`matchMedia`), se quiser mudar o corte.
+
+## Estes arquivos vão pro git
+
+Diferente do `.env` e do `projeto-expansao/`, os `hero-*.mp4` **precisam** estar
+commitados: o GitHub Pages e a Vercel constroem o site a partir do repo, não tem storage
+separado. É por isso que o limite de tamanho por clipe importa.

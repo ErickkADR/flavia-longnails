@@ -1,10 +1,10 @@
 # Lummier Studio
 
-Site institucional para um studio de beleza com três especialistas: Flávia (unhas), Jheny (maquiagem)
-e Vitória (cabelo). Home one-page com resultados, equipe, avaliações e ranking de serviços, mais uma
-página própria por profissional, com agendamento direto pelo WhatsApp.
+Site institucional para um studio de beleza com quatro especialistas: Flávia (unhas), Jheny (maquiagem),
+Vitória (cabelo) e Mayte (cílios e sobrancelhas). Home one-page com resultados, equipe, avaliações e
+ranking de serviços, mais uma página própria por profissional, com agendamento direto pelo WhatsApp.
 
-🔗 **Site no ar:** [afroditestudio.vercel.app](https://afroditestudio.vercel.app) · espelho no [GitHub Pages](https://erickkadr.github.io/flavia-longnails/)
+🔗 **Site no ar:** [lummier-studio.vercel.app](https://lummier-studio.vercel.app) · espelho no [GitHub Pages](https://erickkadr.github.io/flavia-longnails/)
 
 ## Sobre o projeto
 

@@ -6,10 +6,9 @@ sobrancelhas e pele, desde 15/09/2026).
 
 No ar em dois lugares:
 - **GitHub Pages**: https://erickkadr.github.io/flavia-longnails/ (branch `gh-pages`, deploy via `npm run deploy`)
-- **Vercel**: https://afroditestudio.vercel.app (deploy automático a cada push na `main`, projeto Vercel se chama "afrodite_studio")
-  **A URL e o nome do projeto Vercel continuam com o nome antigo** (Afrodite) mesmo depois
-  do rebrand pra Lummier em 15/09/2026 — renomear o projeto/domínio é decisão do Erick,
-  não fiz sozinho. O site nesse endereço já mostra "Lummier Studio" em tudo que é texto.
+- **Vercel**: https://lummier-studio.vercel.app (deploy automático a cada push na `main`,
+  projeto Vercel se chama `lummier-studio-oficial`). **Renomeado em 16/09/2026** — a URL
+  antiga (`afroditestudio.vercel.app`) continua funcionando, só redireciona (307) pra essa.
 
 ## Onde paramos (15/09/2026)
 
@@ -29,14 +28,7 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 4. ~~A Mayte só tinha metade do login~~ → **resolvida em 15/09/2026**: usuário criado no
    painel do Supabase e `migration.sql` atualizado já rodado (confirmado pelo Erick). Login
    dela funciona igual ao das outras 3.
-5. **Renomear o projeto na Vercel está em andamento, sem confirmação final.** O campo
-   "Project Name" foi trocado pra `lummier-studio`, mas isso só afeta a URL de cada deploy
-   (a de hash tipo `lummierstudio-<hash>-erickkadrs-projects.vercel.app`), não o domínio fixo
-   em uso — esse continua sendo escolhido manualmente em **Settings → Domains**, e até o
-   momento só `afroditestudio.vercel.app` aparecia lá. Passei o passo a passo pro Erick
-   (clicar no **+** ao lado de "Domains" e adicionar `lummier-studio.vercel.app` na mão);
-   **ainda não confirmou se funcionou**. Ver `README.md` e o topo deste arquivo pra
-   atualizar assim que ele confirmar — hoje os dois ainda citam a URL antiga.
+5. ~~Renomear o projeto na Vercel~~ → **resolvido em 16/09/2026**, ver item 11 mais abaixo.
 6. **A logo em PNG (`public/logo.png`) já substitui o texto em todo lugar** — nav, rodapé e
    sidebar da área interna.
 7. ~~A galeria da Mayte só tinha a foto de perfil~~ → **resolvida em 15/09/2026**, 6 fotos
@@ -53,6 +45,17 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 10. **Galeria da Flávia e da Jheny trocada por fotos reais em resolução cheia (16/09/2026)**,
     e as capas da seção Resultados também. Bio da Mayte reescrita com o texto que o Erick
     passou. Ver "Fotos em resolução cheia, enviadas direto pelo Erick".
+    Depois disso, ajuste fino: 2 fotos quase duplicadas da galeria da Jheny foram removidas
+    a pedido dele (o pedido original era **somar** fotos novas às antigas, não substituir —
+    eu tinha substituído na primeira tentativa e corrigi).
+11. **URL da Vercel resolvida (16/09/2026): `lummier-studio.vercel.app`** já é o domínio de
+    produção, `afroditestudio.vercel.app` agora só redireciona (307) pra ele. Não renomear
+    o Project Name de novo sem necessidade — o domínio já está fixado explicitamente em
+    Settings → Domains e não depende mais do nome do projeto.
+12. **4º vídeo do hero, `hero-cilios.mp4` (16/09/2026)**, vídeo de banco do Pexels (mesma
+    origem dos outros 3), recortado de um clipe vertical. Ver `public/videos/LEIA-ME.md`,
+    que também foi reescrito (a versão anterior estava desatualizada desde o redesign do
+    hero: dizia que o texto ficava na coluna da direita, e é o contrário).
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle
@@ -148,13 +151,21 @@ rebrand: busca-e-troca de `Afrodite` por `Lummier` nos arquivos de marca (`Nav.t
 `README.md`). Os mesmos três nomes do item acima **continuaram intocados** pelo mesmo
 motivo (e-mails de auth, nome do repo, "studio" minúsculo).
 
-**Não renomeei o projeto nem o domínio da Vercel** (`afroditestudio.vercel.app`) — só o
-texto que aparece na tela. Ficou uma inconsistência cosmética (a URL ainda diz "afrodite",
-o site mostra "Lummier") até o Erick decidir se quer renomear o projeto na Vercel ou
-apontar um domínio próprio. **Isso não dá pra fazer por aqui** — não tenho token/CLI da
-Vercel, é ação no painel dele (Settings → General → Project Name, e opcionalmente
-Settings → Domains pra apontar um domínio novo/subdomínio `.vercel.app` renomeado).
-Renomear o projeto muda a URL automaticamente para `<novo-nome>.vercel.app`.
+**Atualização 16/09/2026: o domínio da Vercel foi renomeado**, ver "Onde paramos" item 11.
+Ficou registrado abaixo como funcionou de verdade, porque a primeira tentativa (renomear só
+o Project Name) não bastou:
+
+1. Trocar o **Project Name** (Settings → General) **não muda sozinho** o domínio de
+   produção já fixado — só afeta URLs de deploy individual (as de hash tipo
+   `<nome>-<hash>-<time>.vercel.app`, que ficam atrás de login SSO da Vercel, não são
+   públicas).
+2. O domínio público de verdade fica em **Settings → Domains**. Pra trocar, tem que
+   **remover** o antigo (`afroditestudio.vercel.app`) de lá — só depois disso a Vercel
+   libera `<project-name>.vercel.app` pra ser adicionado/assumido como o novo. Tentar
+   adicionar um nome que não bate exatamente com o Project Name salvo é rejeitado (foi o
+   que aconteceu numa tentativa no meio do caminho, com o nome errado).
+3. O domínio antigo não precisa ser apagado de vez: a Vercel deixa ele como redirect (307)
+   pro novo automaticamente, então links salvos não quebram.
 
 **A logo em PNG passou a estar em uso em todo o site desde 15/09/2026**: substitui o texto
 "Lummier Studio" no `.nav-logo` (`Nav.tsx`), no `.footer-logo` (`Footer.tsx`) e no

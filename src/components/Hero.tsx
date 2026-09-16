@@ -6,9 +6,9 @@ import { Icon } from './Icon';
 import './Hero.css';
 
 /**
- * Os três clipes de fundo, um por especialidade do studio. Ficam em `public/videos/`
+ * Os quatro clipes de fundo, um por especialidade do studio. Ficam em `public/videos/`
  * e SÃO commitados (ver o LEIA-ME de lá): os dois hosts constroem a partir do repo,
- * não há storage separado. Somados dão ~3,3 MB depois da compressão.
+ * não há storage separado. Somados dão ~4,4 MB depois da compressão.
  *
  * Só um toca por vez. Os outros ficam pausados com opacity 0, então o navegador não
  * gasta decodificação com o que ninguém está vendo.
@@ -17,6 +17,7 @@ const CLIPS = [
   { src: 'videos/hero-unhas.mp4', label: 'Unhas & Nail Art' },
   { src: 'videos/hero-cabelo.mp4', label: 'Cabelo' },
   { src: 'videos/hero-make.mp4', label: 'Maquiagem' },
+  { src: 'videos/hero-cilios.mp4', label: 'Cílios & Sobrancelhas' },
 ];
 
 const HERO_POSTER = 'images/hero-nails-o-0j6oBo.jpg';
