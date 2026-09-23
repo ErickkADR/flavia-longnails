@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-/** CRUD simples contra uma tabela do Supabase — usado pelos 4 módulos da área da colaboradora. */
-export function useTable<T extends { id: string }>(table: string, orderBy = 'created_at') {
+/** CRUD simples contra uma tabela do Supabase — usado pelos módulos da área da colaboradora. */
+export function useTable<T extends { id: string }>(table: string, orderBy = 'created_at', ascending = false) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,14 +13,14 @@ export function useTable<T extends { id: string }>(table: string, orderBy = 'cre
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.from(table).select('*').order(orderBy, { ascending: false });
+    const { data, error } = await supabase.from(table).select('*').order(orderBy, { ascending });
     if (error) setError(error.message);
     else {
       setRows((data ?? []) as T[]);
       setError(null);
     }
     setLoading(false);
-  }, [table, orderBy]);
+  }, [table, orderBy, ascending]);
 
   useEffect(() => {
     reload();

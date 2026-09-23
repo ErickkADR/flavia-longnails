@@ -1,18 +1,32 @@
+/**
+ * Uma linha da tabela `services` no Supabase (migration.sql, seção 7).
+ *
+ * Até 23/09/2026 isso era um array fixo aqui no código, um por profissional, editado
+ * por mim. Agora cada uma edita o próprio catálogo na tela "Meus Serviços" (Área da
+ * Colaboradora) e essa tabela alimenta tanto o Agendamento quanto a página pública
+ * dela — é por isso que os nomes dos campos são snake_case, iguais à coluna: mesma
+ * convenção de `Appointment`/`Client` (ver Agendamento.tsx, Retorno.tsx), sem camada
+ * de tradução entre o nome da coluna e o nome do campo em TS.
+ */
 export interface Service {
+  id: string;
+  owner_id: string | null;
+  /** Igual ao `Professional.name` dela — é como a tabela filtra por profissional. */
+  professional: string;
   /** Chave do mapa em `src/components/Icon.tsx`, nao emoji. */
   icon: string;
   name: string;
   desc: string;
-  price: string;
-  priceNote?: string;
-  popular?: boolean;
-  /**
-   * Quanto tempo o servico ocupa na agenda, em minutos. Estimativa inicial minha, nao
-   * medida no salao: a agenda semanal precisa de um numero pra desenhar o bloco e pra
-   * calcular horario livre. Corrigir aqui quando a profissional disser o tempo real.
-   * Nao aparece no site publico, so na Area da Colaboradora.
-   */
-  durationMin: number;
+  price: number;
+  price_note: string | null;
+  popular: boolean;
+  duration_min: number;
+  created_at: string;
+}
+
+/** 'R$35' pra valor redondo, 'R$64,90' quando tem centavo — mesmo padrão visual de sempre. */
+export function formatPrice(n: number): string {
+  return Number.isInteger(n) ? `R$${n}` : `R$${n.toFixed(2).replace('.', ',')}`;
 }
 
 export interface Professional {
@@ -31,7 +45,6 @@ export interface Professional {
    * foi esse número mesmo.
    */
   whatsapp: string | null;
-  services: Service[];
   gallery: string[];
   /**
    * Regras de atendimento da profissional (sinal, atraso, domicilio, pagamento).
@@ -62,31 +75,6 @@ export const professionals: Professional[] = [
     instagram: 'lummier_studiobeauty',
     instagramIsReal: true,
     whatsapp: null,
-    // Catálogo real dela ("Seja Bem Vinda! Catálogo de Procedimentos", PDF entregue pelo
-    // Erick em 23/09/2026). Substitui os 6 serviços que eu tinha inventado quando criei
-    // a página (mesmo problema já visto com Jheny e Vitória, ver CLAUDE.md): preço, nome
-    // e o que está incluso agora são o que ela mesma escreveu no catálogo. Durações:
-    // o catálogo dá faixa por categoria (Alongamento ~3h, Manicure 30-45min, Pedicure
-    // 45min-1h, Spa dos Pés 2h-2h30, Remoção 30min-1h) — usei o meio da faixa. Pros 4
-    // serviços que o catálogo não cronometra (Esmaltação em Gel mãos/pés, Banho de Gel,
-    // Blindagem), a duração continua chute meu, mesma ressalva de sempre.
-    services: [
-      { icon: 'manicure', name: 'Manicure Tradicional', desc: 'Cuidado completo para as unhas naturais: cutícula, lixamento e esmaltação. Acréscimo de R$5 para francesinha.', price: 'R$35', durationMin: 40 },
-      { icon: 'gel', name: 'Esmaltação em Gel (Mãos)', desc: 'Esmaltação em gel sobre a unha natural, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', price: 'R$64,90', popular: true, durationMin: 60 },
-      { icon: 'acrilica', name: 'Alongamento em Tips', desc: 'Alongamento com molde de tip, acabamento uniforme. Manutenção R$79,90.', price: 'R$165,90', durationMin: 180 },
-      { icon: 'acrilica', name: 'Alongamento em Molde F1', desc: 'Alongamento esculpido em molde F1. Manutenção R$79,90.', price: 'R$140', durationMin: 180 },
-      { icon: 'acrilica', name: 'Alongamento em Fibra de Vidro', desc: 'Alongamento leve e resistente em fibra de vidro. Manutenção R$100.', price: 'R$170', durationMin: 180 },
-      { icon: 'gel', name: 'Banho de Gel', desc: 'Camada de gel sobre a unha já alongada, renovando o brilho e o reforço.', price: 'R$89', durationMin: 60 },
-      { icon: 'blindagem', name: 'Blindagem', desc: 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', price: 'R$55', durationMin: 60 },
-      { icon: 'remocao', name: 'Remoção', desc: 'Retirada segura do alongamento, preservando a unha natural. R$10 por unha avulsa.', price: 'R$49,90', durationMin: 45 },
-      { icon: 'pedicure', name: 'Pedicure Tradicional', desc: 'Tratamento completo para os pés, com cutícula, lixamento e esmaltação.', price: 'R$40', durationMin: 50 },
-      { icon: 'pedicure', name: 'Pedicure com Francesinha', desc: 'Pedicure tradicional com acabamento em francesinha.', price: 'R$45', durationMin: 50 },
-      { icon: 'pedicure', name: 'Esmaltação em Gel (Pés)', desc: 'Esmaltação em gel nos pés, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', price: 'R$69,90', durationMin: 60 },
-      { icon: 'hidratacao', name: 'Plástica dos Pés', desc: 'Higienização, esfoliação, emoliência, tratamento de cutículas, lixamento técnico e hidratação intensiva com óleo de girassol.', price: 'R$89,90', durationMin: 135 },
-      { icon: 'nailart', name: 'Encapsulada', desc: 'Acabamento encapsulado, acréscimo por unha.', price: 'R$9,90', priceNote: '/ unha', durationMin: 10 },
-      { icon: 'nailart', name: 'Baby Boomer', desc: 'Degradê clássico entre os tons, acréscimo por unha.', price: 'R$9,90', priceNote: '/ unha', durationMin: 10 },
-      { icon: 'nailart', name: 'Nail Art 3D', desc: 'Designs em relevo e detalhes 3D, acréscimo sobre o serviço escolhido.', price: 'R$25', durationMin: 15 },
-    ],
     // Puxadas do @flavia_longnails em 05/09/2026, a pedido do Erick.
     // Em 16/09/2026 o Erick mandou 2 fotos novas por WhatsApp, em resolucao bem maior
     // (ate 1600px, contra os 480x640 do Instagram) — SOMADAS a estas, nao no lugar.
@@ -129,14 +117,6 @@ export const professionals: Professional[] = [
     instagramIsReal: true,
     // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
     whatsapp: '5511967218862',
-    // Os 3 servicos REAIS, com preco e tempo do portfolio em PDF que ela entregou em
-    // 07/09/2026. Antes havia 6 servicos inventados por mim, com precos entre R$40 e
-    // R$350: nao existiam. Nao repor sem material dela.
-    services: [
-      { icon: 'express', name: 'Maquiagem Express', desc: 'Produção leve e prática, para quem gosta de uma beleza mais natural e delicada. Pele leve, olhos suaves e acabamento sofisticado, com técnicas mais rápidas.', price: 'R$70', durationMin: 60 },
-      { icon: 'make', name: 'Maquiagem Social', desc: 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', price: 'R$90', popular: true, durationMin: 120 },
-      { icon: 'blindada', name: 'Maquiagem Blindada', desc: 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', price: 'R$110', durationMin: 150 },
-    ],
     // Makes que ela fez de verdade, do Instagram dela. Antes eram banco de imagem.
     // Em 16/09/2026 o Erick mandou 5 fotos novas por WhatsApp, em resolucao bem maior
     // (ate 1600px, contra os 480x640 do Instagram) — SOMADAS a estas, nao no lugar.
@@ -169,19 +149,6 @@ export const professionals: Professional[] = [
     instagramIsReal: false,
     // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
     whatsapp: '5511940498740',
-    // Preços reais, passados pela Vitória por WhatsApp e encaminhados pelo Erick em
-    // 23/09/2026. Antes eram 6 serviços inventados por mim (Escova Modelada, Hidratação
-    // Profunda, Coloração, Luzes/Mechas, Penteado) que nunca passaram por ela — mesmo
-    // problema já visto com a Jheny (ver CLAUDE.md), e removidos pelo mesmo critério:
-    // só fica no ar o que foi confirmado. Durações continuam chute meu (não vieram no
-    // print), corrigir quando ela confirmar o tempo real de cada procedimento.
-    services: [
-      { icon: 'corte', name: 'Corte Feminino', desc: 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', price: 'R$30', durationMin: 60 },
-      { icon: 'progressiva', name: 'Progressiva com Formol', desc: 'Alisamento com formol. Cabelo pequeno R$80, médio R$100, grande R$120.', price: 'R$80', durationMin: 150 },
-      { icon: 'progressiva', name: 'Progressiva sem Formol', desc: 'Alisamento com fórmula sem formol. Cabelo pequeno R$150, médio R$180, grande R$200.', price: 'R$150', popular: true, durationMin: 180 },
-      { icon: 'selagem', name: 'Selagem', desc: 'Selagem capilar para reduzir o volume e dar brilho. Mesmo preço para qualquer tamanho de cabelo.', price: 'R$150', durationMin: 120 },
-      { icon: 'hidratacao', name: 'Hidratação com Vaporizador de Ozônio', desc: 'Hidratação profunda com vaporizador de ozônio, que abre as cutículas do fio para o produto penetrar melhor.', price: 'R$50', durationMin: 45 },
-    ],
     gallery: [
       'images/vitoria-look-1-stock.jpg',
       'images/vitoria-look-2-stock.jpg',
@@ -204,24 +171,6 @@ export const professionals: Professional[] = [
     instagramIsReal: true,
     // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
     whatsapp: '5511958290432',
-    // Preços e nomes exatos que o Erick passou em 15/09/2026, do catálogo dela no
-    // Instagram (@espaco.seixas). As durações são estimativa minha, como nos demais
-    // perfis: corrigir aqui quando ela confirmar o tempo real de cada procedimento.
-    services: [
-      { icon: 'sobrancelha', name: 'Design de Sobrancelhas', desc: 'Modelagem personalizada que analisa o formato do seu rosto para desenhar a sobrancelha ideal, com acabamento natural.', price: 'R$40', durationMin: 30 },
-      { icon: 'henna', name: 'Design com Henna/Tintura', desc: 'Modelagem com aplicação de henna ou tintura, que preenche falhas e reforça o desenho por mais tempo.', price: 'R$50', durationMin: 40 },
-      { icon: 'depilacao', name: 'Depilação Buço', desc: 'Depilação egípcia com linha, técnica delicada e precisa para a região do buço.', price: 'R$10', durationMin: 15 },
-      { icon: 'dermaplaning', name: 'Dermaplaning', desc: 'Esfoliação profunda que remove células mortas e buço fino, deixando a pele mais lisa e luminosa.', price: 'R$100', durationMin: 45 },
-      { icon: 'cilios', name: 'Lash Lifting', desc: 'Alonga e curva os cílios naturais, sem aplicação de fios, para um olhar aberto e descansado.', price: 'R$120', durationMin: 60 },
-      { icon: 'cilios', name: 'Volume Brasileiro', desc: 'Técnica com fio em formato Y, para um volume denso e natural.', price: 'R$120', durationMin: 120 },
-      { icon: 'cilios', name: 'Volume Egípcio', desc: 'Técnica com fios no formato W, para um volume marcante.', price: 'R$120', durationMin: 120 },
-      { icon: 'cilios', name: 'Volume Luxo', desc: 'Técnica feita com fio 5D, para quem gosta de um volume mais intenso.', price: 'R$120', durationMin: 150 },
-      { icon: 'cilios', name: 'Volume Castanho', desc: 'Fios em tom castanho, para um efeito mais suave e natural.', price: 'R$120', durationMin: 120 },
-      { icon: 'cilios', name: 'Volume Fox', desc: 'Efeito alongado e puxado para cima nos cantos externos, para um olhar felino.', price: 'R$150', durationMin: 150 },
-      { icon: 'cilios', name: 'Mega Brasileiro', desc: 'Mais fios por cílio natural que o volume brasileiro, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
-      { icon: 'cilios', name: 'Mega Luxo', desc: 'Mais fios por cílio natural que o volume luxo, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
-      { icon: 'cilios', name: 'Mega Egípcio', desc: 'Mais fios por cílio natural que o volume egípcio, para um resultado ainda mais denso.', price: 'R$150', durationMin: 150 },
-    ],
     // Trabalhos reais dela, do feed do @espaco.seixas (15/09/2026). Mesma técnica das
     // outras: página renderizada via Playwright pra pegar as URLs assinadas do CDN
     // (curl direto na página não funciona, as imagens entram por JS), depois baixadas.
@@ -239,23 +188,6 @@ export const professionals: Professional[] = [
 
 export function getProfessional(slug: string): Professional | undefined {
   return professionals.find((p) => p.slug === slug);
-}
-
-/**
- * Converte o preço de exibição ('R$120') no número que a agenda soma.
- * O campo `price` é string porque nasceu pro site público, onde ele é texto puro.
- * Preferi manter uma fonte só e derivar o número aqui, em vez de duplicar o valor
- * em dois campos que podem divergir com o tempo.
- */
-export function priceOf(service: Service): number {
-  const digits = service.price.replace(/[^\d,.-]/g, '').replace(',', '.');
-  const n = Number.parseFloat(digits);
-  return Number.isFinite(n) ? n : 0;
-}
-
-/** Serviços de uma profissional pelo NOME (é o que a sessão de login carrega, não o slug). */
-export function servicesForName(name: string): Service[] {
-  return professionals.find((p) => p.name === name)?.services ?? [];
 }
 
 /**

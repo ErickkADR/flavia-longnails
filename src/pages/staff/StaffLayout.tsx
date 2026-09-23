@@ -4,6 +4,7 @@ import { asset } from '../../lib/asset';
 import './StaffLayout.css';
 
 const NAV_ITEMS = [
+  { to: '/area-colaboradora/servicos', label: 'Meus Serviços' },
   { to: '/area-colaboradora/agendamento', label: 'Agendamento de Clientes' },
   { to: '/area-colaboradora/retorno', label: 'Retorno de Clientes' },
   { to: '/area-colaboradora/clientes', label: 'Registro de Clientes' },

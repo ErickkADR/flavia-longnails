@@ -18,6 +18,12 @@ URL antiga (`afroditestudio.vercel.app`) continua funcionando, só redireciona (
 
 Se você está voltando depois de um tempo, leia estes pontos antes de qualquer coisa:
 
+> **Pendência aberta agora (23/09/2026): rodar de novo o `supabase/migration.sql`
+> inteiro no SQL Editor do Supabase.** A seção 7 (tabela `services`) ainda não existe em
+> produção — até rodar, a página pública de cada profissional fica sem a seção de
+> serviços (some sozinha, não quebra nada) e o Agendamento mostra "nenhum serviço
+> cadastrado". Detalhe completo no item 19 mais abaixo.
+
 0. ~~Rodar o `migration.sql`~~ → **rodado em 07/09/2026**, `client_returns` confirmada por
    sondagem (200). O banco está em dia com o código e a Vercel também.
 1. **Os preços da Flávia e da Vitória no site são invenção minha.** Nunca passaram por
@@ -105,6 +111,37 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
     clipboard virou código morto e saiu junto (`enviarMensagem` não é mais assíncrona,
     `Candidato.telefone` não é mais opcional). O texto do cabeçalho ganhou uma linha
     avisando o critério, pra não parecer bug quando uma cliente conhecida não aparecer.
+19. **Serviços viraram tabela no Supabase (23/09/2026)**, pedido do Erick depois de ver
+    o Agendamento e notar que só eu conseguia editar preço/nome/duração (mexendo direto
+    no código). Mudança grande, tocou os dois lados do site:
+    - **Nova tela "Meus Serviços"** (`Servicos.tsx`, rota `/area-colaboradora/servicos`,
+      primeiro item do menu). Cada uma só vê e edita o próprio catálogo — mesmo padrão
+      de RLS por `owner_id` que `appointments`/`client_returns` já usavam, não um filtro
+      por texto. Campos: nome, ícone (dropdown com os ~28 ícones que fazem sentido pra
+      serviço, com preview ao lado), preço, nota do preço, duração, descrição, popular.
+    - **`professionals.ts` perdeu o array `services`** de cada profissional. `Service`
+      agora é o formato da linha da tabela (snake_case: `price_note`, `duration_min` —
+      mesma convenção de `Appointment`/`Client`, sem camada de tradução) e `price` é
+      `number`, não mais string ('R$120'): `priceOf()`/`servicesForName()` saíram,
+      entrou `formatPrice(n)` pra exibição.
+    - **`Agendamento.tsx` e `ProfessionalPage.tsx`** (site público) leem a mesma tabela
+      com `useTable('services', 'created_at', true)` e filtram por profissional no
+      cliente — igual `Clientes.tsx`/`Retorno.tsx` já fazem com `clients`/`appointments`,
+      não valia a pena uma query filtrada pra uma tabela desse tamanho. `useTable` ganhou
+      um 3º parâmetro (`ascending`, default `false` — não muda nenhuma tela existente)
+      só pra essa: sem isso um serviço novo sempre entraria no topo do grid público.
+    - **`ServiceGrid` volta `null` se a lista vier vazia** (carregando, ou profissional
+      ainda sem nenhum serviço cadastrado) — mesmo critério do `<ProPolicies>`.
+    - **Migration nova (seção 7 do `migration.sql`), AINDA NÃO RODADA.** Cria a tabela
+      `services` com os mesmos 36 serviços que já estavam em `professionals.ts` (a
+      condição `where not exists` deixa seguro rodar duas vezes sem duplicar), RLS
+      pública pra leitura (site institucional não loga ninguém) e só o próprio `owner_id`
+      pra escrita. **Enquanto o Erick não rodar isso no SQL Editor do Supabase, a seção
+      de serviços some da página pública de todo mundo (`ServiceGrid` retorna `null`,
+      não quebra, só fica sem essa seção) e o Agendamento mostra "nenhum serviço
+      cadastrado"** — confirmei isso ao vivo com o dev server: zero erro de console,
+      just degrada bem. Primeira coisa a checar se ele disser que sumiu o catálogo do
+      site depois desse deploy.
 
 **Achado de processo, vale para sessões futuras**: as páginas públicas (`/flavia`,
 `/vitoria`, `/`) dão pra testar de verdade sem senha nenhuma — `npm run dev` +

@@ -16,6 +16,17 @@
 .mod-field input:focus, .mod-field select:focus, .mod-field textarea:focus { outline: none; border-color: var(--accent); }
 .mod-field input:disabled { background: var(--bg-alt); color: var(--muted); cursor: not-allowed; }
 .mod-form .btn-primary { padding: 12px 26px; font-size: .85rem; white-space: nowrap; }
+.mod-field-wide { grid-column: 1 / -1; }
+
+.mod-icon-select { display: flex; align-items: center; gap: 8px; }
+.mod-icon-select > svg { flex-shrink: 0; color: var(--accent-deep); font-size: 1.1rem; }
+.mod-icon-select select { flex: 1; }
+
+.mod-checkbox {
+  display: flex; align-items: center; gap: 8px; height: 100%;
+  font-family: var(--font-body); font-size: .86rem; color: var(--ink);
+}
+.mod-checkbox input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
 
 .mod-error { color: #b3402f; font-size: .82rem; margin-bottom: 16px; }
 .mod-empty { color: var(--muted); font-size: .88rem; padding: 24px 0; }

@@ -6,6 +6,7 @@ import { Placeholder } from './pages/Placeholder';
 import { TrabalheConosco } from './pages/TrabalheConosco';
 import { Login } from './pages/staff/Login';
 import { StaffLayout } from './pages/staff/StaffLayout';
+import { Servicos } from './pages/staff/Servicos';
 import { Agendamento } from './pages/staff/Agendamento';
 import { Retorno } from './pages/staff/Retorno';
 import { Clientes } from './pages/staff/Clientes';
@@ -26,6 +27,7 @@ export function App() {
       <Route path="/area-colaboradora">
         <Route index element={<Login />} />
         <Route element={<StaffLayout />}>
+          <Route path="servicos" element={<Servicos />} />
           <Route path="agendamento" element={<Agendamento />} />
           <Route path="retorno" element={<Retorno />} />
           <Route path="clientes" element={<Clientes />} />

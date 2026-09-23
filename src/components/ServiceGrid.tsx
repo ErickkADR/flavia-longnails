@@ -1,9 +1,14 @@
 import type { Service } from '../data/professionals';
-import { whatsappForService } from '../data/professionals';
+import { formatPrice, whatsappForService } from '../data/professionals';
 import { Icon } from './Icon';
 import './ServiceGrid.css';
 
 export function ServiceGrid({ name, services }: { name: string; services: Service[] }) {
+  // Some enquanto carrega (a Área da Colaboradora demora um instante pra trazer os
+  // dados do Supabase) e também se a profissional ainda não cadastrou nenhum serviço —
+  // mesmo critério do <ProPolicies>, que também só existe quando tem conteúdo.
+  if (services.length === 0) return null;
+
   return (
     <section className="svc-section">
       <div className="container">
@@ -17,7 +22,7 @@ export function ServiceGrid({ name, services }: { name: string; services: Servic
             <a
               className={`svc-card${s.popular ? ' feat' : ''} reveal`}
               style={{ transitionDelay: `${i * .05}s` }}
-              key={s.name}
+              key={s.id}
               href={whatsappForService(s.name, name)}
               target="_blank"
               rel="noopener noreferrer"
@@ -28,8 +33,8 @@ export function ServiceGrid({ name, services }: { name: string; services: Servic
               <div className="svc-desc">{s.desc}</div>
               <div className="svc-price">
                 <span className="svc-pre">A partir de</span>
-                <span className="svc-val">{s.price}</span>
-                {s.priceNote && <span className="svc-note">{s.priceNote}</span>}
+                <span className="svc-val">{formatPrice(s.price)}</span>
+                {s.price_note && <span className="svc-note">{s.price_note}</span>}
               </div>
               <span className="svc-cta">Agendar no WhatsApp</span>
             </a>

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
-import { priceOf, servicesForName } from '../../data/professionals';
+import { formatPrice } from '../../data/professionals';
 import type { Service } from '../../data/professionals';
 import { addDays, weekDays } from '../../lib/schedule';
 import { Icon } from '../../components/Icon';
@@ -60,8 +60,11 @@ export function Agendamento() {
   const navigate = useNavigate();
   const { rows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
   const { rows: clients } = useTable<Client>('clients', 'name');
-
-  const catalog = useMemo(() => servicesForName(name), [name]);
+  // Busca o catálogo inteiro (das 4) e filtra pelo nome logado, mesma lógica de
+  // ProfessionalPage.tsx pro site público — é a mesma tabela `services`, editável na
+  // tela "Meus Serviços".
+  const { rows: allServices, loading: svcLoading } = useTable<Service>('services', 'created_at', true);
+  const catalog = useMemo(() => allServices.filter((s) => s.professional === name), [allServices, name]);
 
   const [clientQuery, setClientQuery] = useState('');
   const [clientId, setClientId] = useState<string | null>(null);
@@ -91,9 +94,9 @@ export function Agendamento() {
     navigate(location.pathname, { replace: true, state: null });
   }, [location.state, location.pathname, navigate]);
 
-  const totalPrice = useMemo(() => picked.reduce((sum, s) => sum + priceOf(s), 0), [picked]);
+  const totalPrice = useMemo(() => picked.reduce((sum, s) => sum + s.price, 0), [picked]);
   const totalDuration = useMemo(
-    () => picked.reduce((sum, s) => sum + s.durationMin, 0) || 60,
+    () => picked.reduce((sum, s) => sum + s.duration_min, 0) || 60,
     [picked]
   );
 
@@ -161,7 +164,7 @@ export function Agendamento() {
     setSaving(true);
     setFormError(null);
     try {
-      const entries: ServiceEntry[] = picked.map((s) => ({ name: s.name, price: priceOf(s) }));
+      const entries: ServiceEntry[] = picked.map((s) => ({ name: s.name, price: s.price }));
       await insert({
         client_id: clientId,
         client_name: clientQuery.trim(),
@@ -258,24 +261,32 @@ export function Agendamento() {
               </button>
             )}
           </div>
-          <div className="svc-chips">
-            {catalog.map((s) => {
-              const on = picked.some((x) => x.name === s.name);
-              return (
-                <button
-                  type="button"
-                  key={s.name}
-                  className={`svc-chip${on ? ' is-on' : ''}`}
-                  onClick={() => toggleService(s)}
-                  aria-pressed={on}
-                >
-                  <span className="svc-chip-ico"><Icon name={s.icon} /></span>
-                  <span className="svc-chip-name">{s.name}</span>
-                  <span className="svc-chip-meta">{s.price} · {formatDuration(s.durationMin)}</span>
-                </button>
-              );
-            })}
-          </div>
+          {svcLoading ? (
+            <p className="mod-empty">Carregando serviços...</p>
+          ) : catalog.length === 0 ? (
+            <p className="mod-empty">
+              Você ainda não cadastrou nenhum serviço. <Link to="/area-colaboradora/servicos">Cadastrar em Meus Serviços</Link>.
+            </p>
+          ) : (
+            <div className="svc-chips">
+              {catalog.map((s) => {
+                const on = picked.some((x) => x.name === s.name);
+                return (
+                  <button
+                    type="button"
+                    key={s.id}
+                    className={`svc-chip${on ? ' is-on' : ''}`}
+                    onClick={() => toggleService(s)}
+                    aria-pressed={on}
+                  >
+                    <span className="svc-chip-ico"><Icon name={s.icon} /></span>
+                    <span className="svc-chip-name">{s.name}</span>
+                    <span className="svc-chip-meta">{formatPrice(s.price)} · {formatDuration(s.duration_min)}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Faixa de resumo: fecha o que foi montado antes de gravar. Fica apagada até

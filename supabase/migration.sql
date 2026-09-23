@@ -163,6 +163,84 @@ create table if not exists public.client_returns (
 );
 
 -- ============================================================
+-- 7. Catálogo de Serviços (tela "Meus Serviços", 23/09/2026)
+-- Até aqui os serviços de cada profissional eram um array fixo no código
+-- (src/data/professionals.ts), editado por mim. A partir de agora cada uma edita o
+-- próprio catálogo pela Área da Colaboradora, e essa tabela alimenta tanto o
+-- Agendamento quanto a página pública dela (`professional` funciona igual ao de
+-- `appointments`: é o rótulo pro texto/consulta, quem manda na permissão de
+-- escrita é `owner_id`).
+-- ============================================================
+create table if not exists public.services (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid references auth.users(id) on delete cascade default auth.uid(),
+  professional text not null check (professional in ('Flávia', 'Jheny', 'Vitória', 'Mayte')),
+  icon text not null default 'estrela',
+  name text not null,
+  desc text not null default '',
+  price numeric(10, 2) not null default 0,
+  price_note text,
+  popular boolean not null default false,
+  duration_min integer not null default 60,
+  created_at timestamptz not null default now()
+);
+
+-- Semente com o catálogo que já estava no ar em 23/09/2026 (professionals.ts), pra
+-- rodar este arquivo não apagar o site: sem isso a página pública e o Agendamento
+-- ficariam sem nenhum serviço até cada uma recadastrar tudo na mão. Roda só a
+-- primeira vez (a tabela nasce vazia); rodar de novo duplica as linhas.
+insert into public.services (professional, owner_id, icon, name, desc, price, price_note, popular, duration_min)
+select v.professional, u.id, v.icon, v.name, v.desc, v.price, v.price_note, v.popular, v.duration_min
+from (values
+  ('Flávia', 'manicure', 'Manicure Tradicional', 'Cuidado completo para as unhas naturais: cutícula, lixamento e esmaltação. Acréscimo de R$5 para francesinha.', 35.00, null::text, false, 40),
+  ('Flávia', 'gel', 'Esmaltação em Gel (Mãos)', 'Esmaltação em gel sobre a unha natural, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', 64.90, null::text, true, 60),
+  ('Flávia', 'acrilica', 'Alongamento em Tips', 'Alongamento com molde de tip, acabamento uniforme. Manutenção R$79,90.', 165.90, null::text, false, 180),
+  ('Flávia', 'acrilica', 'Alongamento em Molde F1', 'Alongamento esculpido em molde F1. Manutenção R$79,90.', 140.00, null::text, false, 180),
+  ('Flávia', 'acrilica', 'Alongamento em Fibra de Vidro', 'Alongamento leve e resistente em fibra de vidro. Manutenção R$100.', 170.00, null::text, false, 180),
+  ('Flávia', 'gel', 'Banho de Gel', 'Camada de gel sobre a unha já alongada, renovando o brilho e o reforço.', 89.00, null::text, false, 60),
+  ('Flávia', 'blindagem', 'Blindagem', 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', 55.00, null::text, false, 60),
+  ('Flávia', 'remocao', 'Remoção', 'Retirada segura do alongamento, preservando a unha natural. R$10 por unha avulsa.', 49.90, null::text, false, 45),
+  ('Flávia', 'pedicure', 'Pedicure Tradicional', 'Tratamento completo para os pés, com cutícula, lixamento e esmaltação.', 40.00, null::text, false, 50),
+  ('Flávia', 'pedicure', 'Pedicure com Francesinha', 'Pedicure tradicional com acabamento em francesinha.', 45.00, null::text, false, 50),
+  ('Flávia', 'pedicure', 'Esmaltação em Gel (Pés)', 'Esmaltação em gel nos pés, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', 69.90, null::text, false, 60),
+  ('Flávia', 'hidratacao', 'Plástica dos Pés', 'Higienização, esfoliação, emoliência, tratamento de cutículas, lixamento técnico e hidratação intensiva com óleo de girassol.', 89.90, null::text, false, 135),
+  ('Flávia', 'nailart', 'Encapsulada', 'Acabamento encapsulado, acréscimo por unha.', 9.90, '/ unha', false, 10),
+  ('Flávia', 'nailart', 'Baby Boomer', 'Degradê clássico entre os tons, acréscimo por unha.', 9.90, '/ unha', false, 10),
+  ('Flávia', 'nailart', 'Nail Art 3D', 'Designs em relevo e detalhes 3D, acréscimo sobre o serviço escolhido.', 25.00, null::text, false, 15),
+
+  ('Jheny', 'express', 'Maquiagem Express', 'Produção leve e prática, para quem gosta de uma beleza mais natural e delicada. Pele leve, olhos suaves e acabamento sofisticado, com técnicas mais rápidas.', 70.00, null::text, false, 60),
+  ('Jheny', 'make', 'Maquiagem Social', 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', 90.00, null::text, true, 120),
+  ('Jheny', 'blindada', 'Maquiagem Blindada', 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', 110.00, null::text, false, 150),
+
+  ('Vitória', 'corte', 'Corte Feminino', 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', 30.00, null::text, false, 60),
+  ('Vitória', 'progressiva', 'Progressiva com Formol', 'Alisamento com formol. Cabelo pequeno R$80, médio R$100, grande R$120.', 80.00, null::text, false, 150),
+  ('Vitória', 'progressiva', 'Progressiva sem Formol', 'Alisamento com fórmula sem formol. Cabelo pequeno R$150, médio R$180, grande R$200.', 150.00, null::text, true, 180),
+  ('Vitória', 'selagem', 'Selagem', 'Selagem capilar para reduzir o volume e dar brilho. Mesmo preço para qualquer tamanho de cabelo.', 150.00, null::text, false, 120),
+  ('Vitória', 'hidratacao', 'Hidratação com Vaporizador de Ozônio', 'Hidratação profunda com vaporizador de ozônio, que abre as cutículas do fio para o produto penetrar melhor.', 50.00, null::text, false, 45),
+
+  ('Mayte', 'sobrancelha', 'Design de Sobrancelhas', 'Modelagem personalizada que analisa o formato do seu rosto para desenhar a sobrancelha ideal, com acabamento natural.', 40.00, null::text, false, 30),
+  ('Mayte', 'henna', 'Design com Henna/Tintura', 'Modelagem com aplicação de henna ou tintura, que preenche falhas e reforça o desenho por mais tempo.', 50.00, null::text, false, 40),
+  ('Mayte', 'depilacao', 'Depilação Buço', 'Depilação egípcia com linha, técnica delicada e precisa para a região do buço.', 10.00, null::text, false, 15),
+  ('Mayte', 'dermaplaning', 'Dermaplaning', 'Esfoliação profunda que remove células mortas e buço fino, deixando a pele mais lisa e luminosa.', 100.00, null::text, false, 45),
+  ('Mayte', 'cilios', 'Lash Lifting', 'Alonga e curva os cílios naturais, sem aplicação de fios, para um olhar aberto e descansado.', 120.00, null::text, false, 60),
+  ('Mayte', 'cilios', 'Volume Brasileiro', 'Técnica com fio em formato Y, para um volume denso e natural.', 120.00, null::text, false, 120),
+  ('Mayte', 'cilios', 'Volume Egípcio', 'Técnica com fios no formato W, para um volume marcante.', 120.00, null::text, false, 120),
+  ('Mayte', 'cilios', 'Volume Luxo', 'Técnica feita com fio 5D, para quem gosta de um volume mais intenso.', 120.00, null::text, false, 150),
+  ('Mayte', 'cilios', 'Volume Castanho', 'Fios em tom castanho, para um efeito mais suave e natural.', 120.00, null::text, false, 120),
+  ('Mayte', 'cilios', 'Volume Fox', 'Efeito alongado e puxado para cima nos cantos externos, para um olhar felino.', 150.00, null::text, false, 150),
+  ('Mayte', 'cilios', 'Mega Brasileiro', 'Mais fios por cílio natural que o volume brasileiro, para um resultado ainda mais denso.', 150.00, null::text, false, 150),
+  ('Mayte', 'cilios', 'Mega Luxo', 'Mais fios por cílio natural que o volume luxo, para um resultado ainda mais denso.', 150.00, null::text, false, 150),
+  ('Mayte', 'cilios', 'Mega Egípcio', 'Mais fios por cílio natural que o volume egípcio, para um resultado ainda mais denso.', 150.00, null::text, false, 150)
+) as v(professional, icon, name, desc, price, price_note, popular, duration_min)
+join auth.users u on u.email = case v.professional
+  when 'Flávia' then 'flavia@studioflaviaalves.app'
+  when 'Jheny' then 'jheny@studioflaviaalves.app'
+  when 'Vitória' then 'vitoria@studioflaviaalves.app'
+  when 'Mayte' then 'mayte@studioflaviaalves.app'
+end
+where not exists (select 1 from public.services);
+
+-- ============================================================
 -- RLS
 -- ============================================================
 alter table public.clients enable row level security;
@@ -171,6 +249,7 @@ alter table public.salon_transactions enable row level security;
 alter table public.personal_expenses enable row level security;
 alter table public.rent_payments enable row level security;
 alter table public.client_returns enable row level security;
+alter table public.services enable row level security;
 
 drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
@@ -244,6 +323,19 @@ create policy "so a dona mexe no aluguel" on public.rent_payments
   for all to authenticated
   using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
   with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
+
+-- Serviços: leitura é pública (a página de cada profissional no site institucional não
+-- loga ninguém, então precisa enxergar sem `authenticated`). Escrita continua só do
+-- próprio dono, igual appointments/client_returns.
+drop policy if exists "leitura publica de servicos" on public.services;
+create policy "leitura publica de servicos" on public.services
+  for select using (true);
+
+drop policy if exists "cada uma cuida dos proprios servicos" on public.services;
+create policy "cada uma cuida dos proprios servicos" on public.services
+  for all to authenticated
+  using (owner_id = auth.uid())
+  with check (owner_id = auth.uid());
 
 -- ============================================================
 -- Depois de rodar isso: vá em Authentication -> Users -> Add User
