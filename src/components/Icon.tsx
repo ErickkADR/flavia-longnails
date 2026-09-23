@@ -1,6 +1,6 @@
 import {
-  AtSign, BarChart3, Brush, Check, Clock, Crown, Droplet, Eye, Flower2, Footprints,
-  Gem, Globe, Hand, HandHeart, Heart, MapPin, MessageCircle, Palette,
+  AlertTriangle, AtSign, BarChart3, Brush, Check, Clock, Crown, Droplet, Eraser, Eye, Flame, Flower2, Footprints,
+  Gem, Globe, Hand, HandHeart, Heart, Layers, MapPin, MessageCircle, Palette,
   CalendarX, ClipboardCheck, House, Pencil, Phone, Search, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
   Sparkles, Star, Sun, Target,
   TrendingUp, Wind, X,
@@ -63,6 +63,10 @@ const MAPA: Record<string, LucideIcon> = {
   brilho: Sparkle,
   busca: Search,
   editar: Pencil,
+  progressiva: Flame,
+  selagem: Layers,
+  remocao: Eraser,
+  aviso: AlertTriangle,
   // politicas de atendimento das profissionais
   sinal: Gem,
   cancelamento: CalendarX,

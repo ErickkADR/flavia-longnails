@@ -52,9 +52,9 @@ interface ClientReturn {
 
 interface Candidato {
   key: string;
-  clientId: string | null;
+  clientId: string;
   nome: string;
-  telefone: string | null;
+  telefone: string;
   ultimoEm: Date;
   dias: number;
   ultimoServico: string;
@@ -89,7 +89,6 @@ export function Retorno() {
   const { rows: clients } = useTable<Client>('clients', 'name');
   const { rows: marcas, insert, update, remove, reload } = useTable<ClientReturn>('client_returns');
 
-  const [copiado, setCopiado] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
   const telefonePorNome = useMemo(() => {
@@ -133,12 +132,16 @@ export function Retorno() {
         }
       }
 
+      // Sem WhatsApp cadastrado não dá pra chamar de volta por aqui: fica de fora da
+      // lista em vez de entrar sem jeito nenhum de contato (pedido do Erick, 23/09/2026).
       const cadastro = telefonePorNome.get(chave);
+      if (!cadastro?.phone) continue;
+
       out.push({
         key: chave,
-        clientId: a.client_id ?? cadastro?.id ?? null,
+        clientId: a.client_id ?? cadastro.id,
         nome: a.client_name,
-        telefone: cadastro?.phone ?? null,
+        telefone: cadastro.phone,
         ultimoEm: quando,
         dias,
         ultimoServico: servicoDe(a),
@@ -159,24 +162,11 @@ export function Retorno() {
     );
   }
 
-  async function enviarMensagem(c: Candidato) {
+  function enviarMensagem(c: Candidato) {
     const texto = mensagemPara(c);
-    // Com telefone cadastrado a conversa abre direto. Sem telefone (o caso dos 110
-    // clientes importados, que vieram só com nome) o texto vai pra área de transferência
-    // pra ela colar no chat que já tem aberto.
-    if (c.telefone) {
-      const numero = c.telefone.replace(/\D/g, '');
-      const comDDI = numero.startsWith('55') ? numero : `55${numero}`;
-      window.open(`https://wa.me/${comDDI}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(texto);
-      setCopiado(c.key);
-      setTimeout(() => setCopiado(null), 2400);
-    } catch {
-      setErro(`Não consegui copiar sozinho. A mensagem é: ${texto}`);
-    }
+    const numero = c.telefone.replace(/\D/g, '');
+    const comDDI = numero.startsWith('55') ? numero : `55${numero}`;
+    window.open(`https://wa.me/${comDDI}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
   }
 
   /** Leva pro agendamento com a cliente já preenchida; só o serviço fica em aberto. */
@@ -238,7 +228,8 @@ export function Retorno() {
         <div className="mod-title">Retorno de Clientes</div>
         <div className="mod-sub">
           Quem não aparece há {RETURN_AFTER_DAYS} dias ou mais. A lista se monta sozinha a
-          partir da sua agenda: marcou atendimento novo, a cliente sai daqui.
+          partir da sua agenda: marcou atendimento novo, a cliente sai daqui. Só entram
+          clientes com WhatsApp cadastrado.
         </div>
       </div>
 
@@ -297,16 +288,10 @@ export function Retorno() {
                   </div>
                 </div>
 
-                {!c.telefone && (
-                  <p className="ret-aviso">
-                    Sem telefone no cadastro. A mensagem vai pra área de transferência.
-                  </p>
-                )}
-
                 <div className="ret-acoes">
                   <button type="button" className="ret-btn is-primary" onClick={() => enviarMensagem(c)}>
                     <Icon name="whatsapp" />
-                    {copiado === c.key ? 'Copiado!' : 'Enviar mensagem'}
+                    Enviar mensagem
                   </button>
                   <button type="button" className="ret-btn" onClick={() => contatoFeito(c)}>
                     <Icon name="check" />

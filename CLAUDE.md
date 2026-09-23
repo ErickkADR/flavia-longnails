@@ -75,6 +75,47 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
     `busca` (Search) e `editar` (Pencil). Não testei clicando na área logada de verdade —
     não tenho a senha de nenhuma das 4 — só validei com `tsc -b && vite build` limpo e o
     schema de `clients` no `migration.sql` (bate: `name`/`phone`/`email`/`notes`).
+16. **Serviços reais da Vitória (23/09/2026)**, print de WhatsApp encaminhado pelo Erick.
+    Saíram os 4 que eu tinha inventado (Escova Modelada, Hidratação Profunda, Coloração,
+    Luzes/Mechas, Penteado — nunca confirmados, mesmo problema da Jheny) e entraram 5
+    reais: Corte Feminino (a partir de R$30, era R$70 chutado), Progressiva com/sem Formol
+    (varia por tamanho de cabelo — pequeno/médio/grande —, a variação foi pro `desc`
+    porque o campo `price` é um valor só), Selagem (R$150, mesmo preço pra qualquer
+    tamanho) e Hidratação com Vaporizador de Ozônio (R$50). Ícones novos: `progressiva`
+    (Flame) e `selagem` (Layers).
+17. **Catálogo completo da Flávia (23/09/2026)**, PDF "Seja Bem Vinda" que o Erick
+    entregou. Mesmo critério da Jheny: os 6 serviços antigos eram chute meu e saíram
+    todos, entraram os 15 reais do catálogo (manicure, 3 alongamentos, banho de gel,
+    blindagem, remoção, 3 serviços de pé e 3 decorações-acréscimo). Preços vieram com
+    centavos de verdade (R$64,90 etc.) — mantive exatos, não arredondei pra "ficar
+    bonito" (`priceOf` já lida com vírgula decimal, não precisou mexer). Ela também
+    ganhou `policies` pela primeira vez (só a Jheny tinha), com as 7 regras do catálogo;
+    "atendimento a domicílio" ficou de fora de propósito, o catálogo dela não menciona.
+    Ícones novos: `remocao` (Eraser) e `aviso` (AlertTriangle, pro card de manutenção/
+    reposição). **Efeito colateral pego a tempo**: `testimonials.ts` citava por nome 4
+    serviços antigos que sumiram (Alongamento em Gel, Nail Art, Coloração, Escova
+    Modelada) tanto nos depoimentos quanto no ranking `mostBooked` — mesma pegadinha já
+    documentada no caso da Jheny. Corrigido junto, trocando pelos nomes/preços reais
+    novos (e reescrevendo o texto de 2 depoimentos da Vitória que descreviam a Coloração/
+    Escova especificamente, não só o nome do serviço).
+18. **Retorno só mostra quem tem WhatsApp (23/09/2026)**, pedido do Erick. Antes uma
+    cliente sem telefone cadastrado ainda entrava na lista, só que o botão "Enviar
+    mensagem" caía num fallback de copiar pro clipboard. Agora ela nem aparece
+    (`if (!cadastro?.phone) continue` no `useMemo` de candidatos) — o fallback de
+    clipboard virou código morto e saiu junto (`enviarMensagem` não é mais assíncrona,
+    `Candidato.telefone` não é mais opcional). O texto do cabeçalho ganhou uma linha
+    avisando o critério, pra não parecer bug quando uma cliente conhecida não aparecer.
+
+**Achado de processo, vale para sessões futuras**: as páginas públicas (`/flavia`,
+`/vitoria`, `/`) dão pra testar de verdade sem senha nenhuma — `npm run dev` +
+`npx playwright` (Chromium já vem cacheado neste Mac, `chromium-cli` não está instalado).
+O grid de serviços e a seção de políticas usam `.reveal`/`IntersectionObserver` pra
+animar entrada: um screenshot `fullPage` direto sai em branco porque as seções fora do
+viewport inicial nunca disparam o observer. É preciso rolar a página em passos
+(`window.scrollTo` em incrementos, com um `waitForTimeout` curto entre cada um) antes do
+`page.screenshot`, senão parece bug que não existe. Já a área da colaboradora (Retorno,
+Clientes, Agendamento…) continua sem like de teste visual real: fica atrás de login do
+Supabase Auth e não tenho a senha de nenhuma das 4.
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle

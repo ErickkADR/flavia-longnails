@@ -62,13 +62,30 @@ export const professionals: Professional[] = [
     instagram: 'lummier_studiobeauty',
     instagramIsReal: true,
     whatsapp: null,
+    // Catálogo real dela ("Seja Bem Vinda! Catálogo de Procedimentos", PDF entregue pelo
+    // Erick em 23/09/2026). Substitui os 6 serviços que eu tinha inventado quando criei
+    // a página (mesmo problema já visto com Jheny e Vitória, ver CLAUDE.md): preço, nome
+    // e o que está incluso agora são o que ela mesma escreveu no catálogo. Durações:
+    // o catálogo dá faixa por categoria (Alongamento ~3h, Manicure 30-45min, Pedicure
+    // 45min-1h, Spa dos Pés 2h-2h30, Remoção 30min-1h) — usei o meio da faixa. Pros 4
+    // serviços que o catálogo não cronometra (Esmaltação em Gel mãos/pés, Banho de Gel,
+    // Blindagem), a duração continua chute meu, mesma ressalva de sempre.
     services: [
-      { icon: 'manicure', name: 'Manicure', desc: 'Cuidado completo para suas unhas naturais, incluindo cutícula, lixa e esmaltação. Acabamento perfeito para o dia a dia.', price: 'R$40', durationMin: 120 },
-      { icon: 'pedicure', name: 'Pedicure', desc: 'Tratamento completo para os pés, com hidratação, esfoliação e esmaltação. Cuide dos seus pés com todo o carinho.', price: 'R$50', durationMin: 60 },
-      { icon: 'gel', name: 'Alongamento em Gel', desc: 'Unhas longas e naturais com gel de alta qualidade. Resultado durável e brilhante, perfeito para quem ama unhas compridas.', price: 'R$120', popular: true, durationMin: 120 },
-      { icon: 'acrilica', name: 'Unhas Acrílicas', desc: 'Alongamento resistente e versátil. As unhas acrílicas oferecem durabilidade excepcional e possibilidade de designs arrojados.', price: 'R$130', durationMin: 120 },
-      { icon: 'nailart', name: 'Nail Art', desc: 'Designs únicos e personalizados. Das flores delicadas aos padrões geométricos, crie o visual dos seus sonhos.', price: 'R$20', priceNote: '/ design', durationMin: 30 },
-      { icon: 'blindagem', name: 'Blindagem', desc: 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', price: 'R$80', durationMin: 60 },
+      { icon: 'manicure', name: 'Manicure Tradicional', desc: 'Cuidado completo para as unhas naturais: cutícula, lixamento e esmaltação. Acréscimo de R$5 para francesinha.', price: 'R$35', durationMin: 40 },
+      { icon: 'gel', name: 'Esmaltação em Gel (Mãos)', desc: 'Esmaltação em gel sobre a unha natural, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', price: 'R$64,90', popular: true, durationMin: 60 },
+      { icon: 'acrilica', name: 'Alongamento em Tips', desc: 'Alongamento com molde de tip, acabamento uniforme. Manutenção R$79,90.', price: 'R$165,90', durationMin: 180 },
+      { icon: 'acrilica', name: 'Alongamento em Molde F1', desc: 'Alongamento esculpido em molde F1. Manutenção R$79,90.', price: 'R$140', durationMin: 180 },
+      { icon: 'acrilica', name: 'Alongamento em Fibra de Vidro', desc: 'Alongamento leve e resistente em fibra de vidro. Manutenção R$100.', price: 'R$170', durationMin: 180 },
+      { icon: 'gel', name: 'Banho de Gel', desc: 'Camada de gel sobre a unha já alongada, renovando o brilho e o reforço.', price: 'R$89', durationMin: 60 },
+      { icon: 'blindagem', name: 'Blindagem', desc: 'Proteção extra para suas unhas naturais. A blindagem fortalece e protege, ideal para quem tem unhas fracas ou quebradiças.', price: 'R$55', durationMin: 60 },
+      { icon: 'remocao', name: 'Remoção', desc: 'Retirada segura do alongamento, preservando a unha natural. R$10 por unha avulsa.', price: 'R$49,90', durationMin: 45 },
+      { icon: 'pedicure', name: 'Pedicure Tradicional', desc: 'Tratamento completo para os pés, com cutícula, lixamento e esmaltação.', price: 'R$40', durationMin: 50 },
+      { icon: 'pedicure', name: 'Pedicure com Francesinha', desc: 'Pedicure tradicional com acabamento em francesinha.', price: 'R$45', durationMin: 50 },
+      { icon: 'pedicure', name: 'Esmaltação em Gel (Pés)', desc: 'Esmaltação em gel nos pés, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', price: 'R$69,90', durationMin: 60 },
+      { icon: 'hidratacao', name: 'Plástica dos Pés', desc: 'Higienização, esfoliação, emoliência, tratamento de cutículas, lixamento técnico e hidratação intensiva com óleo de girassol.', price: 'R$89,90', durationMin: 135 },
+      { icon: 'nailart', name: 'Encapsulada', desc: 'Acabamento encapsulado, acréscimo por unha.', price: 'R$9,90', priceNote: '/ unha', durationMin: 10 },
+      { icon: 'nailart', name: 'Baby Boomer', desc: 'Degradê clássico entre os tons, acréscimo por unha.', price: 'R$9,90', priceNote: '/ unha', durationMin: 10 },
+      { icon: 'nailart', name: 'Nail Art 3D', desc: 'Designs em relevo e detalhes 3D, acréscimo sobre o serviço escolhido.', price: 'R$25', durationMin: 15 },
     ],
     // Puxadas do @flavia_longnails em 05/09/2026, a pedido do Erick.
     // Em 16/09/2026 o Erick mandou 2 fotos novas por WhatsApp, em resolucao bem maior
@@ -82,6 +99,18 @@ export const professionals: Professional[] = [
       'images/ig-flavia-6.jpg',
       'images/flavia-trabalho-1.jpg',
       'images/flavia-trabalho-2.jpg',
+    ],
+    // Regras dela, do mesmo catálogo em PDF (23/09/2026). Antes só a Jheny tinha essa
+    // seção: era a única com material. "Domicílio" ficou de fora de propósito — o
+    // catálogo da Flávia não menciona atendimento a domicílio, diferente do da Jheny.
+    policies: [
+      { icon: 'sinal', title: 'Sinal de agendamento', text: 'Os agendamentos são feitos com antecedência e mediante pagamento de sinal para confirmação.' },
+      { icon: 'cancelamento', title: 'Cancelamento e reagendamento', text: 'Pedimos, por gentileza, que sejam avisados com no mínimo 24h de antecedência.' },
+      { icon: 'relogio', title: 'Atrasos', text: 'A tolerância é de 15 minutos. Depois desse período o atendimento pode ser cancelado.' },
+      { icon: 'checklist', title: 'Atendimento exclusivo', text: 'Evite vir acompanhada, para mantermos um ambiente tranquilo e focado no seu momento. Siga as orientações pós-procedimento para o serviço durar mais.' },
+      { icon: 'pagamento', title: 'Formas de pagamento', text: 'Dinheiro, Pix ou cartão.' },
+      { icon: 'lixeira', title: 'Higiene e esterilização', text: 'Todo material passa por esterilização em autoclave, conforme as normas da Anvisa, e os instrumentos só são abertos na presença da cliente.' },
+      { icon: 'aviso', title: 'Manutenção e reposição', text: 'Não realizo manutenção de trabalhos feitos por outra profissional. Reposição de unha quebrada: R$10 por unidade. Alongamento mal removido ou danificado pode exigir tempo extra, avaliado no atendimento.' },
     ],
   },
   {
@@ -140,13 +169,18 @@ export const professionals: Professional[] = [
     instagramIsReal: false,
     // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
     whatsapp: '5511940498740',
+    // Preços reais, passados pela Vitória por WhatsApp e encaminhados pelo Erick em
+    // 23/09/2026. Antes eram 6 serviços inventados por mim (Escova Modelada, Hidratação
+    // Profunda, Coloração, Luzes/Mechas, Penteado) que nunca passaram por ela — mesmo
+    // problema já visto com a Jheny (ver CLAUDE.md), e removidos pelo mesmo critério:
+    // só fica no ar o que foi confirmado. Durações continuam chute meu (não vieram no
+    // print), corrigir quando ela confirmar o tempo real de cada procedimento.
     services: [
-      { icon: 'corte', name: 'Corte Feminino', desc: 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', price: 'R$70', durationMin: 60 },
-      { icon: 'escova', name: 'Escova Modelada', desc: 'Escova com acabamento liso ou volumoso, pronta para o seu dia ou a sua noite.', price: 'R$60', durationMin: 45 },
-      { icon: 'hidratacao', name: 'Hidratação Profunda', desc: 'Tratamento que repõe nutrientes e devolve brilho e maciez para o fio.', price: 'R$90', durationMin: 60 },
-      { icon: 'coloracao', name: 'Coloração', desc: 'Cobertura de fios brancos ou mudança de cor, com produtos que preservam a saúde do cabelo.', price: 'R$180', popular: true, durationMin: 120 },
-      { icon: 'luzes', name: 'Luzes / Mechas', desc: 'Iluminação personalizada para dar profundidade e movimento ao cabelo.', price: 'R$250', durationMin: 180 },
-      { icon: 'penteado', name: 'Penteado (Festa/Noiva)', desc: 'Penteados para eventos especiais, com prova disponível para noivas.', price: 'R$150', durationMin: 90 },
+      { icon: 'corte', name: 'Corte Feminino', desc: 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', price: 'R$30', durationMin: 60 },
+      { icon: 'progressiva', name: 'Progressiva com Formol', desc: 'Alisamento com formol. Cabelo pequeno R$80, médio R$100, grande R$120.', price: 'R$80', durationMin: 150 },
+      { icon: 'progressiva', name: 'Progressiva sem Formol', desc: 'Alisamento com fórmula sem formol. Cabelo pequeno R$150, médio R$180, grande R$200.', price: 'R$150', popular: true, durationMin: 180 },
+      { icon: 'selagem', name: 'Selagem', desc: 'Selagem capilar para reduzir o volume e dar brilho. Mesmo preço para qualquer tamanho de cabelo.', price: 'R$150', durationMin: 120 },
+      { icon: 'hidratacao', name: 'Hidratação com Vaporizador de Ozônio', desc: 'Hidratação profunda com vaporizador de ozônio, que abre as cutículas do fio para o produto penetrar melhor.', price: 'R$50', durationMin: 45 },
     ],
     gallery: [
       'images/vitoria-look-1-stock.jpg',

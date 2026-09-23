@@ -52,11 +52,6 @@
   background: linear-gradient(90deg, var(--accent-soft), var(--accent));
 }
 
-.ret-aviso {
-  font-size: .74rem; color: var(--muted); font-style: italic; line-height: 1.5;
-  padding: 8px 11px; background: var(--bg); border-radius: 9px;
-}
-
 .ret-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .ret-btn {
   display: inline-flex; align-items: center; gap: 7px;
