@@ -65,6 +65,16 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
 14. **Cada profissional ganhou WhatsApp próprio (16/09/2026)** — antes todo mundo caía no
     número da Flávia. Endereço e Instagram do salão também atualizados. Ver seção
     "Contato, WhatsApp por profissional e Instagram do salão" logo abaixo.
+15. **Busca por nome e edição de cadastro em `Clientes.tsx` (23/09/2026)**, a pedido do
+    Erick. `useTable` já tinha `update()` pronto (usado no Retorno), só não era chamado
+    aqui — o form de "Adicionar Cliente" virou o mesmo form de edição: clicar em "editar"
+    (na tabela ou nos cards VIP) preenche os campos, troca o botão pra "Salvar Alterações"
+    e dá scroll até o form; "cancelar" na barra que aparece acima limpa sem gravar. Busca é
+    client-side sobre `withVisits` (mesmo `normalize` já usado pra contar visita), filtra
+    antes de separar VIP de resto, então afeta os dois. Ícones novos no mapa do `Icon.tsx`:
+    `busca` (Search) e `editar` (Pencil). Não testei clicando na área logada de verdade —
+    não tenho a senha de nenhuma das 4 — só validei com `tsc -b && vite build` limpo e o
+    schema de `clients` no `migration.sql` (bate: `name`/`phone`/`email`/`notes`).
 
 O que a sessão de 05 a 07/09 entregou: rebrand pra Afrodite Studio, hero de tela cheia
 com três vídeos alternando, agenda semanal e dashboards na área da colaboradora, controle

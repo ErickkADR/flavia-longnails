@@ -1,7 +1,7 @@
 import {
   AtSign, BarChart3, Brush, Check, Clock, Crown, Droplet, Eye, Flower2, Footprints,
   Gem, Globe, Hand, HandHeart, Heart, MapPin, MessageCircle, Palette,
-  CalendarX, ClipboardCheck, House, Phone, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
+  CalendarX, ClipboardCheck, House, Pencil, Phone, Search, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
   Sparkles, Star, Sun, Target,
   TrendingUp, Wind, X,
 } from 'lucide-react';
@@ -61,6 +61,8 @@ const MAPA: Record<string, LucideIcon> = {
   fechar: X,
   check: Check,
   brilho: Sparkle,
+  busca: Search,
+  editar: Pencil,
   // politicas de atendimento das profissionais
   sinal: Gem,
   cancelamento: CalendarX,

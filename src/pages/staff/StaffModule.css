@@ -28,11 +28,27 @@
 }
 .mod-table td { padding: 14px 18px; border-bottom: 1px solid var(--muted-l); color: var(--ink); vertical-align: top; }
 .mod-table tr:last-child td { border-bottom: none; }
-.mod-table-del {
+.mod-table-edit, .mod-table-del {
   border: none; background: transparent; color: var(--muted); cursor: pointer;
   font-size: .78rem; text-decoration: underline; transition: color .2s;
 }
+.mod-table-edit { margin-right: 14px; }
+.mod-table-edit:hover { color: var(--accent-deep); }
 .mod-table-del:hover { color: #b3402f; }
+
+.mod-edit-bar {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  font-size: .82rem; color: var(--accent-deep);
+}
+.mod-edit-bar .mod-table-del { color: var(--muted); }
+
+.mod-search { position: relative; max-width: 360px; margin-bottom: 20px; }
+.mod-search input {
+  width: 100%; font-family: var(--font-body); font-size: .88rem; color: var(--ink);
+  border: 1.5px solid var(--muted-l); border-radius: 10px; padding: 10px 14px 10px 38px; background: var(--surface);
+}
+.mod-search input:focus { outline: none; border-color: var(--accent); }
+.mod-search-ico { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .95rem; }
 
 .mod-tag { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: .72rem; font-weight: 600; }
 .mod-tag.entrada, .mod-tag.agendado { background: var(--accent-soft); color: var(--accent-deep); }
@@ -61,9 +77,15 @@
   background: linear-gradient(135deg, var(--accent-soft), var(--bg-alt));
   border: 1.5px solid rgba(123, 112, 94, .35); border-radius: 16px; padding: 18px 20px;
 }
+.vip-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .vip-card-name { font-family: var(--font-display); font-weight: 600; color: var(--ink); margin-bottom: 4px; }
 .vip-card-visits { font-size: .78rem; color: var(--accent-deep); font-weight: 600; }
 .vip-card-phone { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+.vip-card-edit {
+  border: none; background: none; color: var(--muted); cursor: pointer; padding: 2px;
+  display: inline-flex; transition: color .2s;
+}
+.vip-card-edit:hover { color: var(--accent-deep); }
 
 .admin-section { margin-top: 56px; padding-top: 40px; border-top: 1.5px solid var(--muted-l); }
 .admin-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
