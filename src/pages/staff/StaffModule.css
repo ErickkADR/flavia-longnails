@@ -289,4 +289,19 @@
   .ag-row { grid-template-columns: 1fr; }
   .ag-summary { flex-direction: column; align-items: stretch; }
   .ag-summary-right { justify-content: space-between; }
+
+  /* Chip vira card no mobile: em vez de pílula com ícone-texto-preço numa linha só
+     (largura variava demais de serviço pra serviço, e o ícone ficava "solto" à
+     esquerda, sem se alinhar com o de baixo), aqui é grade de 2 colunas com o
+     ícone centralizado no topo do card — mesmo padrão visual de app de agendamento,
+     mais fácil de escanear rápido no polegar. Muda só a apresentação: o botão
+     continua sendo o mesmo elemento, clique/toggle não mudam. */
+  .svc-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .svc-chip {
+    flex-direction: column; justify-content: center; text-align: center;
+    gap: 7px; padding: 16px 10px; border-radius: 16px;
+  }
+  .svc-chip-ico { font-size: 1.35rem; }
+  .svc-chip-name { font-size: .82rem; font-weight: 500; line-height: 1.25; }
+  .svc-chip-meta { font-size: .7rem; }
 }

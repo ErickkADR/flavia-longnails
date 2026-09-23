@@ -7,7 +7,20 @@
 }
 .staff-sidebar-top { margin-bottom: 40px; }
 .staff-sidebar-logo-img { height: 40px; width: auto; display: block; }
-.staff-sidebar-user { margin-top: 10px; font-size: .8rem; color: var(--muted); }
+.staff-sidebar-user {
+  margin-top: 10px; font-size: .8rem; color: var(--muted);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+/* Botão de sair compacto (só ícone) do cabeçalho mobile. Escondido no desktop:
+   lá o botão "Sair" de texto no rodapé da sidebar já cobre a mesma ação. */
+.staff-logout-mob {
+  display: none; align-items: center; justify-content: center;
+  width: 34px; height: 34px; flex-shrink: 0; border-radius: 100px;
+  border: 1.5px solid var(--muted-l); background: var(--bg); color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .2s;
+}
+.staff-logout-mob:hover { border-color: var(--accent); color: var(--accent); }
 
 .staff-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .staff-nav-link {
@@ -27,11 +40,34 @@
 
 .staff-main { flex: 1; padding: 44px 48px; max-width: 1100px; }
 
+/* Barra inferior fixa: existe no DOM em qualquer largura, só aparece via
+   @media abaixo. Some por padrão (desktop) pra não roubar espaço nem foco de
+   tab do teclado. */
+.staff-bottomnav { display: none; }
+
 @media (max-width: 900px) {
   .staff-shell { flex-direction: column; }
-  .staff-sidebar { width: 100%; height: auto; position: static; padding: 20px; }
-  .staff-nav { flex-direction: row; flex-wrap: wrap; }
-  .staff-main { padding: 28px 20px; }
+  /* Sidebar vira só o cabeçalho (logo + saudação): o menu de navegação em si
+     saiu daqui e virou a barra inferior fixa, ver .staff-bottomnav. Quase toda
+     colaboradora acessa isso pelo celular, e uma fileira de links quebrando
+     linha no topo (o layout antigo) obrigava rolar bastante pra achar o que
+     precisava logo ao entrar — a barra fixa deixa as 5-6 seções sempre à mão,
+     um toque só, no padrão de app que elas já conhecem de outros apps do dia a dia. */
+  .staff-sidebar { width: 100%; height: auto; position: static; padding: 16px 20px; }
+  .staff-sidebar-top { margin-bottom: 0; }
+  .staff-nav, .staff-logout { display: none; }
+  .staff-logout-mob { display: inline-flex; }
+  /* padding-bottom maior que o normal: espaço pra barra fixa não cobrir o fim
+     do conteúdo (padding+ícone+rótulo da barra dá uns 58px, mais folga e o
+     home indicator em telas com env() > 0). */
+  .staff-main { padding: 24px 16px calc(78px + env(safe-area-inset-bottom)); }
+
+  .staff-bottomnav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    display: flex; justify-content: space-around;
+    background: var(--surface); border-top: 1px solid var(--muted-l);
+    padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  }
 }
 
 /* A logo da sidebar é link pra home desde 07/09/2026: era um <div> e clicar nela
@@ -39,3 +75,17 @@
 .staff-sidebar-logo { text-decoration: none; display: inline-block; }
 .staff-sidebar-logo:hover { opacity: .78; }
 .staff-sidebar-logo:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* Barra inferior (mobile). Cada item é ícone + rótulo bem curto empilhados,
+   largura igual pra todo mundo (flex: 1) pra ficar fácil de mirar o dedo sem
+   precisar acertar um alvo estreito — eixo principal do pedido de acessibilidade
+   mobile: alvo de toque generoso, sem exigir leitura fina. */
+.staff-bnav-link {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 2px; text-decoration: none; color: var(--muted);
+  font-family: var(--font-body); font-size: .62rem; line-height: 1.1;
+  border-radius: 10px; transition: color .2s;
+}
+.staff-bnav-link svg { width: 21px; height: 21px; stroke-width: 1.6; }
+.staff-bnav-link.active { color: var(--accent-deep); font-weight: 600; }
+.staff-bnav-link.active svg { stroke-width: 2; }

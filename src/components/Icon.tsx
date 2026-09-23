@@ -1,9 +1,9 @@
 import {
-  AlertTriangle, AtSign, BarChart3, Brush, Check, Clock, Crown, Droplet, Eraser, Eye, Flame, Flower2, Footprints,
-  Gem, Globe, Hand, HandHeart, Heart, Layers, MapPin, MessageCircle, Palette,
-  CalendarX, ClipboardCheck, House, Pencil, Phone, Search, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
+  AlertTriangle, AtSign, BarChart3, Brush, Calendar, Check, Clock, Crown, Droplet, Eraser, Eye, Flame, Flower2, Footprints,
+  Gem, Globe, Hand, HandHeart, Heart, Layers, LogOut, MapPin, MessageCircle, Palette,
+  CalendarX, ClipboardCheck, House, Pencil, Phone, Receipt, Repeat, Search, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
   Sparkles, Star, Sun, Target,
-  TrendingUp, Wind, X,
+  TrendingUp, Users, Wallet, Wind, X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -74,6 +74,13 @@ const MAPA: Record<string, LucideIcon> = {
   pagamento: Sparkles,
   checklist: ClipboardCheck,
   lixeira: Trash2,
+  // navegação da área da colaboradora
+  agenda: Calendar,
+  retorno: Repeat,
+  clientes: Users,
+  contas: Wallet,
+  gastos: Receipt,
+  sair: LogOut,
 };
 
 interface Props {

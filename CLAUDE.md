@@ -18,11 +18,18 @@ URL antiga (`afroditestudio.vercel.app`) continua funcionando, só redireciona (
 
 Se você está voltando depois de um tempo, leia estes pontos antes de qualquer coisa:
 
-> **Pendência aberta agora (23/09/2026): rodar de novo o `supabase/migration.sql`
-> inteiro no SQL Editor do Supabase.** A seção 7 (tabela `services`) ainda não existe em
-> produção — até rodar, a página pública de cada profissional fica sem a seção de
-> serviços (some sozinha, não quebra nada) e o Agendamento mostra "nenhum serviço
-> cadastrado". Detalhe completo no item 19 mais abaixo.
+> ~~Pendência aberta agora (23/09/2026): rodar de novo o `supabase/migration.sql`
+> inteiro no SQL Editor do Supabase.~~ → **rodado em 23/09/2026**, tabela `services` existe
+> em produção e populada com a semente dos 36 serviços reais. Detalhe completo no item 19
+> mais abaixo, e o bug que a primeira tentativa pegou está no item 20.
+>
+> **Pendência aberta agora (23/09/2026): confirmar se o Erick rodou o SQL de limpeza de
+> `clients`.** Pedido dele: apagar as clientes sem telefone cadastrado (ela vai recomeçar o
+> cadastro do zero), mantendo só quem já tem telefone. Entreguei o SQL (com backup pra
+> `clients_backup_20260923` antes do delete, `on delete set null` em `appointments`/
+> `client_returns` preserva o histórico) pra ele rodar no SQL Editor — não rodei eu, não
+> tenho acesso direto a esse Supabase daqui. Se voltar numa sessão futura e a base de
+> clientes ainda tiver ~110 linhas, é sinal de que não rodou.
 
 0. ~~Rodar o `migration.sql`~~ → **rodado em 07/09/2026**, `client_returns` confirmada por
    sondagem (200). O banco está em dia com o código e a Vercel também.
@@ -142,6 +149,45 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       cadastrado"** — confirmei isso ao vivo com o dev server: zero erro de console,
       just degrada bem. Primeira coisa a checar se ele disser que sumiu o catálogo do
       site depois desse deploy.
+20. **`desc` como nome de coluna quebrou a migration no SQL Editor (23/09/2026).** O Erick
+    colou o `migration.sql` da seção anterior e levou `ERROR: 42601: syntax error at or
+    near "desc"` — é palavra reservada do Postgres (a mesma de `ORDER BY ... DESC`), então
+    `create table` e `insert` não aceitam ela como identificador sem aspas. Corrigido
+    trocando as 4 ocorrências por `"desc"` (definição da coluna, lista de colunas do
+    `insert`, `v."desc"` no `select` e no alias do `values`). **Não mudou nada no app**: o
+    nome real da coluna continua `desc` minúsculo sem aspas, então `s.desc` em
+    `ServiceGrid.tsx`/`Servicos.tsx` seguiu funcionando — aspas só importam dentro de SQL
+    puro, não em como o supabase-js referencia a coluna. Rodado de novo pelo Erick,
+    confirmado funcionando.
+21. **Área da colaboradora redesenhada pra mobile (23/09/2026)**, a pedido do Erick: quase
+    100% das colaboradoras acessam pelo celular, e o layout antigo (sidebar virando uma
+    fileira de links quebrando linha no topo) exigia rolar bastante pra achar a seção
+    certa. Duas mudanças, as duas só em CSS/JSX (nenhuma mudou dado nem rota):
+    - **Barra de navegação inferior fixa** (`StaffLayout.tsx`/`.css`), padrão de app: abaixo
+      de 900px a sidebar vira só um cabeçalho compacto (logo + "Olá, Nome" + um botão só de
+      ícone pra Sair) e os 5-6 itens de menu (6 pra Flávia, que também vê Contas do Salão)
+      viram ícone+rótulo curto numa `<nav>` fixa no rodapé (`position: fixed`, com
+      `env(safe-area-inset-bottom)` pro home indicator do iPhone — por isso `index.html`
+      ganhou `viewport-fit=cover` no `<meta viewport>`). Ícones novos no `Icon.tsx`: `agenda`
+      (Calendar), `retorno` (Repeat), `clientes` (Users), `contas` (Wallet), `gastos`
+      (Receipt), `sair` (LogOut). No desktop (≥900px) nada mudou, a sidebar de sempre continua.
+    - **Seletor de serviços do Agendamento virou grade de cards no mobile** (`StaffModule.css`,
+      só a regra dentro do `@media (max-width: 900px)`, a versão desktop em pílula não
+      mudou): eram pílulas de largura variável com ícone-nome-preço numa linha só, e o
+      Erick achou os ícones "não alinhados" porque cada pílula tinha uma largura diferente.
+      Perguntei duas direções (lista de linha cheia com ícone numa coluna fixa, ou grade
+      2 colunas com ícone centralizado no topo do card) porque eram visualmente bem
+      diferentes — ele escolheu a grade de cards.
+    - **Testado sem senha**, mesma limitação de sempre (login das 4 colaboradoras não
+      disponível pra mim): montei uma prévia estática isolada em `/tmp` (HTML solto com o
+      CSS real do build + os mesmos nomes de classe do JSX, ícones como placeholder) e
+      rodei Playwright nela — não deu pra testar dentro do app de verdade. Tentei primeiro
+      pular o guard de login (`if (!session) return <Navigate ...>`) direto no código pra
+      testar de verdade, e o classificador de segurança do Claude Code bloqueou a edição
+      (enfraquecer um guard de auth, mesmo temporário e revertível, conta como ação de
+      segurança) — a prévia isolada foi o contorno. Validado a 390px, 375px e 320px
+      (a barra inferior não quebra linha nem sobrepõe conteúdo; os cards de serviço
+      aceitam nome longo tipo "Alongamento em Fibra de Vidro" sem estourar).
 
 **Achado de processo, vale para sessões futuras**: as páginas públicas (`/flavia`,
 `/vitoria`, `/`) dão pra testar de verdade sem senha nenhuma — `npm run dev` +

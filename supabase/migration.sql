@@ -177,7 +177,7 @@ create table if not exists public.services (
   professional text not null check (professional in ('Flávia', 'Jheny', 'Vitória', 'Mayte')),
   icon text not null default 'estrela',
   name text not null,
-  desc text not null default '',
+  "desc" text not null default '',
   price numeric(10, 2) not null default 0,
   price_note text,
   popular boolean not null default false,
@@ -189,8 +189,8 @@ create table if not exists public.services (
 -- rodar este arquivo não apagar o site: sem isso a página pública e o Agendamento
 -- ficariam sem nenhum serviço até cada uma recadastrar tudo na mão. Roda só a
 -- primeira vez (a tabela nasce vazia); rodar de novo duplica as linhas.
-insert into public.services (professional, owner_id, icon, name, desc, price, price_note, popular, duration_min)
-select v.professional, u.id, v.icon, v.name, v.desc, v.price, v.price_note, v.popular, v.duration_min
+insert into public.services (professional, owner_id, icon, name, "desc", price, price_note, popular, duration_min)
+select v.professional, u.id, v.icon, v.name, v."desc", v.price, v.price_note, v.popular, v.duration_min
 from (values
   ('Flávia', 'manicure', 'Manicure Tradicional', 'Cuidado completo para as unhas naturais: cutícula, lixamento e esmaltação. Acréscimo de R$5 para francesinha.', 35.00, null::text, false, 40),
   ('Flávia', 'gel', 'Esmaltação em Gel (Mãos)', 'Esmaltação em gel sobre a unha natural, com mais brilho e durabilidade. Qualquer decoração já vem inclusa no preço.', 64.90, null::text, true, 60),
@@ -231,7 +231,7 @@ from (values
   ('Mayte', 'cilios', 'Mega Brasileiro', 'Mais fios por cílio natural que o volume brasileiro, para um resultado ainda mais denso.', 150.00, null::text, false, 150),
   ('Mayte', 'cilios', 'Mega Luxo', 'Mais fios por cílio natural que o volume luxo, para um resultado ainda mais denso.', 150.00, null::text, false, 150),
   ('Mayte', 'cilios', 'Mega Egípcio', 'Mais fios por cílio natural que o volume egípcio, para um resultado ainda mais denso.', 150.00, null::text, false, 150)
-) as v(professional, icon, name, desc, price, price_note, popular, duration_min)
+) as v(professional, icon, name, "desc", price, price_note, popular, duration_min)
 join auth.users u on u.email = case v.professional
   when 'Flávia' then 'flavia@studioflaviaalves.app'
   when 'Jheny' then 'jheny@studioflaviaalves.app'
