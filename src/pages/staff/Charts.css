@@ -185,3 +185,6 @@
   .ch-bar__shape, .ch-arc { animation: none; }
   .ch-kpi, .ch-kpi::after, .ch-rank__fill, .ch-arc, .ch-bar__shape, .ch-donut__row { transition: none; }
 }
+
+/* O rótulo do ciclo ("07/10 a 06/11") não pode passar pelo capitalize do .month-nav. */
+.cs-cycle-nav .month-nav span { text-transform: none; min-width: 170px; }

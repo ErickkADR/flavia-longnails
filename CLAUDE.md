@@ -211,6 +211,14 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       rank de profissionais e ranking de serviços. SVG na mão, sem biblioteca. Mês em
       andamento compara com o **mesmo trecho** do anterior (1 até hoje), senão todo começo
       de mês aparecia como queda de 60%.
+    - **O "mês" desta tela é um ciclo de 07 a 06 (pedido do Erick, 09/10/2026)**: a Flávia
+      recebe o aluguel no dia 7, então o ciclo "2026-10" vai de 07/10 a 06/11 (`CICLO_DIA`
+      em `ContasSalao.tsx`). A chave do ciclo é a mesma do `reference_month` do aluguel.
+      Aluguel pago fora do próprio ciclo (adiantado/atrasado) entra no dia 07 do ciclo de
+      referência. Só esta tela usa ciclo; Gastos Pessoais continua no mês do calendário.
+    - **Agenda vai até as 22h** desde 09/10/2026 (`CLOSE_HOUR` em `src/lib/schedule.ts`).
+      O site público (Contact.tsx, Footer.tsx) ainda anuncia "9h às 19h": não mudei,
+      o pedido foi só a agenda interna.
     - Agrupamento por dia usa data **local**, não o recorte UTC do ISO (`useMonthFilter`
       fatia a string e jogaria atendimento das 22h do dia 31 pro mês seguinte).
     - **Prévia visual sem senha que funcionou**: Vite num diretório do scratchpad com

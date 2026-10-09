@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
-import { useMonthFilter } from '../../hooks/useMonthFilter';
 import { MonthNav } from './MonthNav';
 import { StatCards } from './Dashboard';
 import {
@@ -70,15 +69,34 @@ function shiftMonth(key: string, delta: number) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
 }
 
-function daysOf(key: string) {
-  const [y, m] = key.split('-').map(Number);
-  const total = new Date(y, m, 0).getDate();
-  return Array.from({ length: total }, (_, i) => `${key}-${pad(i + 1)}`);
-}
-
 const dateOf = (iso: string) => {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d);
+};
+
+/**
+ * O mês financeiro do salão vira no dia em que o aluguel é pago (pedido do Erick,
+ * 09/10/2026): o ciclo "2026-10" vai de 07/10 a 06/11. A chave do ciclo é a mesma do
+ * `reference_month` do aluguel, então marcar o aluguel de outubro cai no ciclo de outubro.
+ */
+const CICLO_DIA = 7;
+
+function cycleDays(key: string) {
+  const [y, m] = key.split('-').map(Number);
+  const out: string[] = [];
+  const fim = new Date(y, m, CICLO_DIA - 1);
+  for (let d = new Date(y, m - 1, CICLO_DIA); d <= fim; d.setDate(d.getDate() + 1)) out.push(localDay(d));
+  return out;
+}
+
+function cycleOf(iso: string) {
+  return Number(iso.slice(8, 10)) >= CICLO_DIA ? iso.slice(0, 7) : shiftMonth(iso.slice(0, 7), -1);
+}
+
+const ddmm = (iso: string) => (iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}` : '');
+const cycleLabel = (key: string) => {
+  const d = cycleDays(key);
+  return `${ddmm(d[0])} a ${ddmm(d[d.length - 1])}`;
 };
 
 /** `services` (jsonb) manda; `service` (texto legado) sustenta as linhas importadas sem
@@ -105,14 +123,16 @@ interface Resumo {
  * no app, então filtrar por ele deixaria tudo zerado; só "cancelado" fica de fora, igual
  * Clientes.tsx/Retorno.tsx, mais o corte por data (agendamento futuro não é faturamento).
  */
-function resumir(appts: Appointment[], rents: RentPayment[], key: string, agora: number, ateDia = 31): Resumo {
+function resumir(appts: Appointment[], rents: RentPayment[], key: string, agora: number, limiteDias = Infinity): Resumo {
   const porDia: Resumo['porDia'] = {};
   const dia = (d: string) => (porDia[d] ??= { fat: 0, alu: 0, serv: 0, cli: new Set(), atend: 0 });
+  const janela = new Set(cycleDays(key).slice(0, limiteDias));
+  const inicio = `${key}-${pad(CICLO_DIA)}`;
 
   const realizados = appts
     .filter((a) => a.status !== 'cancelado' && new Date(a.scheduled_at).getTime() <= agora)
     .map((a) => ({ ...a, dia: localDay(new Date(a.scheduled_at)) }))
-    .filter((a) => a.dia.slice(0, 7) === key && Number(a.dia.slice(8, 10)) <= ateDia);
+    .filter((a) => janela.has(a.dia));
 
   for (const a of realizados) {
     const d = dia(a.dia);
@@ -122,13 +142,13 @@ function resumir(appts: Appointment[], rents: RentPayment[], key: string, agora:
     d.atend += 1;
   }
 
-  // Aluguel entra no dia em que foi marcado como pago; se o pagamento caiu em outro mês
-  // (pagou adiantado ou atrasado), entra no dia 1º do mês de referência.
+  // Aluguel entra no dia em que foi marcado como pago; se o pagamento caiu fora do ciclo
+  // (pagou adiantado ou atrasado), entra no primeiro dia do ciclo de referência.
   let aluguel = 0;
   for (const r of rents) {
     if (!r.paid || r.reference_month.slice(0, 7) !== key) continue;
-    const d = r.paid_on && r.paid_on.slice(0, 7) === key ? r.paid_on : `${key}-01`;
-    if (Number(d.slice(8, 10)) > ateDia) continue;
+    const d = r.paid_on && cycleOf(r.paid_on) === key ? r.paid_on : inicio;
+    if (!janela.has(d)) continue;
     aluguel += r.amount;
     dia(d).alu += r.amount;
   }
@@ -151,37 +171,33 @@ export function ContasSalao() {
   // personal_expenses — sem isso esta consulta voltaria só com os atendimentos dela.
   const { rows: appointments, loading, error } = useTable<Appointment>('appointments', 'scheduled_at');
   const { rows: rents, upsert: upsertRent } = useTable<RentPayment>('rent_payments', 'reference_month');
-  const { label, month, prevMonth, nextMonth } = useMonthFilter(rents, 'reference_month');
   const [kpi, setKpi] = useState<KpiId>('faturamento');
   const [rentError, setRentError] = useState<string | null>(null);
 
   const [agora] = useState(() => Date.now());
   const hoje = localDay(new Date());
+  const [month, setMonth] = useState(() => cycleOf(hoje));
+  const label = cycleLabel(month);
   const mesAnterior = shiftMonth(month, -1);
-  const labelAnterior = useMemo(() => {
-    const t = dateOf(`${mesAnterior}-01`).toLocaleDateString('pt-BR', { month: 'long' });
-    return t.charAt(0).toUpperCase() + t.slice(1);
-  }, [mesAnterior]);
 
-  // Janela do gráfico: mês corrente vai até hoje (não desenha dia que ainda não existiu).
-  const mesCorrente = month === hoje.slice(0, 7);
+  // Janela do gráfico: ciclo corrente vai até hoje (não desenha dia que ainda não existiu).
+  const cicloCorrente = month === cycleOf(hoje);
   const dias = useMemo(() => {
-    const todos = daysOf(month);
-    return mesCorrente ? todos.filter((d) => d <= hoje) : todos;
-  }, [month, hoje, mesCorrente]);
+    const todos = cycleDays(month);
+    return cicloCorrente ? todos.filter((d) => d <= hoje) : todos;
+  }, [month, hoje, cicloCorrente]);
 
   const cur = useMemo(() => resumir(appointments, rents, month, agora), [appointments, rents, month, agora]);
-  // Mês em andamento compara com o MESMO trecho do anterior (dia 1 até o dia de hoje), igual
-  // o Suporte Remoto: contra o mês anterior inteiro, todo começo de mês pareceria queda.
-  const ateDia = mesCorrente ? dias.length : 31;
+  // Ciclo em andamento compara com o MESMO trecho do anterior (mesmo número de dias desde
+  // o dia 7), igual o Suporte Remoto: contra o ciclo inteiro, todo começo pareceria queda.
+  const limite = cicloCorrente ? dias.length : Infinity;
   const ant = useMemo(
-    () => resumir(appointments, rents, mesAnterior, agora, ateDia),
-    [appointments, rents, mesAnterior, agora, ateDia]
+    () => resumir(appointments, rents, mesAnterior, agora, limite),
+    [appointments, rents, mesAnterior, agora, limite]
   );
-  const refComparacao = mesCorrente
-    ? `vs. 1 a ${ateDia} de ${labelAnterior.toLowerCase()}`
-    : `vs. ${labelAnterior.toLowerCase()}`;
-  const diasAnt = useMemo(() => daysOf(mesAnterior), [mesAnterior]);
+  const diasAnt = useMemo(() => cycleDays(mesAnterior), [mesAnterior]);
+  const trechoAnt = diasAnt.slice(0, limite);
+  const refComparacao = `vs. ${ddmm(trechoAnt[0])} a ${ddmm(trechoAnt[trechoAnt.length - 1])}`;
 
   const servicosRanking = useMemo(() => {
     const m = new Map<string, { vezes: number; valor: number }>();
@@ -328,7 +344,7 @@ export function ContasSalao() {
   // também é mandada embora daqui. A RLS é a trava de verdade; isso é defesa em profundidade.
   if (!isOwner) return <Navigate to="/area-colaboradora/gastos" replace />;
 
-  const fmtDia = (x: string) => (x ? `${x.slice(8, 10)}/${x.slice(5, 7)}` : '');
+  const fmtDia = ddmm;
   const tipDia = (x: string) =>
     dateOf(x).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' }).replace('.', '');
 
@@ -339,7 +355,7 @@ export function ContasSalao() {
         <div className="mod-sub">Calculado sozinho a partir dos atendimentos das {PROFESSIONALS.length} profissionais e dos aluguéis pagos</div>
       </div>
 
-      <MonthNav label={label} onPrev={prevMonth} onNext={nextMonth} />
+      <div className="cs-cycle-nav"><MonthNav label={`Ciclo ${label}`} onPrev={() => setMonth((m) => shiftMonth(m, -1))} onNext={() => setMonth((m) => shiftMonth(m, 1))} /></div>
 
       {(error || rentError) && <p className="mod-error">{error ?? rentError}</p>}
 
@@ -351,7 +367,7 @@ export function ContasSalao() {
             <div className="cs-panel__head">
               <div>
                 <h2 className="ch-title">Visão geral</h2>
-                <p className="ch-sub">{label}, {refComparacao.replace("vs.", "comparado com")}</p>
+                <p className="ch-sub">Ciclo de {label} (o mês vira no dia {CICLO_DIA}, dia do aluguel), {refComparacao.replace("vs.", "comparado com")}</p>
               </div>
             </div>
             <KpiStrip items={kpis} selected={kpi} onSelect={(id) => setKpi(id as KpiId)} />
@@ -368,7 +384,7 @@ export function ContasSalao() {
                 format={ehDinheiro ? fmtMoney : fmtInt}
                 formatX={fmtDia}
                 tipTitle={tipDia}
-                names={[label, labelAnterior]}
+                names={['Este ciclo', 'Ciclo anterior']}
                 emptyMessage={dias.length === 0 ? 'Este mês ainda não começou.' : undefined}
               />
             </div>
@@ -428,7 +444,7 @@ export function ContasSalao() {
       <div className="admin-section">
         <div className="admin-title">Aluguel das Colaboradoras</div>
         <div className="admin-sub">
-          Quem já pagou o posto de trabalho em {label.toLowerCase()}.
+          Quem já pagou o posto de trabalho no ciclo de {label}.
           {rentPending > 0 ? ` Faltam ${rentPending} de ${rentRows.length}.` : ' Todas em dia neste mês.'}
           {' '}Marcar como pago soma no saldo do mês.
         </div>

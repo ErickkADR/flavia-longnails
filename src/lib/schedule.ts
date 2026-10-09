@@ -6,7 +6,7 @@
  * acompanha: a grade, os blocos, os horários vagos e a mensagem que vai pro WhatsApp.
  */
 export const OPEN_HOUR = 9;
-export const CLOSE_HOUR = 19;
+export const CLOSE_HOUR = 22;
 /** Granularidade de encaixe. Um atendimento pode começar a cada 30 minutos. */
 export const SLOT_MIN = 30;
 /** Dias em que o studio abre, no índice de `Date#getDay` (0 = domingo). Terça a domingo. */
