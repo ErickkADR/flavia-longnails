@@ -36,11 +36,22 @@ export interface BarRow {
   kind?: 'entrada' | 'saida';
 }
 
-export function CategoryBars({ title, rows }: { title: string; rows: BarRow[] }) {
+export function CategoryBars({
+  title,
+  rows,
+  format,
+}: {
+  title: string;
+  rows: BarRow[];
+  /** Como escrever o valor de cada barra. Default é dinheiro; a ranking de serviços mais
+   * realizados (Contas do Salão) passa uma contagem ("5x") em vez de R$. */
+  format?: (n: number) => string;
+}) {
   if (rows.length === 0) return null;
   // Escala relativa ao maior item da lista, não a um teto fixo: o objetivo é comparar
   // categorias entre si, e um teto fixo deixaria tudo rente ao chão em mês fraco.
   const max = Math.max(...rows.map((r) => r.value)) || 1;
+  const fmt = format ?? ((n: number) => `R$${n.toFixed(2)}`);
 
   return (
     <div className="dash-bars">
@@ -49,7 +60,7 @@ export function CategoryBars({ title, rows }: { title: string; rows: BarRow[] })
         <div className="dash-bar" key={r.label}>
           <div className="dash-bar-top">
             <span className="dash-bar-cat">{r.label}</span>
-            <span className="dash-bar-val">R${r.value.toFixed(2)}</span>
+            <span className="dash-bar-val">{fmt(r.value)}</span>
           </div>
           <div className="dash-bar-track">
             <div

@@ -262,8 +262,13 @@ drop policy if exists "insere proprio agendamento" on public.appointments;
 drop policy if exists "edita proprio agendamento" on public.appointments;
 drop policy if exists "apaga proprio agendamento" on public.appointments;
 
+-- Select ampliado em 09/10/2026: Contas do Salão virou dashboard automático (lê os
+-- atendimentos de verdade em vez de lançamento manual) e precisa enxergar o faturamento
+-- das 4, não só o da Flávia. Mesmo padrão já usado em personal_expenses: escrita continua
+-- travada em owner_id = auth.uid(), só a leitura abre pra dona do studio.
 create policy "le proprio agendamento" on public.appointments
-  for select to authenticated using (owner_id = auth.uid());
+  for select to authenticated
+  using (owner_id = auth.uid() or auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
 
 create policy "insere proprio agendamento" on public.appointments
   for insert to authenticated with check (owner_id = auth.uid());

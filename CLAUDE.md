@@ -188,6 +188,38 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       segurança) — a prévia isolada foi o contorno. Validado a 390px, 375px e 320px
       (a barra inferior não quebra linha nem sobrepõe conteúdo; os cards de serviço
       aceitam nome longo tipo "Alongamento em Fibra de Vidro" sem estourar).
+22. **Contas do Salão virou dashboard automático (09/10/2026)**, pedido do Erick: não fazia
+    sentido lançar entrada na mão se o atendimento já está na tabela `appointments`. O
+    formulário (Tipo/Categoria/Descrição/Valor/Profissional/Data + botão Lançar) e a lista
+    de lançamentos **saíram inteiros** — ele pediu a remoção explícita ao ver o print da
+    tela antiga, no meio da própria tarefa.
+    - **Faturamento agora é a soma dos atendimentos "realizados"** (`status !== 'cancelado'`
+      e `scheduled_at` já passou) do mês, somando `price` (ou a soma das `services` quando
+      `price` vier nulo). Mesmo critério de "o que conta como visita" que `Clientes.tsx`/
+      `Retorno.tsx` já usavam — só adicionei o corte por data, porque aqui o que importa é
+      dinheiro que já entrou, não compromisso futuro. **Não existe fluxo que marque
+      `status = 'concluido'`** em lugar nenhum do app (conferido antes de filtrar por isso
+      — filtrar por `concluido` teria deixado a tela sempre vazia).
+    - **Saídas continuam vindo de Gastos Pessoais** (`personal_expenses`, âmbito `salao`),
+      não ganharam um segundo lugar pra lançar a mesma coisa — só mudou a fonte das
+      entradas, não das saídas.
+    - **RLS de `appointments` precisou abrir leitura pra dona** (`migration.sql`, seção
+      RLS): antes era só `owner_id = auth.uid()` (cada uma só via a própria agenda), e sem
+      isso a Flávia só enxergaria os próprios atendimentos, não os da Jheny/Vitória/Mayte.
+      Mesmo padrão que `personal_expenses` já usava (`owner_id = auth.uid() or email =
+      flavia@...`); escrita continua travada por profissional. **Rodar esse pedaço do
+      `migration.sql` no SQL Editor é obrigatório pra tela mostrar o faturamento certo** —
+      sem rodar, ela segue mostrando só o que a Flávia mesma atendeu, parece bug mas é RLS.
+    - Cards novos: Faturamento do mês, Saídas do salão, Saldo do mês, Serviços realizados,
+      Clientes atendidas, Serviço mais realizado — e dois `CategoryBars`: faturamento por
+      profissional e ranking de serviços mais realizados. `CategoryBars` ganhou um `format`
+      opcional (antes só sabia escrever `R$`) pra reaproveitar o mesmo componente numa
+      barra de contagem ("5x") sem fingir que é dinheiro.
+    - A tabela `salon_transactions` **não foi apagada** (schema fica, só parou de ser
+      escrita por esta tela) — decisão de não mexer em dado existente sem o Erick pedir.
+    - **Não testado logado**: mesma limitação de sempre, login das 4 não disponível pra
+      mim. Validado só por `tsc -b && vite build` limpo; pedir pro Erick conferir ao vivo
+      como Flávia depois de rodar a RLS nova.
 
 **Achado de processo, vale para sessões futuras**: as páginas públicas (`/flavia`,
 `/vitoria`, `/`) dão pra testar de verdade sem senha nenhuma — `npm run dev` +
