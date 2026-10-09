@@ -200,9 +200,26 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       dinheiro que já entrou, não compromisso futuro. **Não existe fluxo que marque
       `status = 'concluido'`** em lugar nenhum do app (conferido antes de filtrar por isso
       — filtrar por `concluido` teria deixado a tela sempre vazia).
-    - **Saídas continuam vindo de Gastos Pessoais** (`personal_expenses`, âmbito `salao`),
-      não ganharam um segundo lugar pra lançar a mesma coisa — só mudou a fonte das
-      entradas, não das saídas.
+    - **Definição do Erick (09/10/2026): Faturamento do mês = só o que os serviços
+      trouxeram. Saldo do mês = serviços + aluguéis das colaboradoras marcados como
+      pagos.** Saídas não entram no saldo desta tela (e não aparecem mais aqui; continuam
+      em Gastos Pessoais). Não "corrigir" o saldo subtraindo gasto sem ele pedir.
+    - **Gráficos portados do Suporte Remoto do ERP** (`public/ui/charts.js` de lá) pra
+      `Charts.tsx`/`Charts.css`: faixa de 4 KPIs que comanda o gráfico de linha por dia
+      (mês atual x anterior tracejado), barras de atendimentos por dia da semana com linha
+      de média, rosca de faturamento por profissional, rosca de serviços mais realizados,
+      rank de profissionais e ranking de serviços. SVG na mão, sem biblioteca. Mês em
+      andamento compara com o **mesmo trecho** do anterior (1 até hoje), senão todo começo
+      de mês aparecia como queda de 60%.
+    - Agrupamento por dia usa data **local**, não o recorte UTC do ISO (`useMonthFilter`
+      fatia a string e jogaria atendimento das 22h do dia 31 pro mês seguinte).
+    - **Prévia visual sem senha que funcionou**: Vite num diretório do scratchpad com
+      `resolve.alias` trocando `auth/AuthContext` e `hooks/useTable` por mocks com dados
+      fictícios, renderizando o `ContasSalao` real; `esbuild: { jsx: 'automatic' }` no
+      lugar do plugin React (o plugin não resolve dependência fora do projeto). Playwright
+      com `executablePath` apontando pro `chrome-headless-shell` em
+      `~/Library/Caches/ms-playwright/chromium_headless_shell-1248/`. Não precisa mexer no
+      guard de login.
     - **RLS de `appointments` precisou abrir leitura pra dona** (`migration.sql`, seção
       RLS): antes era só `owner_id = auth.uid()` (cada uma só via a própria agenda), e sem
       isso a Flávia só enxergaria os próprios atendimentos, não os da Jheny/Vitória/Mayte.
