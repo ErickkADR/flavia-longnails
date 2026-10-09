@@ -48,7 +48,7 @@ export function Footer() {
           <div>
             <div className="f-col-title">Horários</div>
             <ul className="f-links f-hours">
-              <li>Seg–Sex: 9h às 19h</li>
+              <li>Seg–Sex: 9h às 22h</li>
               <li>Sábado: 9h às 17h</li>
               <li>Domingo: Fechado</li>
             </ul>

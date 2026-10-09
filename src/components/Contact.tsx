@@ -30,7 +30,7 @@ export function Contact() {
             <div className="c-icon"><Icon name="relogio" /></div>
             <div>
               <div className="c-label">Horário de Atendimento</div>
-              <div className="c-value">Seg – Sex: 9h às 19h<br />Sábado: 9h às 17h<br />Domingo: Fechado</div>
+              <div className="c-value">Seg – Sex: 9h às 22h<br />Sábado: 9h às 17h<br />Domingo: Fechado</div>
             </div>
           </div>
           <div className="c-item">

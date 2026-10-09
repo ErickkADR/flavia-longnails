@@ -133,6 +133,19 @@ create table if not exists public.rent_payments (
   unique (professional, reference_month)
 );
 
+-- Aluguel pago em partes (pedido do Erick, 09/10/2026): Jheny e Mayte pagam por semana e
+-- a Flávia lança cada valor quando recebe. A Vitória continua no rent_payments (mês fechado,
+-- marcar como pago). Tabela separada porque rent_payments só aceita uma linha por mês.
+-- O ciclo do pagamento é decidido pela data (paid_on), não por um mês de referência.
+create table if not exists public.rent_entries (
+  id uuid primary key default gen_random_uuid(),
+  professional text not null check (professional in ('Jheny', 'Vitória', 'Mayte')),
+  amount numeric(10, 2) not null check (amount > 0),
+  paid_on date not null default current_date,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
 -- A tabela ja existia em producao com o check antigo (so Jheny/Vitoria) quando a Mayte
 -- entrou como quarta profissional, entao o "create table if not exists" acima nao altera
 -- o que ja esta la. Mesmo padrao aplicado em appointments.professional.
@@ -248,6 +261,7 @@ alter table public.appointments enable row level security;
 alter table public.salon_transactions enable row level security;
 alter table public.personal_expenses enable row level security;
 alter table public.rent_payments enable row level security;
+alter table public.rent_entries enable row level security;
 alter table public.client_returns enable row level security;
 alter table public.services enable row level security;
 
@@ -325,6 +339,12 @@ create policy "cada uma cuida do proprio retorno" on public.client_returns
 -- extra comparando o e-mail com a coluna `professional`.
 drop policy if exists "so a dona mexe no aluguel" on public.rent_payments;
 create policy "so a dona mexe no aluguel" on public.rent_payments
+  for all to authenticated
+  using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
+  with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
+
+drop policy if exists "so a dona mexe no aluguel semanal" on public.rent_entries;
+create policy "so a dona mexe no aluguel semanal" on public.rent_entries
   for all to authenticated
   using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
   with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');

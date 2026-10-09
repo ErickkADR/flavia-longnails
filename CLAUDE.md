@@ -216,9 +216,18 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       em `ContasSalao.tsx`). A chave do ciclo é a mesma do `reference_month` do aluguel.
       Aluguel pago fora do próprio ciclo (adiantado/atrasado) entra no dia 07 do ciclo de
       referência. Só esta tela usa ciclo; Gastos Pessoais continua no mês do calendário.
-    - **Agenda vai até as 22h** desde 09/10/2026 (`CLOSE_HOUR` em `src/lib/schedule.ts`).
-      O site público (Contact.tsx, Footer.tsx) ainda anuncia "9h às 19h": não mudei,
-      o pedido foi só a agenda interna.
+    - **Agenda vai até as 22h** desde 09/10/2026 (`CLOSE_HOUR` em `src/lib/schedule.ts`),
+      e o site público (Contact.tsx, Footer.tsx) passou a anunciar "Seg–Sex: 9h às 22h".
+      Sábado (9h às 17h) e domingo (fechado) no site **não foram mexidos e não batem com a
+      agenda**, que abre de terça a domingo (`WORK_DAYS`). Pendente confirmar com o Erick.
+    - **Aluguel semanal da Jheny e da Mayte (09/10/2026)**: a Flávia lança cada valor quando
+      recebe, na tabela nova `rent_entries` (RLS só da Flávia, mesmo padrão de
+      `rent_payments`). A Vitória continua mensal (`rent_payments`, marcar como pago). As
+      listas são `RENT_MONTHLY`/`RENT_WEEKLY` em `ContasSalao.tsx`. Lançamento semanal cai
+      no ciclo da **data em que foi recebido**. Marcação mensal antiga da Jheny/Mayte
+      continua somando e aparece no cartão dela com "desmarcar". **Precisa rodar o
+      `migration.sql`** pra tabela existir; sem isso a tela mostra um aviso e o botão de
+      lançar fica desabilitado.
     - Agrupamento por dia usa data **local**, não o recorte UTC do ISO (`useMonthFilter`
       fatia a string e jogaria atendimento das 22h do dia 31 pro mês seguinte).
     - **Prévia visual sem senha que funcionou**: Vite num diretório do scratchpad com

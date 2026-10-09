@@ -40,14 +40,25 @@ interface RentPayment {
   created_at: string;
 }
 
+interface RentEntry {
+  id: string;
+  professional: string;
+  amount: number;
+  paid_on: string;
+  notes: string | null;
+  created_at: string;
+}
+
 const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória', 'Mayte'];
 
 /**
- * Quem paga aluguel de posto de trabalho hoje. A Flávia é dona do studio e não paga
- * pra si mesma, por isso não entra. Se entrar colaboradora nova, some aqui e no check
- * da tabela `rent_payments` no migration.sql, senão o insert é recusado pelo banco.
+ * Quem paga aluguel de posto de trabalho hoje, e como. A Flávia é dona e não paga pra si.
+ * Mensal: mês fechado, "marcar como pago" (`rent_payments`). Semanal: a Flávia lança cada
+ * valor quando recebe (`rent_entries`), pedido do Erick em 09/10/2026. Colaboradora nova
+ * entra numa das listas e no check das duas tabelas no migration.sql.
  */
-const RENT_PAYERS = ['Jheny', 'Vitória', 'Mayte'];
+const RENT_MONTHLY = ['Vitória'];
+const RENT_WEEKLY = ['Jheny', 'Mayte'];
 const DEFAULT_RENT = 500;
 
 const ORDEM_SEMANA = [1, 2, 3, 4, 5, 6, 0];
@@ -123,7 +134,9 @@ interface Resumo {
  * no app, então filtrar por ele deixaria tudo zerado; só "cancelado" fica de fora, igual
  * Clientes.tsx/Retorno.tsx, mais o corte por data (agendamento futuro não é faturamento).
  */
-function resumir(appts: Appointment[], rents: RentPayment[], key: string, agora: number, limiteDias = Infinity): Resumo {
+function resumir(
+  appts: Appointment[], rents: RentPayment[], entradas: RentEntry[], key: string, agora: number, limiteDias = Infinity
+): Resumo {
   const porDia: Resumo['porDia'] = {};
   const dia = (d: string) => (porDia[d] ??= { fat: 0, alu: 0, serv: 0, cli: new Set(), atend: 0 });
   const janela = new Set(cycleDays(key).slice(0, limiteDias));
@@ -152,6 +165,12 @@ function resumir(appts: Appointment[], rents: RentPayment[], key: string, agora:
     aluguel += r.amount;
     dia(d).alu += r.amount;
   }
+  // Pagamento semanal cai no ciclo da própria data em que foi recebido.
+  for (const e of entradas) {
+    if (!janela.has(e.paid_on)) continue;
+    aluguel += e.amount;
+    dia(e.paid_on).alu += e.amount;
+  }
 
   const faturamento = realizados.reduce((s, a) => s + valorDe(a), 0);
   return {
@@ -171,6 +190,9 @@ export function ContasSalao() {
   // personal_expenses — sem isso esta consulta voltaria só com os atendimentos dela.
   const { rows: appointments, loading, error } = useTable<Appointment>('appointments', 'scheduled_at');
   const { rows: rents, upsert: upsertRent } = useTable<RentPayment>('rent_payments', 'reference_month');
+  const {
+    rows: rentEntries, error: entriesError, insert: insertEntry, remove: removeEntry,
+  } = useTable<RentEntry>('rent_entries', 'paid_on');
   const [kpi, setKpi] = useState<KpiId>('faturamento');
   const [rentError, setRentError] = useState<string | null>(null);
 
@@ -187,13 +209,16 @@ export function ContasSalao() {
     return cicloCorrente ? todos.filter((d) => d <= hoje) : todos;
   }, [month, hoje, cicloCorrente]);
 
-  const cur = useMemo(() => resumir(appointments, rents, month, agora), [appointments, rents, month, agora]);
+  const cur = useMemo(
+    () => resumir(appointments, rents, rentEntries, month, agora),
+    [appointments, rents, rentEntries, month, agora]
+  );
   // Ciclo em andamento compara com o MESMO trecho do anterior (mesmo número de dias desde
   // o dia 7), igual o Suporte Remoto: contra o ciclo inteiro, todo começo pareceria queda.
   const limite = cicloCorrente ? dias.length : Infinity;
   const ant = useMemo(
-    () => resumir(appointments, rents, mesAnterior, agora, limite),
-    [appointments, rents, mesAnterior, agora, limite]
+    () => resumir(appointments, rents, rentEntries, mesAnterior, agora, limite),
+    [appointments, rents, rentEntries, mesAnterior, agora, limite]
   );
   const diasAnt = useMemo(() => cycleDays(mesAnterior), [mesAnterior]);
   const trechoAnt = diasAnt.slice(0, limite);
@@ -312,15 +337,48 @@ export function ContasSalao() {
   }));
 
   const referenceMonth = `${month}-01`;
-  const rentRows = useMemo(
-    () =>
-      RENT_PAYERS.map((nome) => {
-        const found = rents.find((r) => r.professional === nome && r.reference_month.slice(0, 7) === month);
-        return { professional: nome, record: found ?? null };
-      }),
-    [rents, month]
-  );
-  const rentPending = rentRows.filter((r) => !r.record?.paid).length;
+  const mensalDe = (nome: string) =>
+    rents.find((r) => r.professional === nome && r.reference_month.slice(0, 7) === month) ?? null;
+  const rentPending = RENT_MONTHLY.filter((nome) => !mensalDe(nome)?.paid).length;
+
+  const diasCiclo = useMemo(() => new Set(cycleDays(month)), [month]);
+  const semanaisDe = (nome: string) =>
+    rentEntries
+      .filter((e) => e.professional === nome && diasCiclo.has(e.paid_on))
+      .sort((a, b) => a.paid_on.localeCompare(b.paid_on) || a.created_at.localeCompare(b.created_at));
+
+  const [rascunho, setRascunho] = useState<Record<string, { valor: string; data: string }>>({});
+  const [lancando, setLancando] = useState<string | null>(null);
+  const draftDe = (nome: string) => rascunho[nome] ?? { valor: '', data: hoje };
+  const editarDraft = (nome: string, patch: Partial<{ valor: string; data: string }>) =>
+    setRascunho((r) => ({ ...r, [nome]: { ...draftDe(nome), ...patch } }));
+
+  async function lancarSemanal(nome: string) {
+    const { valor, data } = draftDe(nome);
+    const amount = Number(valor.replace(',', '.'));
+    if (!(amount > 0) || !data) {
+      setRentError('Informe o valor recebido e a data.');
+      return;
+    }
+    setLancando(nome);
+    setRentError(null);
+    try {
+      await insertEntry({ professional: nome, amount, paid_on: data });
+      setRascunho((r) => ({ ...r, [nome]: { valor: '', data: hoje } }));
+    } catch (err) {
+      setRentError(err instanceof Error ? err.message : 'Erro ao lançar o aluguel.');
+    } finally {
+      setLancando(null);
+    }
+  }
+
+  async function apagarSemanal(id: string) {
+    try {
+      await removeEntry(id);
+    } catch (err) {
+      setRentError(err instanceof Error ? err.message : 'Erro ao remover o lançamento.');
+    }
+  }
 
   async function toggleRent(nome: string, current: RentPayment | null) {
     const paid = !current?.paid;
@@ -444,10 +502,16 @@ export function ContasSalao() {
       <div className="admin-section">
         <div className="admin-title">Aluguel das Colaboradoras</div>
         <div className="admin-sub">
-          Quem já pagou o posto de trabalho no ciclo de {label}.
-          {rentPending > 0 ? ` Faltam ${rentPending} de ${rentRows.length}.` : ' Todas em dia neste mês.'}
-          {' '}Marcar como pago soma no saldo do mês.
+          Ciclo de {label}. {RENT_MONTHLY.join(' e ')} paga o mês fechado
+          {rentPending > 0 ? ' (ainda em aberto)' : ' (em dia)'}; {RENT_WEEKLY.join(' e ')} pagam por semana:
+          lance cada valor quando receber. Tudo que entra aqui soma no saldo do mês.
         </div>
+
+        {entriesError && (
+          <p className="mod-error">
+            O aluguel semanal ainda não existe no banco. Rode o supabase/migration.sql no SQL Editor do Supabase.
+          </p>
+        )}
 
         <StatCards
           cards={[
@@ -458,7 +522,8 @@ export function ContasSalao() {
         />
 
         <div className="rent-grid">
-          {rentRows.map(({ professional: nome, record }) => {
+          {RENT_MONTHLY.map((nome) => {
+            const record = mensalDe(nome);
             const pago = record?.paid ?? false;
             const valor = record?.amount ?? DEFAULT_RENT;
             return (
@@ -473,6 +538,67 @@ export function ContasSalao() {
                 <button type="button" className="rent-toggle" onClick={() => toggleRent(nome, record)}>
                   {pago ? 'Desmarcar' : 'Marcar como pago'}
                 </button>
+              </div>
+            );
+          })}
+
+          {RENT_WEEKLY.map((nome) => {
+            const lancamentos = semanaisDe(nome);
+            // Marcação mensal antiga (de antes do aluguel semanal) continua contando no saldo;
+            // aparece aqui pra Flávia poder desfazer se ela também lançar por semana.
+            const antigo = mensalDe(nome);
+            const total = lancamentos.reduce((s, e) => s + e.amount, 0) + (antigo?.paid ? antigo.amount : 0);
+            const draft = draftDe(nome);
+            return (
+              <div className={`rent-card rent-card--weekly${total > 0 ? ' is-paid' : ''}`} key={nome}>
+                <div className="rent-name">{nome}</div>
+                <div className="rent-amount">Pago no ciclo: <strong>{fmtMoney(total)}</strong></div>
+
+                {lancamentos.length === 0 && !antigo?.paid ? (
+                  <div className="rent-status due">Nenhum pagamento lançado neste ciclo</div>
+                ) : (
+                  <ul className="rent-entries">
+                    {antigo?.paid && (
+                      <li>
+                        <span>Mês marcado como pago</span>
+                        <b>{fmtMoney(antigo.amount)}</b>
+                        <button type="button" className="mod-table-del" onClick={() => toggleRent(nome, antigo)}>desmarcar</button>
+                      </li>
+                    )}
+                    {lancamentos.map((e) => (
+                      <li key={e.id}>
+                        <span>{ddmm(e.paid_on)}</span>
+                        <b>{fmtMoney(e.amount)}</b>
+                        <button type="button" className="mod-table-del" onClick={() => apagarSemanal(e.id)}>remover</button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <form
+                  className="rent-entry-form"
+                  onSubmit={(ev) => { ev.preventDefault(); lancarSemanal(nome); }}
+                >
+                  <label className="mod-field">
+                    <span>Valor (R$)</span>
+                    <input
+                      type="number" step="0.01" min="0.01" inputMode="decimal" required
+                      value={draft.valor}
+                      onChange={(ev) => editarDraft(nome, { valor: ev.target.value })}
+                    />
+                  </label>
+                  <label className="mod-field">
+                    <span>Recebido em</span>
+                    <input
+                      type="date" required
+                      value={draft.data}
+                      onChange={(ev) => editarDraft(nome, { data: ev.target.value })}
+                    />
+                  </label>
+                  <button type="submit" className="rent-toggle" disabled={lancando === nome || Boolean(entriesError)}>
+                    {lancando === nome ? 'Lançando...' : 'Lançar pagamento'}
+                  </button>
+                </form>
               </div>
             );
           })}
