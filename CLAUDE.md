@@ -228,6 +228,13 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       continua somando e aparece no cartão dela com "desmarcar". **Precisa rodar o
       `migration.sql`** pra tabela existir; sem isso a tela mostra um aviso e o botão de
       lançar fica desabilitado.
+    - **"Agora" não pode ser congelado (09/10/2026)**: a primeira versão guardava
+      `Date.now()` uma vez ao montar a tela. Como a Flávia usa o app instalado (PWA), aberto
+      por horas, atendimento que terminava depois disso nunca virava "realizado" e ela via
+      tudo em R$ 0,00 com 3 atendimentos no ciclo. Agora `agora` anda a cada minuto e, ao
+      voltar pro app (`visibilitychange`), relê `appointments`/`rent_payments`/`rent_entries`.
+      Causa confirmada só pelo código: a leitura linha a linha do banco foi bloqueada pelo
+      classificador. Se voltar a zerar, conferir os horários dos atendimentos do ciclo.
     - Agrupamento por dia usa data **local**, não o recorte UTC do ISO (`useMonthFilter`
       fatia a string e jogaria atendimento das 22h do dia 31 pro mês seguinte).
     - **Prévia visual sem senha que funcionou**: Vite num diretório do scratchpad com

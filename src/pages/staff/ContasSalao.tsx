@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { useTable } from '../../hooks/useTable';
@@ -188,16 +188,35 @@ export function ContasSalao() {
   const { isOwner } = useAuth();
   // A RLS de appointments (migration.sql) deixa a dona ler as linhas das 4, igual
   // personal_expenses — sem isso esta consulta voltaria só com os atendimentos dela.
-  const { rows: appointments, loading, error } = useTable<Appointment>('appointments', 'scheduled_at');
-  const { rows: rents, upsert: upsertRent } = useTable<RentPayment>('rent_payments', 'reference_month');
+  const { rows: appointments, loading, error, reload: reloadAppointments } = useTable<Appointment>('appointments', 'scheduled_at');
+  const { rows: rents, upsert: upsertRent, reload: reloadRents } = useTable<RentPayment>('rent_payments', 'reference_month');
   const {
-    rows: rentEntries, error: entriesError, insert: insertEntry, remove: removeEntry,
+    rows: rentEntries, error: entriesError, insert: insertEntry, remove: removeEntry, reload: reloadEntries,
   } = useTable<RentEntry>('rent_entries', 'paid_on');
   const [kpi, setKpi] = useState<KpiId>('faturamento');
   const [rentError, setRentError] = useState<string | null>(null);
 
-  const [agora] = useState(() => Date.now());
-  const hoje = localDay(new Date());
+  // "Agora" anda sozinho: a Flávia usa a tela como app instalado (PWA), que fica aberto
+  // horas sem recarregar. Congelado no momento em que a tela abriu, atendimento que
+  // terminou depois disso nunca virava "realizado" e o faturamento ficava em R$ 0,00.
+  // Ao voltar pro app também relê as tabelas, pra pegar o que foi agendado nesse meio-tempo.
+  const [agora, setAgora] = useState(() => Date.now());
+  useEffect(() => {
+    const tick = window.setInterval(() => setAgora(Date.now()), 60_000);
+    const aoVoltar = () => {
+      if (document.visibilityState !== 'visible') return;
+      setAgora(Date.now());
+      reloadAppointments();
+      reloadRents();
+      reloadEntries();
+    };
+    document.addEventListener('visibilitychange', aoVoltar);
+    return () => {
+      window.clearInterval(tick);
+      document.removeEventListener('visibilitychange', aoVoltar);
+    };
+  }, [reloadAppointments, reloadRents, reloadEntries]);
+  const hoje = localDay(new Date(agora));
   const [month, setMonth] = useState(() => cycleOf(hoje));
   const label = cycleLabel(month);
   const mesAnterior = shiftMonth(month, -1);
