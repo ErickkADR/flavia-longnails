@@ -133,6 +133,15 @@ export function ContasSalao() {
 
   const rentPending = rentRows.filter((r) => !r.record?.paid).length;
 
+  // Aluguel é receita do salão, mas vive fora de `entradas` (que só soma atendimento):
+  // é um valor fixo por posto, não um serviço prestado. Pedido do Erick: mostrar o
+  // impacto dele no saldo, não só o total pago isolado.
+  const aluguelRecebido = useMemo(
+    () => rentRows.reduce((s, r) => s + (r.record?.paid ? r.record.amount : 0), 0),
+    [rentRows]
+  );
+  const saldoComAluguel = saldo + aluguelRecebido;
+
   async function toggleRent(nome: string, current: RentPayment | null) {
     const paid = !current?.paid;
     try {
@@ -203,6 +212,15 @@ export function ContasSalao() {
               : ' Todas em dia neste mês.'}
             {' '}Só você enxerga esta seção.
           </div>
+
+          <StatCards
+            cards={[
+              { label: 'Aluguel recebido no mês', value: money(aluguelRecebido), tone: 'pos' },
+              { label: 'Saldo sem aluguel', value: money(saldo), tone: saldo >= 0 ? 'pos' : 'neg' },
+              { label: 'Saldo com aluguel', value: money(saldoComAluguel), tone: saldoComAluguel >= 0 ? 'pos' : 'neg' },
+            ]}
+          />
+
           <div className="rent-grid">
             {rentRows.map(({ professional: nome, record }) => {
               const pago = record?.paid ?? false;
