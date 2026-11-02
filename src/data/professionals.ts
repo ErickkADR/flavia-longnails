@@ -30,7 +30,7 @@ export function formatPrice(n: number): string {
 }
 
 export interface Professional {
-  slug: 'flavia' | 'jheny' | 'vitoria' | 'mayte';
+  slug: 'flavia' | 'vitoria' | 'mayte';
   name: string;
   role: string;
   avatar: string;
@@ -40,7 +40,7 @@ export interface Professional {
   instagramIsReal: boolean;
   /**
    * WhatsApp próprio da profissional (só dígitos, com DDI 55), pra quem já tem número
-   * separado do studio (Jheny, Vitória, Mayte, desde 16/09/2026). `null` = usa o número
+   * separado do studio (Vitória, Mayte, desde 16/09/2026). `null` = usa o número
    * principal do salão (`WHATSAPP_NUMBER`) — é o caso da Flávia, que é a dona e sempre
    * foi esse número mesmo.
    */
@@ -48,9 +48,9 @@ export interface Professional {
   gallery: string[];
   /**
    * Regras de atendimento da profissional (sinal, atraso, domicilio, pagamento).
-   * Opcional porque so a Jheny entregou material com isso ate agora: veio do
-   * portfolio em PDF dela. Quando Flavia e Vitoria passarem as delas, e so
-   * preencher aqui que a secao aparece sozinha na pagina.
+   * Opcional porque nem todas entregaram material com isso: hoje so a Flavia tem.
+   * Quando as outras passarem as delas, e so preencher aqui que a secao aparece
+   * sozinha na pagina.
    */
   policies?: { icon: string; title: string; text: string }[];
 }
@@ -99,41 +99,6 @@ export const professionals: Professional[] = [
       { icon: 'pagamento', title: 'Formas de pagamento', text: 'Dinheiro, Pix ou cartão.' },
       { icon: 'lixeira', title: 'Higiene e esterilização', text: 'Todo material passa por esterilização em autoclave, conforme as normas da Anvisa, e os instrumentos só são abertos na presença da cliente.' },
       { icon: 'aviso', title: 'Manutenção e reposição', text: 'Não realizo manutenção de trabalhos feitos por outra profissional. Reposição de unha quebrada: R$10 por unidade. Alongamento mal removido ou danificado pode exigir tempo extra, avaliado no atendimento.' },
-    ],
-  },
-  {
-    slug: 'jheny',
-    name: 'Jheny',
-    role: 'Maquiagem',
-    // Retrato recortado da capa do portfolio dela em PDF, a 300dpi: 900x900, contra os
-    // 150x150 que o Instagram entregava. A `ig-jheny-avatar.jpg` e a
-    // `jheny-avatar-stock.jpg` continuam no repo.
-    avatar: 'images/jheny-perfil.jpg',
-    photoIsPlaceholder: false,
-    // Texto dela, do portfolio. A bio anterior era escrita por mim e falava de servicos
-    // que ela nao oferece (noiva, sobrancelha, cilios).
-    bio: 'Tenho 21 anos e minha paixão pela maquiagem começou aos 15, quando comecei a me maquiar, praticar e descobrir o quanto eu amava transformar e realçar a beleza. Acredito que a maquiagem vai muito além da beleza: é sobre autoestima, confiança e se sentir bem consigo mesma. Por isso busco oferecer uma experiência personalizada, valorizando os traços e a personalidade de cada cliente.',
-    instagram: 'jhenyluanyybeauty',
-    instagramIsReal: true,
-    // Número dela, passado pelo Erick em 16/09/2026 (antes ia tudo pro número do studio).
-    whatsapp: '5511967218862',
-    // Makes que ela fez de verdade, do Instagram dela. Antes eram banco de imagem.
-    // Em 16/09/2026 o Erick mandou 5 fotos novas por WhatsApp, em resolucao bem maior
-    // (ate 1600px, contra os 480x640 do Instagram) — SOMADAS a estas, nao no lugar.
-    gallery: [
-      'images/ig-jheny-1.jpg',
-      'images/ig-jheny-2.jpg',
-      'images/ig-jheny-3.jpg',
-      'images/jheny-trabalho-1.jpg',
-      'images/jheny-trabalho-5.jpg',
-    ],
-    policies: [
-      { icon: 'sinal', title: 'Sinal de agendamento', text: 'Para reservar o horário é necessário o pagamento de 30% do valor do serviço. O agendamento só é confirmado após o sinal, e o restante é pago no dia do atendimento.' },
-      { icon: 'cancelamento', title: 'Cancelamento', text: 'Em caso de cancelamento por parte da cliente, o sinal de agendamento não é reembolsado.' },
-      { icon: 'relogio', title: 'Atrasos', text: 'A tolerância é de 15 minutos. Depois desse período o atendimento pode ser cancelado ou sofrer alteração de horário.' },
-      { icon: 'casa', title: 'Atendimento a domicílio', text: 'Disponível mediante agenda. O valor do serviço é o mesmo, acrescido do custo de deslocamento de ida e volta, calculado conforme a localização da cliente.' },
-      { icon: 'pagamento', title: 'Formas de pagamento', text: 'Pix ou dinheiro.' },
-      { icon: 'checklist', title: 'No dia do atendimento', text: 'Venha com a pele limpa e sem maquiagem, evitando óleos ou produtos pesados no rosto. Se possível use uma blusa que não precise passar pela cabeça. Traga referências, se tiver. A preparação da pele é feita por ela antes da maquiagem.' },
     ],
   },
   {
@@ -201,7 +166,7 @@ export function getProfessional(slug: string): Professional | undefined {
 /**
  * Número que recebe a mensagem: o da própria profissional, se ela tiver um cadastrado
  * (`Professional.whatsapp`), senão cai no número principal do salão. Assim o card de
- * serviço da Jheny manda a mensagem pro WhatsApp dela, não pro da Flávia.
+ * serviço da Vitória manda a mensagem pro WhatsApp dela, não pro da Flávia.
  */
 function numberFor(professionalName?: string): string {
   const pro = professionals.find((p) => p.name === professionalName);

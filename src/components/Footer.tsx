@@ -14,7 +14,7 @@ export function Footer() {
             <Link to="/" className="footer-logo">
               <img src={asset('logo.png')} alt="Lummier Studio" className="footer-logo-img" />
             </Link>
-            <p className="footer-tagline">Unhas, maquiagem e cabelo em um só lugar</p>
+            <p className="footer-tagline">Unhas, cabelo e cílios em um só lugar</p>
             <div className="footer-social">
               <a href="https://www.instagram.com/lummier_studiobeauty/" className="soc-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <InstagramIcon />

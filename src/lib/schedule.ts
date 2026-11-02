@@ -5,35 +5,37 @@
  * cálculo de horário livre. Mudou o funcionamento do salão, muda aqui e o resto
  * acompanha: a grade, os blocos, os horários vagos e a mensagem que vai pro WhatsApp.
  */
-export const OPEN_HOUR = 9;
-export const CLOSE_HOUR = 22;
+// 7h às 23h desde 02/11/2026 (era 9h às 22h).
+export const OPEN_HOUR = 7;
+export const CLOSE_HOUR = 23;
 /** Granularidade de encaixe. Um atendimento pode começar a cada 30 minutos. */
 export const SLOT_MIN = 30;
-/** Dias em que o studio abre, no índice de `Date#getDay` (0 = domingo). Terça a domingo. */
-export const WORK_DAYS = [2, 3, 4, 5, 6, 0];
+/** Dias em que o studio abre, no índice de `Date#getDay` (0 = domingo). Terça a sábado:
+ * o domingo saiu da agenda em 02/11/2026. */
+export const WORK_DAYS = [2, 3, 4, 5, 6];
 
 /** Teto de horários listados na mensagem. Acima disso vira "e mais N". */
 const MSG_MAX_SLOTS = 10;
 
 /**
  * A terça-feira que abre o bloco da semana da data informada.
- * A semana do studio vai de terça a domingo, então ela não casa com a semana do
- * calendário (que o JS começa no domingo). Segunda é dia fechado: cai no bloco que
- * começa no dia seguinte, que é o que a profissional quer ver numa segunda.
+ * A semana do studio vai de terça a sábado, então ela não casa com a semana do
+ * calendário (que o JS começa no domingo). Domingo e segunda são dias fechados: caem
+ * no bloco que começa na terça seguinte, que é o que a profissional quer ver ali.
  */
 export function weekStart(ref: Date): Date {
   const d = new Date(ref);
   d.setHours(0, 0, 0, 0);
   const day = d.getDay();
-  const back = day === 0 ? 5 : day === 1 ? -1 : day - 2;
+  const back = day === 0 ? -2 : day === 1 ? -1 : day - 2;
   d.setDate(d.getDate() - back);
   return d;
 }
 
-/** Os 6 dias abertos do bloco: terça a domingo. */
+/** Os dias abertos do bloco: terça a sábado. */
 export function weekDays(ref: Date): Date[] {
   const start = weekStart(ref);
-  return Array.from({ length: 6 }, (_, i) => {
+  return Array.from({ length: WORK_DAYS.length }, (_, i) => {
     const d = new Date(start);
     d.setDate(start.getDate() + i);
     return d;

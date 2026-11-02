@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { ProfessionalPage } from './pages/ProfessionalPage';
@@ -11,7 +11,7 @@ import { Agendamento } from './pages/staff/Agendamento';
 import { Retorno } from './pages/staff/Retorno';
 import { Clientes } from './pages/staff/Clientes';
 import { ContasSalao } from './pages/staff/ContasSalao';
-import { GastosPessoais } from './pages/staff/GastosPessoais';
+import { Calendario } from './pages/staff/Calendario';
 
 export function App() {
   return (
@@ -32,7 +32,9 @@ export function App() {
           <Route path="retorno" element={<Retorno />} />
           <Route path="clientes" element={<Clientes />} />
           <Route path="contas" element={<ContasSalao />} />
-          <Route path="gastos" element={<GastosPessoais />} />
+          <Route path="calendario" element={<Calendario />} />
+          {/* Gastos Pessoais saiu em 02/11/2026; link salvo cai no calendário. */}
+          <Route path="gastos" element={<Navigate to="/area-colaboradora/calendario" replace />} />
         </Route>
       </Route>
     </Routes>

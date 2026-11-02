@@ -221,10 +221,6 @@ from (values
   ('Flávia', 'nailart', 'Baby Boomer', 'Degradê clássico entre os tons, acréscimo por unha.', 9.90, '/ unha', false, 10),
   ('Flávia', 'nailart', 'Nail Art 3D', 'Designs em relevo e detalhes 3D, acréscimo sobre o serviço escolhido.', 25.00, null::text, false, 15),
 
-  ('Jheny', 'express', 'Maquiagem Express', 'Produção leve e prática, para quem gosta de uma beleza mais natural e delicada. Pele leve, olhos suaves e acabamento sofisticado, com técnicas mais rápidas.', 70.00, null::text, false, 60),
-  ('Jheny', 'make', 'Maquiagem Social', 'Produção elaborada e detalhada, com pele bem construída, olhos trabalhados, contorno e iluminação definidos e cílios. Ideal para eventos, festas, formaturas e casamentos.', 90.00, null::text, true, 120),
-  ('Jheny', 'blindada', 'Maquiagem Blindada', 'Produção completa com foco em fixação e durabilidade, feita em camadas. Para eventos longos, dias quentes e ocasiões em que a make precisa permanecer impecável por mais tempo.', 110.00, null::text, false, 150),
-
   ('Vitória', 'corte', 'Corte Feminino', 'Corte personalizado de acordo com o formato do rosto e a textura do seu cabelo.', 30.00, null::text, false, 60),
   ('Vitória', 'progressiva', 'Progressiva com Formol', 'Alisamento com formol. Cabelo pequeno R$80, médio R$100, grande R$120.', 80.00, null::text, false, 150),
   ('Vitória', 'progressiva', 'Progressiva sem Formol', 'Alisamento com fórmula sem formol. Cabelo pequeno R$150, médio R$180, grande R$200.', 150.00, null::text, true, 180),
@@ -253,6 +249,81 @@ join auth.users u on u.email = case v.professional
 end
 where not exists (select 1 from public.services);
 
+-- A Jheny saiu do studio em 02/11/2026. O catálogo dela sai do site; os atendimentos e
+-- os pagamentos de aluguel (rent_payments/rent_entries) ficam, por isso 'Jheny' continua
+-- nos checks das tabelas: tirar de lá faria o Postgres recusar as linhas antigas.
+delete from public.services where professional = 'Jheny';
+
+-- ============================================================
+-- 8. Calendário de contas da Flávia (02/11/2026)
+-- Substitui Gastos Pessoais, que saiu do app (a tabela personal_expenses fica, só não é
+-- mais escrita). Duas tabelas:
+--   fixed_bills  -> a regra da conta fixa (quando vence, quanto custa). Nada é lançado
+--                   sozinho: a tela projeta a ocorrência no calendário a partir da regra.
+--   bill_entries -> o que de fato entrou no mês: a ocorrência de uma conta fixa com valor
+--                   e status, ou uma conta só daquele mês (bill_id nulo).
+-- Regras (`rule`):
+--   'mensal'        todo mês no dia `day_of_month` (31 em mês curto cai no último dia)
+--   'semana_do_mes' na `weeks`-ésima `weekday` do mês: weekday 1 + weeks {1,3} = 1ª e 3ª segunda
+--   'diaria'        todo dia, lançada só quando usada (comida, transporte)
+--   'dia_livre'     uma vez por mês, no dia que a Flávia escolher (pet shop do Alf)
+-- `amount` nulo = valor muda toda vez e é preenchido no calendário (fatura de cartão).
+-- ============================================================
+create table if not exists public.fixed_bills (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  name text not null,
+  amount numeric(10, 2) check (amount >= 0),
+  rule text not null check (rule in ('mensal', 'semana_do_mes', 'diaria', 'dia_livre')),
+  day_of_month integer check (day_of_month between 1 and 31),
+  weekday integer check (weekday between 0 and 6),
+  weeks integer[],
+  active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.bill_entries (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  bill_id uuid references public.fixed_bills(id) on delete set null,
+  name text not null,
+  amount numeric(10, 2) not null check (amount >= 0),
+  due_on date not null,
+  paid boolean not null default false,
+  paid_on date,
+  created_at timestamptz not null default now(),
+  -- Uma ocorrência por conta fixa por dia: segura o clique duplo. Conta avulsa tem
+  -- bill_id nulo, e nulo nunca colide em unique no Postgres.
+  unique (bill_id, due_on)
+);
+
+-- Semente: as contas fixas que o Erick passou em 02/11/2026. Só roda com a tabela vazia.
+insert into public.fixed_bills (owner_id, name, amount, rule, day_of_month, weekday, weeks)
+select u.id, v.name, v.amount, v.rule, v.day_of_month, v.weekday, v.weeks
+from (values
+  ('Comida', null::numeric, 'diaria', null::integer, null::integer, null::integer[]),
+  ('Material', null, 'semana_do_mes', null, 1, '{1,3}'::integer[]),
+  ('Cantinho do café', null, 'semana_do_mes', null, 1, '{1,3}'::integer[]),
+  ('Cartão Renner', null, 'mensal', 1, null, null),
+  ('Cartão Pontal', null, 'mensal', 25, null, null),
+  ('Cartão Riachuelo', null, 'mensal', 15, null, null),
+  ('Academia', 110, 'mensal', 22, null, null),
+  ('Pet Love', 35, 'mensal', 13, null, null),
+  ('Aluguel do salão', 1800, 'mensal', 7, null, null),
+  ('Água do salão', null, 'mensal', 10, null, null),
+  ('Luz do salão', null, 'mensal', 10, null, null),
+  ('Internet do salão', 100, 'mensal', 20, null, null),
+  ('Rematrícula', 300, 'mensal', 15, null, null),
+  ('Plano de celular', 75, 'mensal', 12, null, null),
+  ('Comida do Alf', 50, 'semana_do_mes', null, 1, '{1}'::integer[]),
+  ('Pet shop do Alf', null, 'dia_livre', null, null, null),
+  ('Transporte', null, 'diaria', null, null, null),
+  ('Fatura Nubank', null, 'mensal', 25, null, null),
+  ('Fatura Inter', null, 'mensal', 20, null, null)
+) as v(name, amount, rule, day_of_month, weekday, weeks)
+join auth.users u on u.email = 'flavia@studioflaviaalves.app'
+where not exists (select 1 from public.fixed_bills);
+
 -- ============================================================
 -- RLS
 -- ============================================================
@@ -264,6 +335,8 @@ alter table public.rent_payments enable row level security;
 alter table public.rent_entries enable row level security;
 alter table public.client_returns enable row level security;
 alter table public.services enable row level security;
+alter table public.fixed_bills enable row level security;
+alter table public.bill_entries enable row level security;
 
 drop policy if exists "staff logada acessa clients" on public.clients;
 create policy "staff logada acessa clients" on public.clients
@@ -361,6 +434,19 @@ create policy "cada uma cuida dos proprios servicos" on public.services
   for all to authenticated
   using (owner_id = auth.uid())
   with check (owner_id = auth.uid());
+
+-- Calendário de contas: só da Flávia, mesmo padrão do aluguel.
+drop policy if exists "so a dona mexe nas contas fixas" on public.fixed_bills;
+create policy "so a dona mexe nas contas fixas" on public.fixed_bills
+  for all to authenticated
+  using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
+  with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
+
+drop policy if exists "so a dona mexe nos lancamentos de contas" on public.bill_entries;
+create policy "so a dona mexe nos lancamentos de contas" on public.bill_entries
+  for all to authenticated
+  using (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app')
+  with check (auth.jwt() ->> 'email' = 'flavia@studioflaviaalves.app');
 
 -- ============================================================
 -- Depois de rodar isso: vá em Authentication -> Users -> Add User

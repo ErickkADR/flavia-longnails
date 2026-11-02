@@ -14,7 +14,8 @@ export interface StaffUser {
  */
 export const STAFF_USERS: StaffUser[] = [
   { username: 'flavia', email: 'flavia@studioflaviaalves.app', name: 'Flávia', isOwner: true },
-  { username: 'jheny', email: 'jheny@studioflaviaalves.app', name: 'Jheny', isOwner: false },
+  // A Jheny saiu em 02/11/2026: sem entrada aqui o login dela deixa de funcionar. O
+  // usuário continua no Supabase Auth, e os pagamentos de aluguel dela ficam no banco.
   { username: 'vitoria', email: 'vitoria@studioflaviaalves.app', name: 'Vitória', isOwner: false },
   // Adicionada em 15/09/2026. O e-mail segue o mesmo domínio fixo dos outros 3
   // (não é texto de marca, é só identificador no Supabase Auth — ver CLAUDE.md).

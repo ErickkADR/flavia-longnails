@@ -6,7 +6,7 @@ import { Icon } from './Icon';
 import './Hero.css';
 
 /**
- * Os quatro clipes de fundo, um por especialidade do studio. Ficam em `public/videos/`
+ * Os três clipes de fundo, um por especialidade do studio. Ficam em `public/videos/`
  * e SÃO commitados (ver o LEIA-ME de lá): os dois hosts constroem a partir do repo,
  * não há storage separado. Somados dão ~4,4 MB depois da compressão.
  *
@@ -16,7 +16,6 @@ import './Hero.css';
 const CLIPS = [
   { src: 'videos/hero-unhas.mp4', label: 'Unhas & Nail Art' },
   { src: 'videos/hero-cabelo.mp4', label: 'Cabelo' },
-  { src: 'videos/hero-make.mp4', label: 'Maquiagem' },
   { src: 'videos/hero-cilios.mp4', label: 'Cílios & Sobrancelhas' },
 ];
 
@@ -86,9 +85,9 @@ export function Hero() {
             </span>
           </h1>
           <p className="hero-desc">
-            Unhas, maquiagem, cabelo e cílios em um só lugar. Quatro especialistas, uma só
-            experiência: do alongamento perfeito à make dos sonhos, passando pelo cabelo que
-            você sempre quis.
+            Unhas, cabelo e cílios em um só lugar. Três especialistas, uma só experiência:
+            do alongamento perfeito ao olhar marcante, passando pelo cabelo que você sempre
+            quis.
           </p>
           <div className="hero-actions">
             <a href={WHATSAPP_LINK} className="btn-primary" target="_blank" rel="noopener noreferrer">
@@ -99,7 +98,7 @@ export function Hero() {
           </div>
           <div className="hero-stats">
             <div><span className="stat-num">5+</span><span className="stat-lbl">Anos de Experiência</span></div>
-            <div><span className="stat-num">4</span><span className="stat-lbl">Especialistas</span></div>
+            <div><span className="stat-num">3</span><span className="stat-lbl">Especialistas</span></div>
             <div><span className="stat-num">4.9<Icon name="estrela" fill="currentColor" strokeWidth={0} className="stat-star" /></span><span className="stat-lbl">Avaliação Média</span></div>
           </div>
         </div>

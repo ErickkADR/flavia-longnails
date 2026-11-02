@@ -7,7 +7,7 @@ import { formatPrice } from '../../data/professionals';
 import type { Service } from '../../data/professionals';
 import { addDays, weekDays } from '../../lib/schedule';
 import { Icon } from '../../components/Icon';
-import { WeekAgenda } from './WeekAgenda';
+import { WeekAgenda, brl } from './WeekAgenda';
 import type { AgendaItem } from './WeekAgenda';
 import './StaffModule.css';
 
@@ -35,6 +35,9 @@ interface Client {
   name: string;
 }
 
+/** `price` é o valor combinado; sem ele, soma o que os serviços custam. */
+const valueOf = (a: Appointment) => a.price ?? (a.services ?? []).reduce((s, e) => s + e.price, 0);
+
 /** `services` (jsonb, novo) manda; `service` (texto, legado) atende as 260 linhas importadas. */
 function labelOf(a: Appointment): string {
   if (a.services && a.services.length > 0) return a.services.map((s) => s.name).join(' + ');
@@ -58,7 +61,11 @@ export function Agendamento() {
   const { name } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { rows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
+  const { rows: allRows, loading, error, insert, remove } = useTable<Appointment>('appointments', 'scheduled_at');
+  // A RLS deixa a Flávia ler a agenda das outras (pro faturamento de Contas do Salão).
+  // Aqui é a agenda DELA: sem esse filtro o horário de outra profissional bloqueava a
+  // vaga dela e entrava no faturado da semana.
+  const rows = useMemo(() => allRows.filter((a) => a.professional === name), [allRows, name]);
   const { rows: clients } = useTable<Client>('clients', 'name');
   // Busca o catálogo inteiro (das 4) e filtra pelo nome logado, mesma lógica de
   // ProfessionalPage.tsx pro site público — é a mesma tabela `services`, editável na
@@ -77,6 +84,9 @@ export function Agendamento() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const comboRef = useRef<HTMLDivElement>(null);
+  const [svcQuery, setSvcQuery] = useState('');
+  const [svcOpen, setSvcOpen] = useState(false);
+  const svcRef = useRef<HTMLDivElement>(null);
 
   /**
    * O painel RETORNO manda a cliente pra cá pelo state da rota, com o botão "Contato
@@ -111,6 +121,14 @@ export function Agendamento() {
     return q.length > 0 && !clients.some((c) => c.name.toLowerCase() === q);
   }, [clients, clientQuery]);
 
+  // Busca de serviço: o catálogo da Flávia passou de 25 itens e a grade de pílulas com
+  // todos abertos poluía o formulário (02/11/2026). Aqui só aparece o que ela procura,
+  // sem os já escolhidos, que viram etiqueta na faixa de resumo.
+  const svcMatches = useMemo(() => {
+    const q = svcQuery.trim().toLowerCase();
+    return catalog.filter((s) => !picked.some((p) => p.name === s.name) && (!q || s.name.toLowerCase().includes(q)));
+  }, [catalog, picked, svcQuery]);
+
   const days = useMemo(() => weekDays(weekRef), [weekRef]);
 
   const agendaItems: AgendaItem[] = useMemo(
@@ -121,6 +139,7 @@ export function Agendamento() {
         label: labelOf(a),
         start: new Date(a.scheduled_at),
         durationMin: a.duration_min || 60,
+        value: valueOf(a),
         status: a.status,
       })),
     [rows]
@@ -131,6 +150,7 @@ export function Agendamento() {
   useEffect(() => {
     function onDown(e: MouseEvent) {
       if (comboRef.current && !comboRef.current.contains(e.target as Node)) setListOpen(false);
+      if (svcRef.current && !svcRef.current.contains(e.target as Node)) setSvcOpen(false);
     }
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
@@ -188,7 +208,24 @@ export function Agendamento() {
     }
   }
 
-  const weekLabel = `${days[0].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} a ${days[5].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}`;
+  const weekLabel = `${days[0].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} a ${days[days.length - 1].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}`;
+
+  // Faturado da semana: tudo que não foi cancelado entre a terça e o fim do sábado. O
+  // número cresce conforme a agenda é preenchida; "já realizado" é o que já passou.
+  const semana = useMemo(() => {
+    const inicio = days[0].getTime();
+    const fim = addDays(days[days.length - 1], 1).getTime();
+    const agora = Date.now();
+    const da = rows.filter((a) => {
+      const t = new Date(a.scheduled_at).getTime();
+      return a.status !== 'cancelado' && t >= inicio && t < fim;
+    });
+    return {
+      total: da.reduce((s, a) => s + valueOf(a), 0),
+      realizado: da.filter((a) => new Date(a.scheduled_at).getTime() <= agora).reduce((s, a) => s + valueOf(a), 0),
+      atendimentos: da.length,
+    };
+  }, [rows, days]);
   const valorFinal = priceOverride ? Number(priceOverride) : totalPrice;
 
   return (
@@ -268,23 +305,31 @@ export function Agendamento() {
               Você ainda não cadastrou nenhum serviço. <Link to="/area-colaboradora/servicos">Cadastrar em Meus Serviços</Link>.
             </p>
           ) : (
-            <div className="svc-chips">
-              {catalog.map((s) => {
-                const on = picked.some((x) => x.name === s.name);
-                return (
-                  <button
-                    type="button"
-                    key={s.id}
-                    className={`svc-chip${on ? ' is-on' : ''}`}
-                    onClick={() => toggleService(s)}
-                    aria-pressed={on}
-                  >
-                    <span className="svc-chip-ico"><Icon name={s.icon} /></span>
-                    <span className="svc-chip-name">{s.name}</span>
-                    <span className="svc-chip-meta">{formatPrice(s.price)} · {formatDuration(s.duration_min)}</span>
-                  </button>
-                );
-              })}
+            <div className="ag-field combo svc-search" ref={svcRef}>
+              <input
+                value={svcQuery}
+                onChange={(e) => { setSvcQuery(e.target.value); setSvcOpen(true); }}
+                onFocus={() => setSvcOpen(true)}
+                placeholder={picked.length ? 'Adicionar outro serviço' : 'Buscar serviço, ex.: manicure'}
+                autoComplete="off"
+              />
+              {svcOpen && (
+                <ul className="combo-list svc-list">
+                  {svcMatches.length === 0 ? (
+                    <li className="combo-new">Nenhum serviço com esse nome</li>
+                  ) : (
+                    svcMatches.map((s) => (
+                      <li key={s.id}>
+                        <button type="button" onClick={() => { toggleService(s); setSvcQuery(''); }}>
+                          <span className="svc-chip-ico"><Icon name={s.icon} /></span>
+                          <span className="svc-opt-name">{s.name}</span>
+                          <span className="svc-chip-meta">{formatPrice(s.price)} · {formatDuration(s.duration_min)}</span>
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
             </div>
           )}
         </div>
@@ -295,7 +340,11 @@ export function Agendamento() {
           <div className="ag-summary-list">
             {picked.length === 0
               ? <span className="ag-summary-empty">Nenhum serviço selecionado ainda</span>
-              : picked.map((s) => <span className="ag-tag" key={s.name}>{s.name}</span>)}
+              : picked.map((s) => (
+                  <button type="button" className="ag-tag" key={s.name} onClick={() => toggleService(s)} title="Tirar este serviço">
+                    {s.name} <span aria-hidden="true">×</span>
+                  </button>
+                ))}
           </div>
           <div className="ag-summary-right">
             <div className="ag-summary-total">
@@ -329,6 +378,18 @@ export function Agendamento() {
           <span>{weekLabel}</span>
           <button type="button" onClick={() => setWeekRef((d) => addDays(d, 7))} aria-label="Próxima semana">›</button>
         </div>
+      </div>
+
+      <div className="ag-week-total">
+        <div>
+          <span className="ag-week-total-lbl">Faturado na semana</span>
+          <span className="ag-week-total-val">{brl(semana.total)}</span>
+        </div>
+        <span className="ag-week-total-note">
+          {semana.atendimentos === 0
+            ? 'Nenhum atendimento marcado nesta semana'
+            : `${semana.atendimentos} ${semana.atendimentos === 1 ? 'atendimento' : 'atendimentos'}, ${brl(semana.realizado)} já realizado`}
+        </span>
       </div>
 
       <WeekAgenda

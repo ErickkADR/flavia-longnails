@@ -49,7 +49,7 @@ interface RentEntry {
   created_at: string;
 }
 
-const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória', 'Mayte'];
+const PROFESSIONALS = ['Flávia', 'Vitória', 'Mayte'];
 
 /**
  * Quem paga aluguel de posto de trabalho hoje, e como. A Flávia é dona e não paga pra si.
@@ -58,7 +58,13 @@ const PROFESSIONALS = ['Flávia', 'Jheny', 'Vitória', 'Mayte'];
  * entra numa das listas e no check das duas tabelas no migration.sql.
  */
 const RENT_MONTHLY = ['Vitória'];
-const RENT_WEEKLY = ['Jheny', 'Mayte'];
+const RENT_WEEKLY = ['Mayte'];
+/**
+ * Quem já saiu do studio (a Jheny, em 02/11/2026). Os pagamentos dela continuam no banco e
+ * somam no ciclo em que entraram; o cartão aparece só nos ciclos em que ela tem lançamento,
+ * sem formulário, e ela entra no faturamento só se tiver atendimento naquele ciclo.
+ */
+const FORMER = ['Jheny'];
 const DEFAULT_RENT = 500;
 
 const ORDEM_SEMANA = [1, 2, 3, 4, 5, 6, 0];
@@ -262,7 +268,7 @@ export function ContasSalao() {
 
   const porProfissional = useMemo(
     () =>
-      PROFESSIONALS.map((nome, i) => {
+      [...PROFESSIONALS, ...FORMER.filter((n) => cur.realizados.some((a) => a.professional === n))].map((nome, i) => {
         const dela = cur.realizados.filter((a) => a.professional === nome);
         return {
           nome,
@@ -419,7 +425,7 @@ export function ContasSalao() {
 
   // Trava de rota: além do link sumir da sidebar (StaffLayout), quem digitar a URL direto
   // também é mandada embora daqui. A RLS é a trava de verdade; isso é defesa em profundidade.
-  if (!isOwner) return <Navigate to="/area-colaboradora/gastos" replace />;
+  if (!isOwner) return <Navigate to="/area-colaboradora/agendamento" replace />;
 
   const fmtDia = ddmm;
   const tipDia = (x: string) =>
@@ -522,7 +528,7 @@ export function ContasSalao() {
         <div className="admin-title">Aluguel das Colaboradoras</div>
         <div className="admin-sub">
           Ciclo de {label}. {RENT_MONTHLY.join(' e ')} paga o mês fechado
-          {rentPending > 0 ? ' (ainda em aberto)' : ' (em dia)'}; {RENT_WEEKLY.join(' e ')} pagam por semana:
+          {rentPending > 0 ? ' (ainda em aberto)' : ' (em dia)'}; {RENT_WEEKLY.join(' e ')} {RENT_WEEKLY.length === 1 ? 'paga' : 'pagam'} por semana:
           lance cada valor quando receber. Tudo que entra aqui soma no saldo do mês.
         </div>
 
@@ -561,8 +567,10 @@ export function ContasSalao() {
             );
           })}
 
-          {RENT_WEEKLY.map((nome) => {
+          {[...RENT_WEEKLY, ...FORMER].map((nome) => {
             const lancamentos = semanaisDe(nome);
+            const saiu = FORMER.includes(nome);
+            if (saiu && lancamentos.length === 0 && !mensalDe(nome)?.paid) return null;
             // Marcação mensal antiga (de antes do aluguel semanal) continua contando no saldo;
             // aparece aqui pra Flávia poder desfazer se ela também lançar por semana.
             const antigo = mensalDe(nome);
@@ -570,7 +578,7 @@ export function ContasSalao() {
             const draft = draftDe(nome);
             return (
               <div className={`rent-card rent-card--weekly${total > 0 ? ' is-paid' : ''}`} key={nome}>
-                <div className="rent-name">{nome}</div>
+                <div className="rent-name">{nome}{saiu && <span className="rent-former"> · não é mais colaboradora</span>}</div>
                 <div className="rent-amount">Pago no ciclo: <strong>{fmtMoney(total)}</strong></div>
 
                 {lancamentos.length === 0 && !antigo?.paid ? (
@@ -581,20 +589,20 @@ export function ContasSalao() {
                       <li>
                         <span>Mês marcado como pago</span>
                         <b>{fmtMoney(antigo.amount)}</b>
-                        <button type="button" className="mod-table-del" onClick={() => toggleRent(nome, antigo)}>desmarcar</button>
+                        {!saiu && <button type="button" className="mod-table-del" onClick={() => toggleRent(nome, antigo)}>desmarcar</button>}
                       </li>
                     )}
                     {lancamentos.map((e) => (
                       <li key={e.id}>
                         <span>{ddmm(e.paid_on)}</span>
                         <b>{fmtMoney(e.amount)}</b>
-                        <button type="button" className="mod-table-del" onClick={() => apagarSemanal(e.id)}>remover</button>
+                        {!saiu && <button type="button" className="mod-table-del" onClick={() => apagarSemanal(e.id)}>remover</button>}
                       </li>
                     ))}
                   </ul>
                 )}
 
-                <form
+                {!saiu && <form
                   className="rent-entry-form"
                   onSubmit={(ev) => { ev.preventDefault(); lancarSemanal(nome); }}
                 >
@@ -617,7 +625,7 @@ export function ContasSalao() {
                   <button type="submit" className="rent-toggle" disabled={lancando === nome || Boolean(entriesError)}>
                     {lancando === nome ? 'Lançando...' : 'Lançar pagamento'}
                   </button>
-                </form>
+                </form>}
               </div>
             );
           })}

@@ -1,4 +1,4 @@
-/* Agenda semanal no formato de grade horária: colunas são dias (terça a domingo),
+/* Agenda semanal no formato de grade horária: colunas são dias (terça a sábado),
    a régua da esquerda são as horas, e cada atendimento é um bloco posicionado por
    `top`/`height` calculados a partir do horário e da duração. O mesmo desenho do
    Google Agenda, sem biblioteca. */
@@ -7,7 +7,7 @@
 
 .wk-grid {
   display: grid;
-  grid-template-columns: 62px repeat(6, minmax(0, 1fr));
+  grid-template-columns: 62px repeat(var(--days, 5), minmax(0, 1fr));
   border: 1.5px solid var(--muted-l);
   border-radius: 18px;
   overflow: hidden;
@@ -57,6 +57,9 @@
 }
 .wk-pill.is-full { color: var(--muted); background: var(--bg-alt); }
 .wk-dayhead.is-copied .wk-pill { background: #DCEAD4; color: #4F7141; }
+
+/* Quanto o dia fatura (atendimentos não cancelados). Some no dia sem nada marcado. */
+.wk-dayval { font-size: .62rem; font-weight: 600; color: #4F7141; font-variant-numeric: tabular-nums; }
 
 /* Régua de horas. A altura de cada faixa é a mesma unidade usada pelo cálculo de
    `top` dos blocos, então a linha da hora e o bloco das 14h coincidem. */

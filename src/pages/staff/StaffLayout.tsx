@@ -9,10 +9,10 @@ const NAV_ITEMS = [
   { to: '/area-colaboradora/agendamento', label: 'Agendamento de Clientes', short: 'Agenda', icon: 'agenda' },
   { to: '/area-colaboradora/retorno', label: 'Retorno de Clientes', short: 'Retorno', icon: 'retorno' },
   { to: '/area-colaboradora/clientes', label: 'Registro de Clientes', short: 'Clientes', icon: 'clientes' },
-  // Só a Flávia vê Contas do Salão (pedido do Erick, 15/09/2026): as outras usam Gastos
-  // Pessoais com âmbito "Salão", que já soma pra ela em "Visão Geral da Equipe".
+  // Só a Flávia vê Contas do Salão (15/09/2026) e o Calendário de Contas, que substituiu
+  // Gastos Pessoais em 02/11/2026: as outras ficam com serviços, agenda, retorno e clientes.
   { to: '/area-colaboradora/contas', label: 'Contas do Salão', short: 'Contas', icon: 'contas', ownerOnly: true },
-  { to: '/area-colaboradora/gastos', label: 'Gastos Pessoais', short: 'Gastos', icon: 'gastos' },
+  { to: '/area-colaboradora/calendario', label: 'Calendário de Contas', short: 'Calendário', icon: 'calendario', ownerOnly: true },
 ];
 
 export function StaffLayout() {

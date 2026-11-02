@@ -15,6 +15,8 @@ export interface AgendaItem {
   label: string;
   start: Date;
   durationMin: number;
+  /** Valor do atendimento, pra somar o faturado do dia no cabeçalho. */
+  value: number;
   status: 'agendado' | 'concluido' | 'cancelado';
 }
 
@@ -27,6 +29,8 @@ interface Props {
   onCopyDay: (day: Date, text: string) => void;
   copiedDay: string | null;
 }
+
+export const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 function sameDay(a: Date, b: Date) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -78,7 +82,7 @@ export function WeekAgenda({ days, items, durationMin, onPickSlot, onCopyDay, co
 
   return (
     <div className="wk">
-      <div className="wk-grid" style={{ ['--px-hour' as string]: `${PX_PER_HOUR}px` }}>
+      <div className="wk-grid" style={{ ['--px-hour' as string]: `${PX_PER_HOUR}px`, ['--days' as string]: days.length }}>
         <div className="wk-corner">
           <span>{OPEN_HOUR}h às {CLOSE_HOUR}h</span>
         </div>
@@ -89,6 +93,9 @@ export function WeekAgenda({ days, items, durationMin, onPickSlot, onCopyDay, co
           const fechado = !WORK_DAYS.includes(d.getDay());
           const hoje = sameDay(d, now);
           const copiado = copiedDay === key;
+          const faturado = items
+            .filter((it) => it.status !== 'cancelado' && sameDay(it.start, d))
+            .reduce((s, it) => s + it.value, 0);
           return (
             <button
               type="button"
@@ -102,6 +109,7 @@ export function WeekAgenda({ days, items, durationMin, onPickSlot, onCopyDay, co
               <span className={`wk-pill${livres.length === 0 ? ' is-full' : ''}`}>
                 {copiado ? 'copiado' : fechado ? 'fechado' : `${livres.length} ${livres.length === 1 ? 'vaga' : 'vagas'}`}
               </span>
+              {faturado > 0 && <span className="wk-dayval">{brl(faturado)}</span>}
             </button>
           );
         })}

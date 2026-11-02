@@ -1,5 +1,5 @@
 import {
-  AlertTriangle, AtSign, BarChart3, Brush, Calendar, Check, Clock, Crown, Droplet, Eraser, Eye, Flame, Flower2, Footprints,
+  AlertTriangle, AtSign, BarChart3, Brush, Calendar, CalendarDays, Check, Clock, Crown, Droplet, Eraser, Eye, Flame, Flower2, Footprints,
   Gem, Globe, Hand, HandHeart, Heart, Layers, LogOut, MapPin, MessageCircle, Palette,
   CalendarX, ClipboardCheck, House, Pencil, Phone, Receipt, Repeat, Search, Trash2, Scissors, Shield, ShieldCheck, Sparkle,
   Sparkles, Star, Sun, Target,
@@ -80,6 +80,7 @@ const MAPA: Record<string, LucideIcon> = {
   clientes: Users,
   contas: Wallet,
   gastos: Receipt,
+  calendario: CalendarDays,
   sair: LogOut,
 };
 

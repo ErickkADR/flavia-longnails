@@ -262,6 +262,43 @@ Se você está voltando depois de um tempo, leia estes pontos antes de qualquer 
       mim. Validado só por `tsc -b && vite build` limpo; pedir pro Erick conferir ao vivo
       como Flávia depois de rodar a RLS nova.
 
+23. **Sessão de 02/11/2026: Jheny sai, Calendário de Contas entra.** **Precisa rodar o
+    `supabase/migration.sql` no SQL Editor** (seção 8 + a limpeza dos serviços da Jheny);
+    sem isso o calendário mostra um aviso no topo e não grava nada.
+    - **Jheny não é mais colaboradora.** Saiu de `STAFF_USERS` (login não funciona mais;
+      o usuário ainda existe no Supabase Auth, apagar lá é decisão do Erick), do site
+      público inteiro (página, equipe, 2 depoimentos, ranking, círculo de make nos
+      Resultados, vídeo `hero-make.mp4` do hero, "4 especialistas" virou 3, maquiagem
+      saiu das copies e do `<title>`) e do catálogo (`delete from services`). **Ficou de
+      propósito**: os pagamentos de aluguel dela. `'Jheny'` continua nos `check` das
+      tabelas pra essas linhas antigas valerem, e em `ContasSalao.tsx` ela está em
+      `FORMER`: o cartão dela aparece só nos ciclos em que tem lançamento, sem formulário
+      e sem botão de remover. O `hero-make.mp4` e as fotos dela continuam no repo.
+    - **Gastos Pessoais saiu; entrou o Calendário de Contas** (`Calendario.tsx`, rota
+      `/area-colaboradora/calendario`, só a Flávia; `/gastos` redireciona). Modelo
+      copiado do calendário de Finanças do repo `ErickkADR/SISTEMA`: `fixed_bills` guarda
+      a regra, a tela projeta a ocorrência e só grava em `bill_entries` quando ela
+      preenche o valor ou marca como paga. Regras em `src/lib/bills.ts`: `mensal`,
+      `semana_do_mes` (1ª e 3ª segunda etc.), `diaria` (comida/transporte, lança quando
+      usar, nunca atrasa) e `dia_livre` (pet shop do Alf, uma vez por mês no dia que ela
+      escolher). `amount` nulo = valor preenchido a cada mês. As 19 contas que o Erick
+      passou estão na semente do migration. Cards: A pagar, Faturamento do mês (agenda
+      **dela**, incluindo o que ainda está agendado), Lucro do mês (faturamento menos todas
+      as contas do mês). **Aluguel recebido das colaboradoras não entra no lucro**, não foi
+      pedido. `personal_expenses` não foi apagada, só não tem mais tela; as outras
+      colaboradoras ficaram sem lugar pra lançar gasto.
+    - **Agenda: 7h às 23h, terça a sábado** (domingo saiu). `weekStart` manda domingo e
+      segunda pra terça seguinte; a grade usa `--days` em vez de 6 colunas fixas. O site
+      público (Contact/Footer) **não** foi mexido e continua anunciando outro horário.
+    - **Faturado na semana** no Agendamento (faixa acima da grade) e por dia no cabeçalho
+      de cada coluna. E a agenda passou a filtrar `professional === name`: desde a RLS de
+      09/10 a Flávia lia os atendimentos das outras, e o horário delas bloqueava vaga dela.
+    - **Seletor de serviços virou busca** (campo + lista suspensa, escolhidos viram
+      etiqueta com × no resumo). O Erick achou a grade de pílulas com 25 serviços poluída.
+    - Conferido em prévia com dados fictícios (mocks de `AuthContext`/`useTable` no
+      scratchpad, `playwright-core` com o Chrome instalado em `C:/Program Files/Google/`),
+      desktop e 390px. Não testado logado.
+
 **Achado de processo, vale para sessões futuras**: as páginas públicas (`/flavia`,
 `/vitoria`, `/`) dão pra testar de verdade sem senha nenhuma — `npm run dev` +
 `npx playwright` (Chromium já vem cacheado neste Mac, `chromium-cli` não está instalado).
@@ -925,8 +962,8 @@ Mudou o funcionamento do salão, muda ali e a grade, os horários vagos e a mens
 acompanham juntos:
 
 ```
-OPEN_HOUR  = 9        CLOSE_HOUR = 19
-SLOT_MIN   = 30       WORK_DAYS  = [2,3,4,5,6,0]   // terça a domingo
+OPEN_HOUR  = 7        CLOSE_HOUR = 23
+SLOT_MIN   = 30       WORK_DAYS  = [2,3,4,5,6]   // terça a sábado (02/11/2026)
 ```
 
 > Dias e horário **confirmados pelo Erick em 05/09/2026**: terça a domingo, fecha às 19h.

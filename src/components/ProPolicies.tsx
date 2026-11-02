@@ -5,7 +5,7 @@ import './ProPolicies.css';
 /**
  * Regras de atendimento da profissional (sinal, atraso, domicílio, pagamento).
  *
- * A seção inteira só existe se `policies` estiver preenchido. Hoje só a Jheny tem,
+ * A seção inteira só existe se `policies` estiver preenchido. Hoje só a Flávia tem,
  * porque foi a única que entregou material com isso. Não inventar conteúdo aqui:
  * são condições comerciais e cada uma define as suas.
  */

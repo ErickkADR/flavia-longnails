@@ -18,9 +18,9 @@ export function Resultados() {
               alt="Unhas com francesinha em glitter, feitas no Lummier Studio"
             />
           </div>
-          {/* Os três círculos menores existem pra dizer, sem texto, que o studio faz
-              quatro coisas: a foto grande é unha, e as pequenas são cabelo, maquiagem
-              e cílios (adicionado em 15/09/2026, ver rv-inset-cilios).
+          {/* Os círculos menores existem pra dizer, sem texto, que o studio faz três
+              coisas: a foto grande é unha, e as pequenas são cabelo e cílios. O de
+              maquiagem saiu em 02/11/2026 junto com a Jheny (a foto era trabalho dela).
               A de cabelo ainda é banco de imagem, a Vitória não passou material. */}
           <div className="rv-inset rv-inset-cabelo">
             <img
@@ -28,15 +28,8 @@ export function Resultados() {
               alt="Cabelo longo com ondas e iluminação, trabalho de cabelo do studio"
             />
           </div>
-          <div className="rv-inset rv-inset-make">
-            <img
-              src={asset('images/jheny-trabalho-1.jpg')}
-              alt="Maquiagem com delineado gráfico, feita no Lummier Studio"
-            />
-          </div>
-          {/* Quarto círculo, adicionado em 15/09/2026 quando a Mayte entrou (cílios e
-              sobrancelhas). Morde o canto inferior direito do círculo principal, espelhando
-              como o rv-inset-make morde o topo. */}
+          {/* Círculo de cílios, adicionado em 15/09/2026 quando a Mayte entrou (cílios e
+              sobrancelhas). Morde o canto inferior direito do círculo principal. */}
           <div className="rv-inset rv-inset-cilios">
             <img
               src={asset('images/ig-mayte-1.jpg')}
@@ -49,8 +42,8 @@ export function Resultados() {
           <div className="sec-label">Portfolio</div>
           <h2 className="sec-title">Resultados que <span>Falam por&nbsp;Si</span></h2>
           <p className="resultados-text">
-            Cada atendimento no studio é pensado pra durar, na unha, na make, no cabelo ou
-            nos cílios, com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
+            Cada atendimento no studio é pensado pra durar, na unha, no cabelo ou nos
+            cílios, com produtos de qualidade, técnica apurada e um olhar atento a cada detalhe.
           </p>
           <div className="resultados-stats">
             <div className="rs-rating">

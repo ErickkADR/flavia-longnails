@@ -40,24 +40,6 @@ export const testimonials: Testimonial[] = [
     verified: true,
   },
   {
-    initials: 'BF',
-    name: 'Bruna Ferreira',
-    service: 'Maquiagem Blindada',
-    professional: 'Jheny',
-    text: 'Pedi a blindada pra um casamento que foi o dia inteiro e ela não saiu do lugar, nem no calor. A Jheny é super atenciosa do início ao fim.',
-    avatar: 'images/review-bruna-stock.jpg',
-    verified: true,
-  },
-  {
-    initials: 'RN',
-    name: 'Rafaela Nunes',
-    service: 'Maquiagem Social',
-    professional: 'Jheny',
-    text: 'Pedi uma make social pra um evento e recebi muitos elogios a noite toda. A Jheny entende exatamente o que combina com cada rosto.',
-    avatar: 'images/review-rafaela-stock.jpg',
-    verified: true,
-  },
-  {
     initials: 'JF',
     name: 'Juliana F.',
     service: 'Progressiva sem Formol',
@@ -105,9 +87,7 @@ export interface RankedService {
 export const mostBooked: RankedService[] = [
   { name: 'Esmaltação em Gel (Mãos)', professional: 'Flávia', category: 'Unhas', price: 'R$64,90' },
   { name: 'Progressiva sem Formol', professional: 'Vitória', category: 'Cabelo', price: 'R$150' },
-  { name: 'Maquiagem Social', professional: 'Jheny', category: 'Maquiagem', price: 'R$90' },
   { name: 'Selagem', professional: 'Vitória', category: 'Cabelo', price: 'R$150' },
   { name: 'Manicure Tradicional', professional: 'Flávia', category: 'Unhas', price: 'R$35' },
-  { name: 'Maquiagem Blindada', professional: 'Jheny', category: 'Maquiagem', price: 'R$110' },
   { name: 'Blindagem', professional: 'Flávia', category: 'Unhas', price: 'R$55' },
 ];
